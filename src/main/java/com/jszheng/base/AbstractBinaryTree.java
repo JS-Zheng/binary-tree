@@ -8,7 +8,7 @@ import com.jszheng.search.SearchResult;
 import static com.jszheng.base.SkewedState.*;
 
 
-public abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
+abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
 
     @Override
     public int count() {

@@ -9,7 +9,7 @@ import java.util.Stack;
 /*
  * O(Log n)
  */
-public class AvlInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
+class AvlInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
 
     @Override
     protected AvlTree<E> getBt() {

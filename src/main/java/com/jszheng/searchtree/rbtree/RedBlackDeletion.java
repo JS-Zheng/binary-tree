@@ -12,7 +12,7 @@ import static com.jszheng.searchtree.rbtree.RedBlackTree.Color.BLACK;
 import static com.jszheng.searchtree.rbtree.RedBlackTree.Color.RED;
 
 
-public class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
+class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
 
     @Override
     protected RedBlackTree<E> getBt() {

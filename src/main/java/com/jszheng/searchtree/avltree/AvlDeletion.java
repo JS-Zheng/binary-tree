@@ -4,7 +4,7 @@ import com.jszheng.node.TreeNode;
 import com.jszheng.searchtree.BinarySearchTree;
 import com.jszheng.searchtree.BstDeletion;
 
-public class AvlDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
+class AvlDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
 
     @Override
     protected AvlTree<E> getBt() {

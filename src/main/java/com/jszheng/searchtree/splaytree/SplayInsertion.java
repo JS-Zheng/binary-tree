@@ -3,7 +3,7 @@ package com.jszheng.searchtree.splaytree;
 import com.jszheng.node.TreeNode;
 import com.jszheng.searchtree.BstInsertion;
 
-public class SplayInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
+class SplayInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
 
     @Override
     protected SplayTree<E> getBt() {

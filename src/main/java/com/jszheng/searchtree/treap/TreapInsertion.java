@@ -7,17 +7,17 @@ import com.jszheng.searchtree.BstInsertion;
 /*
  * O(Log n)
  */
-public class TreapInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
+class TreapInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
 
     private boolean specifiedPriority = false;
     private boolean minHeapImplement = true;
     private int priority;
 
-    public TreapInsertion(boolean minHeapImplement) {
+    TreapInsertion(boolean minHeapImplement) {
         this.minHeapImplement = minHeapImplement;
     }
 
-    public TreapInsertion(boolean minHeapImplement, int priority) {
+    TreapInsertion(boolean minHeapImplement, int priority) {
         this.minHeapImplement = minHeapImplement;
         this.priority = priority;
         specifiedPriority = true;

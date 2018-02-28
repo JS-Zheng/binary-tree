@@ -7,7 +7,7 @@ import com.jszheng.searchtree.rotation.LlRotation;
 import com.jszheng.searchtree.rotation.RotationState;
 import com.jszheng.searchtree.rotation.RrRotation;
 
-public class TreapDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
+class TreapDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
 
     @Override
     protected Treap<E> getBt() {

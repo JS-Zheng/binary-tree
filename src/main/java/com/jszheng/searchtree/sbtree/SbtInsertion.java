@@ -7,7 +7,7 @@ import com.jszheng.searchtree.BstInsertion;
 /*
  * O(Log n)
  */
-public class SbtInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
+class SbtInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
 
     @Override
     protected SizeBalancedTree<E> getBt() {

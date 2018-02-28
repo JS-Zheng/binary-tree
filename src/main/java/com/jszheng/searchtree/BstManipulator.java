@@ -11,12 +11,6 @@ public class BstManipulator extends TreeManipulator {
     }
 
     @Override
-    protected void comment() {
-        System.out.println("[註]: 二元搜尋樹");
-        System.out.println("Delete 操作，預設採用中序前驅節點\n");
-    }
-
-    @Override
     protected void addDeleteOp() {
         super.addDeleteOp();
         addOperation("delete", bt -> {
@@ -32,6 +26,12 @@ public class BstManipulator extends TreeManipulator {
         super.addSearchOp();
         addOperation("search max", bt -> searchExtrema(bt, true));
         addOperation("search min", bt -> searchExtrema(bt, false));
+    }
+
+    @Override
+    protected void comment() {
+        System.out.println("[註]: 二元搜尋樹");
+        System.out.println("Delete 操作，預設採用中序前驅節點\n");
     }
 
     @Override

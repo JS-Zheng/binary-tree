@@ -8,7 +8,7 @@ import com.jszheng.node.TreeNode;
 /*
  * O(Log n)
  */
-public class SimpleBalancedInsertion<E> extends AbstractInsertionAlgo<E> {
+class SimpleBalancedInsertion<E> extends AbstractInsertionAlgo<E> {
 
     @Override
     protected InsertionLocator<E> insertData(E data) {

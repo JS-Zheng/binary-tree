@@ -10,7 +10,7 @@ import java.util.Queue;
  *
  * O(n)
  */
-public class TopDownTreeNodeConstructor<E> implements TreeNodeConstructor<E>, BFSAlgo<TreeNode<E>, TreeNode<E>, Void> {
+class TopDownTreeNodeConstructor<E> implements TreeNodeConstructor<E>, BFSAlgo<TreeNode<E>, TreeNode<E>, Void> {
 
     private final TreeNode<E> node;
     private E[] data;
