@@ -59,7 +59,7 @@ public class MinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap
     }
 
     @Override
-    public InsertionAlgo<E> createInsertionAlgo() {
+    protected InsertionAlgo<E> createInsertionAlgo() {
         return new MinMaxHeapInsertion<>();
     }
 

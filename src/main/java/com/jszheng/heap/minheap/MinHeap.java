@@ -31,7 +31,7 @@ public class MinHeap<E extends Comparable<? super E>> extends BinaryHeap<E> {
     }
 
     @Override
-    public InsertionAlgo<E> createInsertionAlgo() {
+    protected InsertionAlgo<E> createInsertionAlgo() {
         return new MinHeapInsertion<>();
     }
 

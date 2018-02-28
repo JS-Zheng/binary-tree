@@ -1,6 +1,5 @@
 package com.jszheng.base;
 
-
 import com.jszheng.Env;
 import com.jszheng.base.completebt.CompleteBtInsertion;
 import com.jszheng.base.completebt.LinearSearch;
@@ -104,17 +103,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     }
 
     @Override
-    public InsertionAlgo<E> createInsertionAlgo() {
-        // Default Algo
-        return new CompleteBtInsertion<>();
-    }
-
-    @Override
-    public SearchAlgo<E> createSearchAlgo() {
-        return new LinearSearch<>();
-    }
-
-    @Override
     public List<TreeNode<E>> traverse(Class clz) {
         TraversalAlgo algo = TraversalAlgoFactory.create(clz, false, null);
         return traverse(algo);
@@ -125,6 +113,17 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
                                       boolean isFullMode, TraversalNodeHandler<E> handler) {
         TraversalAlgo algo = TraversalAlgoFactory.create(order, recursive, isFullMode, handler);
         return traverse(algo);
+    }
+
+    @Override
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        // Default Algo
+        return new CompleteBtInsertion<>();
+    }
+
+    @Override
+    protected SearchAlgo<E> createSearchAlgo() {
+        return new LinearSearch<>();
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})

@@ -1,6 +1,6 @@
 package com.jszheng.printer;
 
-public interface Printer {
+interface Printer {
 
     static void printWhitespaces(int count) {
         printByCount(count, " ");

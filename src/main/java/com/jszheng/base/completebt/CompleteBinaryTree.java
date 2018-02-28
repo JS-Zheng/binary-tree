@@ -1,6 +1,5 @@
 package com.jszheng.base.completebt;
 
-
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BtDecorator;
 import com.jszheng.insertion.InsertionAlgo;
@@ -23,12 +22,12 @@ public class CompleteBinaryTree<E> extends BtDecorator<E> {
     }
 
     @Override
-    public InsertionAlgo<E> createInsertionAlgo() {
+    protected InsertionAlgo<E> createInsertionAlgo() {
         return new CompleteBtInsertion<>();
     }
 
     @Override
-    public SearchAlgo<E> createSearchAlgo() {
+    protected SearchAlgo<E> createSearchAlgo() {
         return new LinearSearch<>();
     }
 }

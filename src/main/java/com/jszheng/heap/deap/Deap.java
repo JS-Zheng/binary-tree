@@ -23,7 +23,7 @@ public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> {
     }
 
     @Override
-    public InsertionAlgo<E> createInsertionAlgo() {
+    protected InsertionAlgo<E> createInsertionAlgo() {
         return new DeapInsertion<>();
     }
 

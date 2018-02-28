@@ -7,7 +7,6 @@ import com.jszheng.search.SearchResult;
 
 import static com.jszheng.base.SkewedState.*;
 
-
 abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
 
     @Override

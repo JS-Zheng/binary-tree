@@ -1,6 +1,5 @@
 package com.jszheng.base;
 
-
 import com.jszheng.node.TreeNode;
 import com.jszheng.traversal.TraversalNodeHandler;
 

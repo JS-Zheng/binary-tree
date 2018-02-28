@@ -7,7 +7,7 @@ import com.jszheng.util.BFSAlgo;
  *
  * O(n * Log n)
  */
-public class BottomUpTreeNodeConstructor<E> implements TreeNodeConstructor<E> {
+class BottomUpTreeNodeConstructor<E> implements TreeNodeConstructor<E> {
 
     private final TreeNode<E> node;
 
