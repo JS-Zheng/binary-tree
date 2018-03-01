@@ -1,5 +1,6 @@
 package com.jszheng.base;
 
+import com.jszheng.Env;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.TreeNode;
 import com.jszheng.search.SearchAlgo;
@@ -49,8 +50,13 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
         // Default Algo
         InsertionAlgo<E> algo = createInsertionAlgo();
 
-        for (E d : data)
+        for (E d : data) {
+            if (Env.debug)
+                System.out.println("[insert] data: " + d);
             algo.insert(this, d);
+            if (Env.debug)
+                System.out.println();
+        }
     }
 
     @Override

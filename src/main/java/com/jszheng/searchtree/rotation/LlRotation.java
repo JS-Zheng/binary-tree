@@ -14,7 +14,7 @@ public class LlRotation extends AbstractRotation {
         TreeNode<E> child = pivot.getRightChild();
 
         if (Env.debug)
-            System.out.println("LL Case: Pivot is " + pivot.getData() + ".\n");
+            System.out.println("[rotate] LL case: pivot is " + pivot.getData());
 
         rotateRight(parent, pivot, child); // LL
 

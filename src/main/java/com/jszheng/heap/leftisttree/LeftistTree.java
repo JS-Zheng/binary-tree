@@ -85,7 +85,7 @@ abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<
         }
 
         if (Env.debug)
-            System.out.println("[merge] complete\n");
+            System.out.println("[merge] complete");
     }
 
     abstract boolean isMaxHeap();

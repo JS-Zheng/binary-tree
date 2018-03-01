@@ -1,5 +1,6 @@
 package com.jszheng.searchtree;
 
+import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.deletion.DeletionAlgo;
 import com.jszheng.node.TreeNode;
@@ -68,12 +69,16 @@ public class BstDeletion<E extends Comparable<? super E>> implements DeletionAlg
         // lChild Max or rChild Min
         SearchResult<E> result = replaceByLMax ? subTree.searchMax() : subTree.searchMin();
 
-        TreeNode<E> extremaNode;
-        if (result == null || (extremaNode = result.getNode()) == null)
+        TreeNode<E> extremaChild;
+        if (result == null || (extremaChild = result.getNode()) == null)
             return;
 
-        delete(subTree, extremaNode);
-        targetNode.setData(extremaNode.getData());
+        delete(subTree, extremaChild);
+        E extremaChildData = extremaChild.getData();
+        targetNode.setData(extremaChildData);
+        if (Env.debug) {
+            System.out.println("[delete] replace node data with " + extremaChildData);
+        }
     }
 
     protected void fixAfterDeletion(TreeNode<E> parent, TreeNode<E> sibling, TreeNode<E> targetNode, boolean isTargetLeft, int degree) {

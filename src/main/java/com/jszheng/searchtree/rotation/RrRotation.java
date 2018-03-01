@@ -14,7 +14,7 @@ public class RrRotation extends AbstractRotation {
         TreeNode<E> child = pivot.getLeftChild();
 
         if (Env.debug)
-            System.out.println("RR Case: Pivot is " + pivot.getData() + ".\n");
+            System.out.println("[rotate] RR case: pivot is " + pivot.getData());
 
         rotateLeft(parent, pivot, child); // RR
 

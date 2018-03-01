@@ -1,5 +1,6 @@
 package com.jszheng.searchtree;
 
+import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BtDecorator;
 import com.jszheng.insertion.InsertionAlgo;
@@ -30,13 +31,13 @@ public class BinarySearchTree<E extends Comparable<? super E>> extends BtDecorat
     }
 
     public void delete(E data, boolean replaceByLMax) {
+        if (Env.debug)
+            System.out.println("[delete] data: " + data);
         BstDeletion<E> algo = createDeletionAlgo();
         algo.setReplaceByLMax(replaceByLMax);
         algo.delete(this, data);
-    }
-
-    public final BinarySearchTree<E> newGeneralBst() {
-        return new BinarySearchTree<>(component.newTree());
+        if (Env.debug)
+            System.out.println();
     }
 
     public SearchResult<E> searchMax() {
@@ -65,5 +66,9 @@ public class BinarySearchTree<E extends Comparable<? super E>> extends BtDecorat
         if (searchAlgo == null)
             searchAlgo = new BstSearch<>();
         return searchAlgo;
+    }
+
+    final BinarySearchTree<E> newGeneralBst() {
+        return new BinarySearchTree<>(component.newTree());
     }
 }

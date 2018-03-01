@@ -63,7 +63,7 @@ public class LrRotation extends AbstractRotation {
         if (pivot == null) return null;
 
         if (Env.debug)
-            System.out.println("LR Case: Pivot is " + pivot.getData() + ".\n");
+            System.out.println("[rotate] LR case: pivot is " + pivot.getData());
 
         // Note the first argument.
         rotateLeft(middle, pivot, pivot.getLeftChild()); // RR

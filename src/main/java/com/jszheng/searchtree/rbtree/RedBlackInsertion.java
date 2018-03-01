@@ -47,11 +47,9 @@ class RedBlackInsertion<E extends Comparable<? super E>> extends BstInsertion<E>
     private void changeColor(TreeNode<E> parent, TreeNode<E> lChild, TreeNode<E> rChild) {
         RedBlackTree<E> rbt = getBt();
 
-        if (Env.debug) {
-            System.out.println("========= Change Color =========");
-            System.out.println("Make node " + lChild.getData() + " BLACK.");
-            System.out.println("Make node " + rChild.getData() + " BLACK.");
-        }
+        if (Env.debug)
+            System.out.printf("[insert] change Color -- make node %s & %s BLACK\n"
+                    , lChild.getData(), rChild.getData());
 
         rbt.putColor(lChild, BLACK);
         rbt.putColor(rChild, BLACK);
@@ -60,14 +58,11 @@ class RedBlackInsertion<E extends Comparable<? super E>> extends BstInsertion<E>
             rbt.putColor(parent, RED);
 
             if (Env.debug)
-                System.out.println("Make parentNode " + parent.getData() + " RED.\n");
+                System.out.println("[insert] make parentNode " + parent.getData() + " RED.");
 
             // Must do this!
             // 檢查 parent 與 grandParent 是否產生連續紅色
             checkContinuousRedNode(parent);
-        } else {
-            if (Env.debug)
-                System.out.println();
         }
     }
 
@@ -80,8 +75,8 @@ class RedBlackInsertion<E extends Comparable<? super E>> extends BstInsertion<E>
         if (grandParent == null || rbt.colorOf(parent) != RED) return;
 
         if (Env.debug)
-            System.out.println("Detected continuous red: "
-                    + child.getData() + " " + parent.getData());
+            System.out.println("[insert] detected continuous red: "
+                    + child.getData() + " & " + parent.getData());
 
         RotationState state = rbt.getRotationState(parent, child);
         state.rotate(rbt, grandParent);
