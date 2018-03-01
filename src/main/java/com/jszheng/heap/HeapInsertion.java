@@ -4,7 +4,7 @@ import com.jszheng.base.BinaryTree;
 import com.jszheng.base.completebt.CompleteBtInsertion;
 
 /*
- * O(Log n)
+ * O(log n)
  */
 public abstract class HeapInsertion<E extends Comparable<? super E>> extends CompleteBtInsertion<E> {
 

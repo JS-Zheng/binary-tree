@@ -1,11 +1,12 @@
 package com.jszheng.heap.smmh;
 
 import com.jszheng.base.BinaryTree;
+import com.jszheng.base.completebt.CompleteBinaryTree;
 import com.jszheng.heap.DoubleEndedHeap;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.TreeNode;
 
-public class SymmetricMinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> {
+public class SymmetricMinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> implements CompleteBinaryTree<E> {
 
     public SymmetricMinMaxHeap(BinaryTree<E> component) {
         super(component);
@@ -22,18 +23,8 @@ public class SymmetricMinMaxHeap<E extends Comparable<? super E>> extends Double
     }
 
     @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        return new SmmhInsertion<>();
-    }
-
-    @Override
     public E deleteMax() {
         return deleteExtrema(true);
-    }
-
-    @Override
-    public E deleteMin() {
-        return deleteExtrema(false);
     }
 
     @Override
@@ -43,9 +34,19 @@ public class SymmetricMinMaxHeap<E extends Comparable<? super E>> extends Double
     }
 
     @Override
+    public E deleteMin() {
+        return deleteExtrema(false);
+    }
+
+    @Override
     public E searchMin() {
         TreeNode<E> minNode = searchExtremaNode(false);
         return minNode != null ? minNode.getData() : null;
+    }
+
+    @Override
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        return new SmmhInsertion<>();
     }
 
     private E deleteExtrema(boolean max) {

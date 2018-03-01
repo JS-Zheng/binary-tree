@@ -15,6 +15,30 @@ public class SplayTree<E extends Comparable<? super E>> extends SelfBalancingBst
         super(component);
     }
 
+    @Override
+    public BinaryTree<E> copy(boolean deep) {
+        return new SplayTree<>(component.copy(deep));
+    }
+
+    @Override
+    public SplayTree<E> newTree() {
+        return new SplayTree<>(component.newTree());
+    }
+
+    @Override
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        if (insertionAlgo == null)
+            insertionAlgo = new SplayInsertion<>();
+        return insertionAlgo;
+    }
+
+    @Override
+    protected BstSearch<E> createSearchAlgo() {
+        if (searchAlgo == null)
+            searchAlgo = new SplaySearch<>();
+        return searchAlgo;
+    }
+
     public void fixAfterOperation(TreeNode<E> targetNode) {
         if (targetNode == null) return;
 
@@ -40,24 +64,5 @@ public class SplayTree<E extends Comparable<? super E>> extends SelfBalancingBst
 
             state.rotate(this, rotateTarget);
         }
-    }
-
-    @Override
-    public SplayTree<E> newTree() {
-        return new SplayTree<>(component.newTree());
-    }
-
-    @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        if (insertionAlgo == null)
-            insertionAlgo = new SplayInsertion<>();
-        return insertionAlgo;
-    }
-
-    @Override
-    protected BstSearch<E> createSearchAlgo() {
-        if (searchAlgo == null)
-            searchAlgo = new SplaySearch<>();
-        return searchAlgo;
     }
 }

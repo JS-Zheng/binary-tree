@@ -1,6 +1,5 @@
 package com.jszheng.searchtree.avltree;
 
-import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BinaryTreeLemma;
 import com.jszheng.insertion.InsertionAlgo;
@@ -16,6 +15,30 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
 
     public AvlTree(BinaryTree<E> component) {
         super(component);
+    }
+
+    @Override
+    public BinaryTree<E> copy(boolean deep) {
+        return new AvlTree<>(component.copy(deep));
+    }
+
+    @Override
+    public AvlTree<E> newTree() {
+        return new AvlTree<>(component.newTree());
+    }
+
+    @Override
+    protected BstDeletion<E> createDeletionAlgo() {
+        if (deletionAlgo == null)
+            deletionAlgo = new AvlDeletion<>();
+        return deletionAlgo;
+    }
+
+    @Override
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        if (insertionAlgo == null)
+            insertionAlgo = new AvlInsertion<>();
+        return insertionAlgo;
     }
 
     public int getBalanceFactor(TreeNode<E> node) {
@@ -52,25 +75,6 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
         return data != null ? data.toString() + (bf == 0 ? "" : "(" + bf + ")") : " ";
     }
 
-    @Override
-    public AvlTree<E> newTree() {
-        return new AvlTree<>(component.newTree());
-    }
-
-    @Override
-    protected BstDeletion<E> createDeletionAlgo() {
-        if (deletionAlgo == null)
-            deletionAlgo = new AvlDeletion<>();
-        return deletionAlgo;
-    }
-
-    @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        if (insertionAlgo == null)
-            insertionAlgo = new AvlInsertion<>();
-        return insertionAlgo;
-    }
-
     TreeNode<E> getHigherChild(TreeNode<E> parent) {
         TreeNode<E> lChild = parent.getLeftChild();
         TreeNode<E> rChild = parent.getRightChild();
@@ -99,12 +103,6 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
     void handleUnbalancedNode(TreeNode<E> unbalancedNode, int bf, boolean isGrandChildLeft) {
         if (unbalancedNode == null)
             throw new RuntimeException("Unbalanced Node cannot be null.");
-
-        // Unbalanced
-        if (Env.debug) {
-            System.out.println();
-            System.out.println(unbalancedNode.getData() + " UNBALANCED!!" + "  BF: " + bf);
-        }
 
         RotationState state = null;
 

@@ -9,6 +9,9 @@ import static com.jszheng.base.SkewedState.*;
 
 abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
 
+    protected InsertionAlgo<E> insertionAlgo;
+    protected SearchAlgo<E> searchAlgo;
+
     @Override
     public int count() {
         return count(getRoot());
@@ -112,6 +115,23 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
             node.setRightChildWithIndex(tmpLeft);
             node.isRoot();
         }
+    }
+
+    protected <T extends Comparable<? super T>> TreeNode<T> compareNode(TreeNode<T> t1, TreeNode<T> t2, boolean findGreater) {
+        T t1Data = t1 != null ? t1.getData() : null;
+        T t2Data = t2 != null ? t2.getData() : null;
+
+        if (t1Data == null && t2Data == null) return null;
+        else if (t1Data == null) return t2;
+        else if (t2Data == null) return t1;
+
+        int compareResult = t1Data.compareTo(t2Data);
+        boolean t1GreaterThanT2 = compareResult > 0;
+
+        if (findGreater)
+            return t1GreaterThanT2 ? t1 : t2;
+        else
+            return t1GreaterThanT2 ? t2 : t1;
     }
 
     protected abstract InsertionAlgo<E> createInsertionAlgo();

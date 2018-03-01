@@ -15,10 +15,8 @@ public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalan
     }
 
     @Override
-    public String getNodeString(TreeNode<E> node) {
-        Object data = node != null ? node.getData() : null;
-        return data != null ? node.getData() + "(" + count(node) + ")" :
-                (getRoot() == node ? "⊙" : " ");
+    public BinaryTree<E> copy(boolean deep) {
+        return new SizeBalancedTree<>(component.copy(deep));
     }
 
     @Override
@@ -31,6 +29,13 @@ public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalan
         if (insertionAlgo == null)
             insertionAlgo = new SbtInsertion<>();
         return insertionAlgo;
+    }
+
+    @Override
+    public String getNodeString(TreeNode<E> node) {
+        Object data = node != null ? node.getData() : null;
+        return data != null ? node.getData() + "(" + count(node) + ")" :
+                (getRoot() == node ? "⊙" : " ");
     }
 
     public TreeNode<E> selectKth(int k) {

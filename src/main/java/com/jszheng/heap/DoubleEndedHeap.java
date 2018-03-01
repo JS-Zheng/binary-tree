@@ -1,21 +1,22 @@
 package com.jszheng.heap;
 
 import com.jszheng.base.BinaryTree;
+import com.jszheng.base.completebt.LinearSearch;
 import com.jszheng.node.TreeNode;
+import com.jszheng.search.SearchAlgo;
 
-public abstract class DoubleEndedHeap<E extends Comparable<? super E>> extends Heap<E> {
+public abstract class DoubleEndedHeap<E extends Comparable<? super E>> extends AbstractHeap<E> implements MaxHeap<E>, MinHeap<E> {
 
     public DoubleEndedHeap(BinaryTree<E> component) {
         super(component);
     }
 
-    public abstract E deleteMax();
-
-    public abstract E deleteMin();
-
-    public abstract E searchMax();
-
-    public abstract E searchMin();
+    @Override
+    protected SearchAlgo<E> createSearchAlgo() {
+        if (searchAlgo == null)
+            searchAlgo = new LinearSearch<>();
+        return searchAlgo;
+    }
 
     protected TreeNode<E> getExtremaNodeFromArr(TreeNode<E> nodes[], boolean max) {
         TreeNode<E> extremaNode = null;

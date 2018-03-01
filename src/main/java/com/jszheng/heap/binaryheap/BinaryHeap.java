@@ -1,20 +1,36 @@
-package com.jszheng.heap;
+package com.jszheng.heap.binaryheap;
 
 import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BinaryTreeLemma;
+import com.jszheng.base.completebt.CompleteBinaryTree;
+import com.jszheng.base.completebt.LinearSearch;
+import com.jszheng.heap.AbstractHeap;
 import com.jszheng.node.TreeNode;
+import com.jszheng.search.SearchAlgo;
 
 import java.util.List;
 
-public abstract class BinaryHeap<E extends Comparable<? super E>> extends Heap<E> {
+abstract class BinaryHeap<E extends Comparable<? super E>> extends AbstractHeap<E> implements CompleteBinaryTree<E> {
 
-    public BinaryHeap(BinaryTree<E> component) {
+    private final boolean maxHeap;
+
+    BinaryHeap(BinaryTree<E> component) {
         super(component);
+        maxHeap = isMaxHeap();
+    }
+
+    abstract boolean isMaxHeap();
+
+    @Override
+    protected SearchAlgo<E> createSearchAlgo() {
+        if (searchAlgo == null)
+            searchAlgo = new LinearSearch<>();
+        return searchAlgo;
     }
 
     // O(n)
-    protected void constructHeapByBottomUp(E[] data, boolean maxHeap) {
+    void constructHeapByBottomUp(E[] data) {
         if (Env.debug)
             System.out.println("===== Bottom-up Construct "
                     + (maxHeap ? "MaxHeap" : "MinHeap") + " =====");
@@ -32,8 +48,9 @@ public abstract class BinaryHeap<E extends Comparable<? super E>> extends Heap<E
         }
     }
 
-    // Extrema == Root
-    protected E deleteExtrema(boolean maxHeap) {
+    // Θ(log n)
+    E deleteExtrema() {
+        // Extrema == Root
         TreeNode<E> root = getRoot();
         if (root == null) return null;
         else if (root.degree() == 0) {
@@ -55,7 +72,8 @@ public abstract class BinaryHeap<E extends Comparable<? super E>> extends Heap<E
         return extrema;
     }
 
-    protected E searchExtrema() {
+    // O(1)
+    E searchExtrema() {
         TreeNode<E> root = getRoot();
         if (root == null) return null;
         return root.getData();

@@ -1,51 +1,20 @@
 package com.jszheng.heap.minmaxheap;
 
 import com.jszheng.base.BinaryTree;
+import com.jszheng.base.completebt.CompleteBinaryTree;
 import com.jszheng.heap.DoubleEndedHeap;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.TreeNode;
 
-public class MinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> {
+public class MinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> implements CompleteBinaryTree<E> {
 
     public MinMaxHeap(BinaryTree<E> component) {
         super(component);
     }
 
     @Override
-    public E deleteMax() {
-        return deleteExtrema(true);
-    }
-
-    @Override
-    public E deleteMin() {
-        return deleteExtrema(false);
-    }
-
-    @Override
-    public E searchMax() {
-        TreeNode<E> maxNode = searchExtremaNode(true);
-        return maxNode != null ? maxNode.getData() : null;
-    }
-
-    @Override
-    public E searchMin() {
-        TreeNode<E> minNode = searchExtremaNode(false);
-        return minNode != null ? minNode.getData() : null;
-    }
-
-    @Override
-    protected TreeNode<E> searchExtremaNode(boolean max) {
-        TreeNode<E> root = getRoot();
-        if (root == null) return null;
-        if (!max) return root;
-
-        // Find Max
-        TreeNode<E> lChild = root.getLeftChild();
-        TreeNode<E> rChild = root.getRightChild();
-        if (lChild == null && rChild == null)
-            return root;
-        else
-            return compareNode(lChild, rChild, true);
+    public BinaryTree<E> copy(boolean deep) {
+        return new MinMaxHeap<>(component.copy(deep));
     }
 
     @Override
@@ -56,6 +25,28 @@ public class MinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap
     @Override
     public BinaryTree<E> newTree() {
         return new MinMaxHeap<>(component.newTree());
+    }
+
+    @Override
+    public E deleteMax() {
+        return deleteExtrema(true);
+    }
+
+    @Override
+    public E searchMax() {
+        TreeNode<E> maxNode = searchExtremaNode(true);
+        return maxNode != null ? maxNode.getData() : null;
+    }
+
+    @Override
+    public E deleteMin() {
+        return deleteExtrema(false);
+    }
+
+    @Override
+    public E searchMin() {
+        TreeNode<E> minNode = searchExtremaNode(false);
+        return minNode != null ? minNode.getData() : null;
     }
 
     @Override
@@ -72,6 +63,21 @@ public class MinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap
     @Override
     protected void upHeap(TreeNode<E> node, boolean maxHeap) {
         super.upHeap(node, maxHeap);
+    }
+
+    @Override
+    protected TreeNode<E> searchExtremaNode(boolean max) {
+        TreeNode<E> root = getRoot();
+        if (root == null) return null;
+        if (!max) return root;
+
+        // Find Max
+        TreeNode<E> lChild = root.getLeftChild();
+        TreeNode<E> rChild = root.getRightChild();
+        if (lChild == null && rChild == null)
+            return root;
+        else
+            return compareNode(lChild, rChild, true);
     }
 
     private E deleteExtrema(boolean max) {

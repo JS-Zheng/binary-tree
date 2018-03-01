@@ -7,7 +7,6 @@ import com.jszheng.search.SearchResult;
 
 public class BinarySearchTree<E extends Comparable<? super E>> extends BtDecorator<E> {
 
-    protected InsertionAlgo<E> insertionAlgo;
     protected BstDeletion<E> deletionAlgo;
     protected BstSearch<E> searchAlgo;
 
@@ -22,7 +21,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> extends BtDecorat
 
     @Override
     public BinarySearchTree<E> newTree() {
-        return new BinarySearchTree<>(component.newTree());
+        return newGeneralBst();
     }
 
     // The subtree of the "binary search tree" is still BST.
@@ -34,6 +33,10 @@ public class BinarySearchTree<E extends Comparable<? super E>> extends BtDecorat
         BstDeletion<E> algo = createDeletionAlgo();
         algo.setReplaceByLMax(replaceByLMax);
         algo.delete(this, data);
+    }
+
+    public final BinarySearchTree<E> newGeneralBst() {
+        return new BinarySearchTree<>(component.newTree());
     }
 
     public SearchResult<E> searchMax() {

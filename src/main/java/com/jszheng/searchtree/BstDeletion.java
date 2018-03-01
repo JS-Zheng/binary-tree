@@ -25,10 +25,6 @@ public class BstDeletion<E extends Comparable<? super E>> implements DeletionAlg
         return (targetNode != null) && delete(bst, targetNode);
     }
 
-    public void setReplaceByLMax(boolean replaceByLMax) {
-        this.replaceByLMax = replaceByLMax;
-    }
-
     protected BinarySearchTree<E> getBt() {
         return this.bst;
     }
@@ -64,7 +60,9 @@ public class BstDeletion<E extends Comparable<? super E>> implements DeletionAlg
     // Degree 2 (just replace data)
     protected void deleteNodeByExtremaChild(BinarySearchTree<E> bst, TreeNode<E> targetNode, boolean replaceByLMax) {
         TreeNode<E> child = replaceByLMax ? targetNode.getLeftChild() : targetNode.getRightChild();
-        BinarySearchTree<E> subTree = bst.newTree(); // use tmp tree to find extrema conveniently
+        // Use tmp tree to find extrema conveniently
+        // Use newGeneralBst() to prevent the additional amortized operation after searching (e.g., SplayTree)
+        BinarySearchTree<E> subTree = bst.newGeneralBst();
         subTree.setRoot(child);
 
         // lChild Max or rChild Min
@@ -106,5 +104,9 @@ public class BstDeletion<E extends Comparable<? super E>> implements DeletionAlg
             bst.setRoot(child);
 
         child.setParent(parent, isTargetLeft);
+    }
+
+    void setReplaceByLMax(boolean replaceByLMax) {
+        this.replaceByLMax = replaceByLMax;
     }
 }

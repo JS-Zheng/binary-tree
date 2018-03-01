@@ -1,6 +1,7 @@
-package com.jszheng.heap.minheap;
+package com.jszheng.heap.binaryheap;
 
 import com.jszheng.base.BinaryTree;
+import com.jszheng.heap.MinHeap;
 import com.jszheng.manipulator.TreeManipulator;
 
 public class MinHeapManipulator extends TreeManipulator {
@@ -29,6 +30,6 @@ public class MinHeapManipulator extends TreeManipulator {
 
     @Override
     protected BinaryTree createTree() {
-        return new MinHeap(baseBt());
+        return new MinBinaryHeap(baseBt());
     }
 }

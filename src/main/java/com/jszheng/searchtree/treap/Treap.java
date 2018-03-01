@@ -15,11 +15,19 @@ import java.util.Random;
 
 public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E> {
 
-    private boolean minHeapImplement = true;
+    private final boolean maxHeap;
+    private TreapInsertion<E> insertionAlgo;
+
     private Map<TreeNode<E>, Integer> priority = new HashMap<>();
 
     public Treap(BinaryTree<E> component) {
         super(component);
+        this.maxHeap = false;
+    }
+
+    public Treap(BinaryTree<E> component, boolean maxHeap) {
+        super(component);
+        this.maxHeap = maxHeap;
     }
 
     @Override
@@ -34,10 +42,12 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E> 
             setRoot(data, p);
             return;
         }
+        if (insertionAlgo == null)
+            insertionAlgo = new TreapInsertion<>();
 
-        // Default Algo
-        InsertionAlgo<E> algo = new TreapInsertion<>(minHeapImplement, p);
-        algo.insert(this, data);
+        insertionAlgo.setMaxHeap(maxHeap);
+        insertionAlgo.specifiedPriority(p);
+        insertionAlgo.insert(this, data);
     }
 
     @Override
@@ -46,12 +56,8 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E> 
         putRandomPriority(getRoot());
     }
 
-    boolean isMinHeapImplement() {
-        return minHeapImplement;
-    }
-
-    public void setMinHeapImplement(boolean minHeapImplement) {
-        this.minHeapImplement = minHeapImplement;
+    boolean isMaxHeap() {
+        return maxHeap;
     }
 
     @Override
@@ -64,7 +70,9 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E> 
     @Override
     protected InsertionAlgo<E> createInsertionAlgo() {
         if (insertionAlgo == null)
-            insertionAlgo = new TreapInsertion<>(minHeapImplement);
+            insertionAlgo = new TreapInsertion<>();
+        insertionAlgo.setMaxHeap(maxHeap);
+        insertionAlgo.useRandomPriority();
         return insertionAlgo;
     }
 

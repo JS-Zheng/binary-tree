@@ -37,14 +37,8 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
     }
 
     @Override
-    public String getNodeString(TreeNode<E> node) {
-        E data = node != null ? node.getData() : null;
-        if (osName.contains("Windows"))
-            return data != null ? data.toString() +
-                    "(" + (colorOf(node) == BLACK ? "黑" : "紅") + ")" : " ";
-        else
-            return data != null ? data.toString() +
-                    "(" + (colorOf(node) == BLACK ? "⚫" : "🔴") + ")" : " "; // Keep one space to mock null.
+    public BinaryTree<E> copy(boolean deep) {
+        return new RedBlackTree<>(component.copy(deep));
     }
 
     @Override
@@ -64,6 +58,17 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
         if (insertionAlgo == null)
             insertionAlgo = new RedBlackInsertion<>();
         return insertionAlgo;
+    }
+
+    @Override
+    public String getNodeString(TreeNode<E> node) {
+        E data = node != null ? node.getData() : null;
+        if (osName.contains("Windows"))
+            return data != null ? data.toString() +
+                    "(" + (colorOf(node) == BLACK ? "黑" : "紅") + ")" : " ";
+        else
+            return data != null ? data.toString() +
+                    "(" + (colorOf(node) == BLACK ? "⚫" : "🔴") + ")" : " "; // Keep one space to mock null.
     }
 
     @Override

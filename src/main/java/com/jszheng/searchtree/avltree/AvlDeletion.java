@@ -1,5 +1,6 @@
 package com.jszheng.searchtree.avltree;
 
+import com.jszheng.Env;
 import com.jszheng.node.TreeNode;
 import com.jszheng.searchtree.BinarySearchTree;
 import com.jszheng.searchtree.BstDeletion;
@@ -23,6 +24,10 @@ class AvlDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
             if (bf < -1 || bf > 1) {
                 TreeNode<E> child = avlTree.getHigherChild(currentNode);
                 boolean isGrandChildLeft = avlTree.getHigherChild(child).isLeftChild();
+                // Unbalanced
+                if (Env.debug)
+                    System.out.printf("[delete] node: %s is unbalanced -- BF: %d\n"
+                            , currentNode.getData(), bf);
                 avlTree.handleUnbalancedNode(currentNode, bf, isGrandChildLeft);
                 break;
             }

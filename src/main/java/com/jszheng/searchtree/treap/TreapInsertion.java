@@ -9,18 +9,11 @@ import com.jszheng.searchtree.BstInsertion;
  */
 class TreapInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
 
+    private boolean maxHeap = true;
     private boolean specifiedPriority = false;
-    private boolean minHeapImplement = true;
     private int priority;
 
-    TreapInsertion(boolean minHeapImplement) {
-        this.minHeapImplement = minHeapImplement;
-    }
-
-    TreapInsertion(boolean minHeapImplement, int priority) {
-        this.minHeapImplement = minHeapImplement;
-        this.priority = priority;
-        specifiedPriority = true;
+    TreapInsertion() {
     }
 
     @Override
@@ -37,6 +30,21 @@ class TreapInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
         else
             treap.putRandomPriority(newNode);
 
-        treap.upHeap(newNode, !minHeapImplement);
+        treap.upHeap(newNode, maxHeap);
     }
+
+    void specifiedPriority(int priority) {
+        this.specifiedPriority = true;
+        this.priority = priority;
+    }
+
+    void useRandomPriority() {
+        this.specifiedPriority = false;
+    }
+
+    void setMaxHeap(boolean maxHeap) {
+        this.maxHeap = maxHeap;
+    }
+
+
 }

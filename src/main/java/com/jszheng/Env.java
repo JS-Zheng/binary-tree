@@ -12,10 +12,12 @@ public class Env {
     public final static String TREAP = "Treap";
     public final static String AVL_TREE = "AVL樹";
     public final static String RED_BLACK_TREE = "紅黑樹";
-    public final static String SIZE_BALACNED_TREE = "大小平衡樹";
+    public final static String SIZE_BALANCED_TREE = "大小平衡樹";
     public final static String MIN_HEAP = "Min-Heap";
     public final static String MAX_HEAP = "Max-Heap";
     public final static String MIN_MAX_HEAP = "Min-Max Heap";
     public final static String DEAP = "DEAP";
     public final static String SMMH = "SMMH";
+    public final static String MIN_LEFTIST_TREE = "最小左傾樹";
+    public final static String MAX_LEFTIST_TREE = "最大左傾樹";
 }

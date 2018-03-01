@@ -1,6 +1,7 @@
-package com.jszheng.heap.maxheap;
+package com.jszheng.heap.binaryheap;
 
 import com.jszheng.base.BinaryTree;
+import com.jszheng.heap.MaxHeap;
 import com.jszheng.manipulator.TreeManipulator;
 
 public class MaxHeapManipulator extends TreeManipulator {
@@ -29,6 +30,6 @@ public class MaxHeapManipulator extends TreeManipulator {
 
     @Override
     protected BinaryTree createTree() {
-        return new MaxHeap(baseBt());
+        return new MaxBinaryHeap(baseBt());
     }
 }

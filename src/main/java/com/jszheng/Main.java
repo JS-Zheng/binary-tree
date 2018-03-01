@@ -2,9 +2,11 @@ package com.jszheng;
 
 import com.jszheng.base.completebt.CompleteBtManipulator;
 import com.jszheng.base.simplebalanced.SimpleBalancedTreeManipulator;
+import com.jszheng.heap.binaryheap.MaxHeapManipulator;
+import com.jszheng.heap.binaryheap.MinHeapManipulator;
 import com.jszheng.heap.deap.DeapManipulator;
-import com.jszheng.heap.maxheap.MaxHeapManipulator;
-import com.jszheng.heap.minheap.MinHeapManipulator;
+import com.jszheng.heap.leftisttree.MaxLeftistTreeManipulator;
+import com.jszheng.heap.leftisttree.MinLeftistTreeManipulator;
 import com.jszheng.heap.minmaxheap.MinMaxHeapManipulator;
 import com.jszheng.heap.smmh.SmmhManipulator;
 import com.jszheng.manipulator.DataTypeManipulator;
@@ -36,9 +38,11 @@ public class Main {
         factory.register(TREAP, TreapManipulator.class);
         factory.register(AVL_TREE, AvlManipulator.class);
         factory.register(RED_BLACK_TREE, RbtManipulator.class);
-        factory.register(SIZE_BALACNED_TREE, SbtManipulator.class);
+        factory.register(SIZE_BALANCED_TREE, SbtManipulator.class);
         factory.register(MAX_HEAP, MaxHeapManipulator.class);
         factory.register(MIN_HEAP, MinHeapManipulator.class);
+        factory.register(MIN_LEFTIST_TREE, MinLeftistTreeManipulator.class);
+        factory.register(MAX_LEFTIST_TREE, MaxLeftistTreeManipulator.class);
         factory.register(MIN_MAX_HEAP, MinMaxHeapManipulator.class);
         factory.register(DEAP, DeapManipulator.class);
         factory.register(SMMH, SmmhManipulator.class);

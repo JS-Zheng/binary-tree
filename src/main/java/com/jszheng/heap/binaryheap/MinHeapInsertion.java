@@ -1,15 +1,18 @@
-package com.jszheng.heap.minheap;
+package com.jszheng.heap.binaryheap;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.heap.HeapInsertion;
 import com.jszheng.node.TreeNode;
 
-public class MinHeapInsertion<E extends Comparable<? super E>> extends HeapInsertion<E> {
+/*
+ * O(log n)
+ */
+class MinHeapInsertion<E extends Comparable<? super E>> extends HeapInsertion<E> {
 
     @Override
-    protected MinHeap<E> getBt() {
+    protected MinBinaryHeap<E> getBt() {
         BinaryTree<E> bt = super.getBt();
-        return (MinHeap<E>) bt;
+        return (MinBinaryHeap<E>) bt;
     }
 
     @Override

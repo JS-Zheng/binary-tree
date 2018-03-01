@@ -19,7 +19,7 @@ class TreapDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
     @Override
     protected void deleteNodeByExtremaChild(BinarySearchTree<E> bst, TreeNode<E> targetNode, boolean replaceByLMax) {
         Treap<E> treap = getBt();
-        boolean isMinHeapImpl = treap.isMinHeapImplement();
+        boolean isMaxHeapImpl = treap.isMaxHeap();
 
         while (targetNode.degree() == 2) {
             TreeNode<E> lChild = targetNode.getLeftChild();
@@ -27,7 +27,7 @@ class TreapDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
             int lChildPriority = treap.priorityOf(lChild);
             int rChildPriority = treap.priorityOf(rChild);
 
-            TreeNode<E> extremaPriorityChild = isMinHeapImpl && lChildPriority < rChildPriority ? lChild : rChild;
+            TreeNode<E> extremaPriorityChild = !isMaxHeapImpl && lChildPriority < rChildPriority ? lChild : rChild;
 
             RotationState state = extremaPriorityChild == lChild ? new LlRotation() : new RrRotation();
             state.rotate(treap, targetNode);

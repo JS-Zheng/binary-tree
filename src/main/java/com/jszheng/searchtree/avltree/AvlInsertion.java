@@ -1,5 +1,6 @@
 package com.jszheng.searchtree.avltree;
 
+import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.node.TreeNode;
 import com.jszheng.searchtree.BstInsertion;
@@ -34,6 +35,10 @@ class AvlInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
             int bf = avlTree.getBalanceFactor(currentNode);
             if (bf < -1 || bf > 1) {
                 boolean isGrandChildLeft = stack.pop();
+                // Unbalanced
+                if (Env.debug)
+                    System.out.printf("[insert] node: %s is unbalanced -- BF: %d\n"
+                            , currentNode.getData(), bf);
                 avlTree.handleUnbalancedNode(currentNode, bf, isGrandChildLeft);
                 break; // Important!
             }

@@ -2,11 +2,12 @@ package com.jszheng.heap.deap;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BinaryTreeLemma;
+import com.jszheng.base.completebt.CompleteBinaryTree;
 import com.jszheng.heap.DoubleEndedHeap;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.TreeNode;
 
-public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> {
+public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> implements CompleteBinaryTree<E> {
 
     public Deap(BinaryTree<E> component) {
         super(component);
@@ -23,18 +24,8 @@ public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> {
     }
 
     @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        return new DeapInsertion<>();
-    }
-
-    @Override
     public E deleteMax() {
         return deleteExtrema(true);
-    }
-
-    @Override
-    public E deleteMin() {
-        return deleteExtrema(false);
     }
 
     @Override
@@ -44,9 +35,21 @@ public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> {
     }
 
     @Override
+    public E deleteMin() {
+        return deleteExtrema(false);
+    }
+
+    @Override
     public E searchMin() {
         TreeNode<E> minNode = searchExtremaNode(false);
         return minNode != null ? minNode.getData() : null;
+    }
+
+    @Override
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        if (insertionAlgo == null)
+            insertionAlgo = new DeapInsertion<>();
+        return insertionAlgo;
     }
 
     private E deleteExtrema(boolean max) {

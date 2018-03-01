@@ -11,6 +11,6 @@ public class CompleteBtManipulator extends TreeManipulator {
 
     @Override
     protected BinaryTree createTree() {
-        return new CompleteBinaryTree(baseBt());
+        return new CompleteBtImpl(baseBt());
     }
 }

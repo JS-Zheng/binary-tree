@@ -118,12 +118,17 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     @Override
     protected InsertionAlgo<E> createInsertionAlgo() {
         // Default Algo
-        return new CompleteBtInsertion<>();
+        if (insertionAlgo == null)
+            insertionAlgo = new CompleteBtInsertion<>();
+        return insertionAlgo;
     }
 
     @Override
     protected SearchAlgo<E> createSearchAlgo() {
-        return new LinearSearch<>();
+        // Default Algo
+        if (searchAlgo == null)
+            searchAlgo = new LinearSearch<>();
+        return searchAlgo;
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})

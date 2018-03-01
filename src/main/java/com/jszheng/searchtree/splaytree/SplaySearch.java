@@ -15,5 +15,4 @@ class SplaySearch<E extends Comparable<? super E>> extends BstSearch<E> {
         super.fixAfterSearch(node);
         getBt().fixAfterOperation(node);
     }
-
 }
