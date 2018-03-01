@@ -2,7 +2,7 @@ package com.jszheng.heap.deap;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BinaryTreeLemma;
-import com.jszheng.base.completebt.CompleteBinaryTree;
+import com.jszheng.base.complete.CompleteBinaryTree;
 import com.jszheng.heap.DoubleEndedHeap;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.TreeNode;

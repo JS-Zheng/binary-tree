@@ -1,22 +1,22 @@
 package com.jszheng;
 
-import com.jszheng.base.completebt.CompleteBtManipulator;
+import com.jszheng.base.complete.CompleteBtManipulator;
 import com.jszheng.base.simplebalanced.SimpleBalancedTreeManipulator;
-import com.jszheng.heap.binaryheap.MaxHeapManipulator;
-import com.jszheng.heap.binaryheap.MinHeapManipulator;
+import com.jszheng.heap.binary.MaxHeapManipulator;
+import com.jszheng.heap.binary.MinHeapManipulator;
 import com.jszheng.heap.deap.DeapManipulator;
-import com.jszheng.heap.leftisttree.MaxLeftistTreeManipulator;
-import com.jszheng.heap.leftisttree.MinLeftistTreeManipulator;
-import com.jszheng.heap.minmaxheap.MinMaxHeapManipulator;
+import com.jszheng.heap.leftist.MaxLeftistTreeManipulator;
+import com.jszheng.heap.leftist.MinLeftistTreeManipulator;
+import com.jszheng.heap.minmax.MinMaxHeapManipulator;
 import com.jszheng.heap.smmh.SmmhManipulator;
 import com.jszheng.manipulator.DataTypeManipulator;
 import com.jszheng.manipulator.Manipulator;
 import com.jszheng.manipulator.TreeManipulatorFactory;
 import com.jszheng.searchtree.BstManipulator;
-import com.jszheng.searchtree.avltree.AvlManipulator;
-import com.jszheng.searchtree.rbtree.RbtManipulator;
-import com.jszheng.searchtree.sbtree.SbtManipulator;
-import com.jszheng.searchtree.splaytree.SplayTreeManipulator;
+import com.jszheng.searchtree.avl.AvlManipulator;
+import com.jszheng.searchtree.redblack.RbtManipulator;
+import com.jszheng.searchtree.sizebalanced.SbtManipulator;
+import com.jszheng.searchtree.splay.SplayTreeManipulator;
 import com.jszheng.searchtree.treap.TreapManipulator;
 
 import static com.jszheng.Env.*;

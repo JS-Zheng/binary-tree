@@ -1,8 +1,8 @@
 package com.jszheng.base;
 
 import com.jszheng.Env;
-import com.jszheng.base.completebt.CompleteBtInsertion;
-import com.jszheng.base.completebt.LinearSearch;
+import com.jszheng.base.complete.CompleteBtInsertion;
+import com.jszheng.base.complete.LinearSearch;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.LinkedTreeNode;
 import com.jszheng.node.TreeNode;

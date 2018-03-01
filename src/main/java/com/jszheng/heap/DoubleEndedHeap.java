@@ -1,7 +1,7 @@
 package com.jszheng.heap;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.base.completebt.LinearSearch;
+import com.jszheng.base.complete.LinearSearch;
 import com.jszheng.node.TreeNode;
 import com.jszheng.search.SearchAlgo;
 

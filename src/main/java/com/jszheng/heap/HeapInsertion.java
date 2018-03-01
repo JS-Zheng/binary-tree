@@ -1,7 +1,7 @@
 package com.jszheng.heap;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.base.completebt.CompleteBtInsertion;
+import com.jszheng.base.complete.CompleteBtInsertion;
 
 /*
  * O(log n)

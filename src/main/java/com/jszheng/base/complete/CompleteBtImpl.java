@@ -1,30 +1,29 @@
-package com.jszheng.base.simplebalanced;
+package com.jszheng.base.complete;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BtDecorator;
-import com.jszheng.base.complete.LinearSearch;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.search.SearchAlgo;
 
-public class SimpleBalancedTree<E> extends BtDecorator<E> {
+public class CompleteBtImpl<E> extends BtDecorator<E> implements CompleteBinaryTree<E> {
 
-    public SimpleBalancedTree(BinaryTree<E> component) {
+    public CompleteBtImpl(BinaryTree<E> component) {
         super(component);
     }
 
     @Override
-    public BinaryTree<E> copy(boolean deep) {
-        return new SimpleBalancedTree<>(component.copy(deep));
+    public CompleteBtImpl<E> copy(boolean deep) {
+        return new CompleteBtImpl<>(component.copy(deep));
     }
 
     @Override
     public BinaryTree<E> newTree() {
-        return new SimpleBalancedTree<>(component.newTree());
+        return new CompleteBtImpl<>(component.newTree());
     }
 
     @Override
     protected InsertionAlgo<E> createInsertionAlgo() {
-        return new SimpleBalancedInsertion<>();
+        return new CompleteBtInsertion<>();
     }
 
     @Override

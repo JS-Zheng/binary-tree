@@ -1,7 +1,7 @@
 package com.jszheng.heap.smmh;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.base.completebt.CompleteBinaryTree;
+import com.jszheng.base.complete.CompleteBinaryTree;
 import com.jszheng.heap.DoubleEndedHeap;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.TreeNode;

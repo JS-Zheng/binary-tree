@@ -1,7 +1,7 @@
 package com.jszheng.heap.smmh;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.base.completebt.CompleteBtInsertion;
+import com.jszheng.base.complete.CompleteBtInsertion;
 import com.jszheng.node.TreeNode;
 
 public class SmmhInsertion<E extends Comparable<? super E>> extends CompleteBtInsertion<E> {
