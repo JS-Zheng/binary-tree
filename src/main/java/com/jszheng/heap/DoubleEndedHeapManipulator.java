@@ -1,8 +1,8 @@
 package com.jszheng.heap;
 
-import com.jszheng.manipulator.TreeManipulator;
+import com.jszheng.manipulator.BinTreeManipulator;
 
-public abstract class DoubleEndedHeapManipulator extends TreeManipulator {
+public abstract class DoubleEndedHeapManipulator extends BinTreeManipulator {
 
     public DoubleEndedHeapManipulator(Class dataType) {
         super(dataType);
@@ -13,12 +13,12 @@ public abstract class DoubleEndedHeapManipulator extends TreeManipulator {
         super.addDeleteOp();
         addOperation("delete max", bt -> {
             ((DoubleEndedHeap) bt).deleteMax();
-            printBt();
+            printTree();
         });
 
         addOperation("delete min", bt -> {
             ((DoubleEndedHeap) bt).deleteMin();
-            printBt();
+            printTree();
         });
     }
 

@@ -1,8 +1,8 @@
 package com.jszheng.heap.deap;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.base.completebt.CompleteBtInsertion;
-import com.jszheng.node.TreeNode;
+import com.jszheng.base.complete.CompleteBtInsertion;
+import com.jszheng.node.BinTreeNode;
 
 public class DeapInsertion<E extends Comparable<? super E>> extends CompleteBtInsertion<E> {
 
@@ -22,7 +22,7 @@ public class DeapInsertion<E extends Comparable<? super E>> extends CompleteBtIn
     }
 
     @Override
-    protected void fixAfterInsertion(TreeNode<E> newNode) {
+    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         Deap<E> deap = getBt();
         deap.insertionFixUp(newNode);
     }

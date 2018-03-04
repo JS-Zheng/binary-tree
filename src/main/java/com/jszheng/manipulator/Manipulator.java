@@ -42,8 +42,8 @@ public abstract class Manipulator<Operation> {
             result.append("[").append(i + 1).append("]")
                     .append(operationNames.get(i)).append(" ");
 
-            if (opSize > 8)
-                if (i >= 7 && i % 7 == 0) result.append("\n");
+            if (opSize > 8 && i >= 7 && i % 7 == 0 && i != opSize - 1)
+                result.append("\n");
         }
         return result.toString();
     }

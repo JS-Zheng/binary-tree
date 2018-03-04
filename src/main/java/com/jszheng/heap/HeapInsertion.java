@@ -1,10 +1,10 @@
 package com.jszheng.heap;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.base.completebt.CompleteBtInsertion;
+import com.jszheng.base.complete.CompleteBtInsertion;
 
 /*
- * O(Log n)
+ * O(log n)
  */
 public abstract class HeapInsertion<E extends Comparable<? super E>> extends CompleteBtInsertion<E> {
 

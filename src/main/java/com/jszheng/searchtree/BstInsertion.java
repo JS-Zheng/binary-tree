@@ -3,7 +3,7 @@ package com.jszheng.searchtree;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.AbstractInsertionAlgo;
 import com.jszheng.insertion.InsertionLocator;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 /*
  * O(Log n)
@@ -25,8 +25,8 @@ public class BstInsertion<E extends Comparable<? super E>> extends AbstractInser
     public InsertionLocator<E> insertData(E data) {
         int searchCount = 0;
         boolean isLeft = false;
-        TreeNode<E> lastNode = null;
-        TreeNode<E> currentNode = getBt().getRoot();
+        BinTreeNode<E> lastNode = null;
+        BinTreeNode<E> currentNode = getBt().getRoot();
 
         while (currentNode != null) {
             searchCount++;
@@ -58,7 +58,7 @@ public class BstInsertion<E extends Comparable<? super E>> extends AbstractInser
     }
 
     // Handles each node in process of BST Comparing
-    protected boolean handleNode(TreeNode<E> node) {
+    protected boolean handleNode(BinTreeNode<E> node) {
         // Default do nothing.
         return true;
     }

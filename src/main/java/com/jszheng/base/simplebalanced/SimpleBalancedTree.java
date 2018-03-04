@@ -2,7 +2,7 @@ package com.jszheng.base.simplebalanced;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BtDecorator;
-import com.jszheng.base.completebt.LinearSearch;
+import com.jszheng.base.complete.LinearSearch;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.search.SearchAlgo;
 
@@ -23,12 +23,12 @@ public class SimpleBalancedTree<E> extends BtDecorator<E> {
     }
 
     @Override
-    public InsertionAlgo<E> createInsertionAlgo() {
+    protected InsertionAlgo<E> createInsertionAlgo() {
         return new SimpleBalancedInsertion<>();
     }
 
     @Override
-    public SearchAlgo<E> createSearchAlgo() {
+    protected SearchAlgo<E> createSearchAlgo() {
         return new LinearSearch<>();
     }
 }

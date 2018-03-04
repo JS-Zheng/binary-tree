@@ -12,7 +12,7 @@ import java.util.Queue;
  * <p>
  * Created by zhengzhongsheng on 2017/10/16.
  */
-public class SubTreeArrayAlgo<Param> implements BFSAlgo<Param[], Integer, Param[]> {
+class SubTreeArrayAlgo<Param> implements BFSAlgo<Param[], Integer, Param[]> {
 
     private List<Param> list = new ArrayList<>();
     private Param[] treeArr;

@@ -1,7 +1,7 @@
 package com.jszheng.searchtree;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.rotation.*;
 
 public class SelfBalancingBst<E extends Comparable<? super E>> extends BinarySearchTree<E> {
@@ -10,7 +10,7 @@ public class SelfBalancingBst<E extends Comparable<? super E>> extends BinarySea
         super(component);
     }
 
-    public RotationState getRotationState(TreeNode<E> pivot, TreeNode<E> child) {
+    public RotationState getRotationState(BinTreeNode<E> pivot, BinTreeNode<E> child) {
         RotationState state;
 
         boolean isPivotLeft = pivot.isLeftChild();

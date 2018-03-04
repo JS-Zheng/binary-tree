@@ -7,11 +7,11 @@ import com.jszheng.util.BFSAlgo;
  *
  * O(n * Log n)
  */
-public class BottomUpTreeNodeConstructor<E> implements TreeNodeConstructor<E> {
+class BottomUpTreeNodeConstructor<E> implements TreeNodeConstructor<E> {
 
-    private final TreeNode<E> node;
+    private final BinTreeNode<E> node;
 
-    public BottomUpTreeNodeConstructor(TreeNode<E> node) {
+    public BottomUpTreeNodeConstructor(BinTreeNode<E> node) {
         this.node = node;
     }
 
@@ -31,12 +31,12 @@ public class BottomUpTreeNodeConstructor<E> implements TreeNodeConstructor<E> {
         return algo.execute(treeArr);
     }
 
-    private void setSubTreeByArr(TreeNode<E> node, E[] items, boolean isLeft) {
+    private void setSubTreeByArr(BinTreeNode<E> node, E[] items, boolean isLeft) {
         E[] subItems = getChildArray(items, isLeft);
 
         // Prevent unnecessary instance
         if (subItems != null && subItems.length > 0 && items[0] != null) {
-            TreeNode<E> child = node.newNode();
+            BinTreeNode<E> child = node.newNode();
             child.setDataByArr(subItems);
 
             if (isLeft)

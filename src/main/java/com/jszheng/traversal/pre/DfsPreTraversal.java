@@ -1,7 +1,7 @@
 package com.jszheng.traversal.pre;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.traversal.AbstractIterativeTraversal;
 
 import java.util.LinkedHashSet;
@@ -12,11 +12,11 @@ import java.util.Set;
 public class DfsPreTraversal<E> extends AbstractIterativeTraversal<E> {
 
     @Override
-    public List<TreeNode<E>> traverse(BinaryTree<E> bt) { // No support FullBt Mode, due to my lazy.
-        TreeNode<E> currentNode = bt.getRoot(), prev = null, next;
-        TreeNode<E> lChildTmp, rChildTmp, parentTmp;
+    public List<BinTreeNode<E>> traverse(BinaryTree<E> bt) { // No support FullBt Mode, due to my lazy.
+        BinTreeNode<E> currentNode = bt.getRoot(), prev = null, next;
+        BinTreeNode<E> lChildTmp, rChildTmp, parentTmp;
 
-        Set<TreeNode<E>> mSet = new LinkedHashSet<>();
+        Set<BinTreeNode<E>> mSet = new LinkedHashSet<>();
 
         while (currentNode != null) {
             if ((parentTmp = currentNode.getParent()) == prev ||

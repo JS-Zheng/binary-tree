@@ -1,7 +1,7 @@
 package com.jszheng.traversal;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 @FunctionalInterface
 public interface TraversalNodeHandler<E> {
@@ -14,5 +14,5 @@ public interface TraversalNodeHandler<E> {
      * @param node in process of traversing
      * @return false to terminate traverse
      */
-    boolean handle(TreeNode<E> node);
+    boolean handle(BinTreeNode<E> node);
 }

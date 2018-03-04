@@ -1,7 +1,7 @@
 package com.jszheng.searchtree;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.search.SearchAlgo;
 import com.jszheng.search.SearchResult;
 
@@ -14,7 +14,7 @@ public class BstSearch<E extends Comparable<? super E>> implements SearchAlgo<E>
 
     @Override
     public SearchResult<E> search(BinaryTree<E> bt, E data) {
-        TreeNode<E> currentNode;
+        BinTreeNode<E> currentNode;
 
         if (bt == null || (currentNode = bt.getRoot()) == null)
             return null;
@@ -61,7 +61,7 @@ public class BstSearch<E extends Comparable<? super E>> implements SearchAlgo<E>
         return bt;
     }
 
-    protected void fixAfterSearch(TreeNode<E> node) {
+    protected void fixAfterSearch(BinTreeNode<E> node) {
         // default do nothing.
     }
 
@@ -74,8 +74,8 @@ public class BstSearch<E extends Comparable<? super E>> implements SearchAlgo<E>
         SearchResult<E> result = new SearchResult<>();
         int searchCount = 0;
 
-        TreeNode<E> lastNode = null;
-        TreeNode<E> currentNode = bt.getRoot();
+        BinTreeNode<E> lastNode = null;
+        BinTreeNode<E> currentNode = bt.getRoot();
 
         while (currentNode != null) {
             searchCount++;

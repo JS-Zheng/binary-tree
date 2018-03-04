@@ -1,7 +1,7 @@
 package com.jszheng.traversal.post;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.traversal.AbstractIterativeTraversal;
 import com.jszheng.traversal.TraversalAlgo;
 import com.jszheng.util.DFSAlgo;
@@ -11,12 +11,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
-public class PostOrderTraversal<E> extends AbstractIterativeTraversal<E> implements TraversalAlgo<E>, DFSAlgo<BinaryTree<E>, TreeNode<E>, List<TreeNode<E>>> {
+public class PostOrderTraversal<E> extends AbstractIterativeTraversal<E> implements TraversalAlgo<E>, DFSAlgo<BinaryTree<E>, BinTreeNode<E>, List<BinTreeNode<E>>> {
 
-    private List<TreeNode<E>> dataList = new ArrayList<>();
+    private List<BinTreeNode<E>> dataList = new ArrayList<>();
 
     @Override
-    public TreeNode<E> firstItem(BinaryTree<E> bt) {
+    public BinTreeNode<E> firstItem(BinaryTree<E> bt) {
         return bt.getRoot();
     }
 
@@ -26,7 +26,7 @@ public class PostOrderTraversal<E> extends AbstractIterativeTraversal<E> impleme
     }
 
     @Override
-    public boolean onDataPopped(Stack<TreeNode<E>> stack, TreeNode<E> node) {
+    public boolean onDataPopped(Stack<BinTreeNode<E>> stack, BinTreeNode<E> node) {
         // Traverse rightest child
         while (node != null) {
             dataList.add(node);
@@ -36,7 +36,7 @@ public class PostOrderTraversal<E> extends AbstractIterativeTraversal<E> impleme
 
         // traverse each leftChild of Tree in Stack.
         if (!stack.isEmpty()) {
-            TreeNode<E> subTree = stack.pop();
+            BinTreeNode<E> subTree = stack.pop();
             stack.push(subTree.getLeftChild());
         }
 
@@ -44,10 +44,10 @@ public class PostOrderTraversal<E> extends AbstractIterativeTraversal<E> impleme
     }
 
     @Override
-    public List<TreeNode<E>> onFinish(BinaryTree<E> bt) {
+    public List<BinTreeNode<E>> onFinish(BinaryTree<E> bt) {
         Collections.reverse(dataList);
 
-        for (TreeNode<E> node : dataList) {
+        for (BinTreeNode<E> node : dataList) {
             if (!getNodeHandler().handle(node))
                 break;
         }
@@ -58,7 +58,7 @@ public class PostOrderTraversal<E> extends AbstractIterativeTraversal<E> impleme
     }
 
     @Override
-    public List<TreeNode<E>> traverse(BinaryTree<E> bt) {
+    public List<BinTreeNode<E>> traverse(BinaryTree<E> bt) {
         return execute(bt);
     }
 }

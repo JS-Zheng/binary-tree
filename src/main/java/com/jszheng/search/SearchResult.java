@@ -1,17 +1,17 @@
 package com.jszheng.search;
 
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 public class SearchResult<E> {
 
-    private TreeNode<E> node;
+    private BinTreeNode<E> node;
     private int searchCount;
 
-    public TreeNode<E> getNode() {
+    public BinTreeNode<E> getNode() {
         return node;
     }
 
-    public void setNode(TreeNode<E> node) {
+    public void setNode(BinTreeNode<E> node) {
         this.node = node;
     }
 

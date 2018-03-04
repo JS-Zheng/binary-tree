@@ -1,9 +1,9 @@
 package com.jszheng.searchtree.rotation;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 public interface RotationState {
 
-    <E> void rotate(BinaryTree<E> bt, TreeNode<E> parent);
+    <E> void rotate(BinaryTree<E> bt, BinTreeNode<E> parent);
 }

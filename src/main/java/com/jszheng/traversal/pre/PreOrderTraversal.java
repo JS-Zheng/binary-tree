@@ -1,7 +1,7 @@
 package com.jszheng.traversal.pre;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.traversal.AbstractIterativeTraversal;
 import com.jszheng.util.DFSAlgo;
 
@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class PreOrderTraversal<E> extends AbstractIterativeTraversal<E> implements DFSAlgo<BinaryTree<E>, TreeNode<E>, List<TreeNode<E>>> {
+public class PreOrderTraversal<E> extends AbstractIterativeTraversal<E> implements DFSAlgo<BinaryTree<E>, BinTreeNode<E>, List<BinTreeNode<E>>> {
 
-    protected List<TreeNode<E>> dataList = new ArrayList<>();
+    protected List<BinTreeNode<E>> dataList = new ArrayList<>();
 
     @Override
-    public TreeNode<E> firstItem(BinaryTree<E> bt) {
+    public BinTreeNode<E> firstItem(BinaryTree<E> bt) {
         return bt.getRoot();
     }
 
@@ -24,7 +24,7 @@ public class PreOrderTraversal<E> extends AbstractIterativeTraversal<E> implemen
     }
 
     @Override
-    public boolean onDataPopped(Stack<TreeNode<E>> stack, TreeNode<E> node) {
+    public boolean onDataPopped(Stack<BinTreeNode<E>> stack, BinTreeNode<E> node) {
         if (node == null)
             return false;
 
@@ -32,11 +32,11 @@ public class PreOrderTraversal<E> extends AbstractIterativeTraversal<E> implemen
         if (!getNodeHandler().handle(node))
             return false;
 
-        TreeNode<E> rChild = node.getRightChild();
+        BinTreeNode<E> rChild = node.getRightChild();
         if (rChild != null)
             stack.push(rChild);// Right First (Stack)
 
-        TreeNode<E> lChild = node.getLeftChild();
+        BinTreeNode<E> lChild = node.getLeftChild();
         if (lChild != null)
             stack.push(lChild);
 
@@ -44,13 +44,13 @@ public class PreOrderTraversal<E> extends AbstractIterativeTraversal<E> implemen
     }
 
     @Override
-    public List<TreeNode<E>> onFinish(BinaryTree<E> bt) {
+    public List<BinTreeNode<E>> onFinish(BinaryTree<E> bt) {
         getNodeHandler().afterTraversed(bt);
         return dataList;
     }
 
     @Override
-    public List<TreeNode<E>> traverse(BinaryTree<E> bt) {
+    public List<BinTreeNode<E>> traverse(BinaryTree<E> bt) {
         return execute(bt);
     }
 }

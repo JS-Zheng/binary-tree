@@ -1,7 +1,7 @@
 package com.jszheng.insertion;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 public abstract class AbstractInsertionAlgo<E> implements InsertionAlgo<E> {
 
@@ -22,14 +22,14 @@ public abstract class AbstractInsertionAlgo<E> implements InsertionAlgo<E> {
         InsertionLocator<E> result = insertData(data);
 
         boolean isLeft;
-        TreeNode<E> targetParentNode;
+        BinTreeNode<E> targetParentNode;
 
         if (result == null || (targetParentNode = result.parentNode) == null)
             return false;
 
         isLeft = result.isLeft;
 
-        TreeNode<E> newNode = targetParentNode.newNode();
+        BinTreeNode<E> newNode = targetParentNode.newNode();
         newNode.setData(data);
 
         if (isLeft) {
@@ -50,7 +50,7 @@ public abstract class AbstractInsertionAlgo<E> implements InsertionAlgo<E> {
         return bt;
     }
 
-    protected void fixAfterInsertion(TreeNode<E> newNode) {
+    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         // default do nothing.
     }
 

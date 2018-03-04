@@ -1,26 +1,27 @@
 package com.jszheng.heap;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.base.complete.LinearSearch;
+import com.jszheng.node.BinTreeNode;
+import com.jszheng.search.SearchAlgo;
 
-public abstract class DoubleEndedHeap<E extends Comparable<? super E>> extends Heap<E> {
+public abstract class DoubleEndedHeap<E extends Comparable<? super E>> extends AbstractHeap<E> implements MaxHeap<E>, MinHeap<E> {
 
     public DoubleEndedHeap(BinaryTree<E> component) {
         super(component);
     }
 
-    public abstract E deleteMax();
+    @Override
+    protected SearchAlgo<E> createSearchAlgo() {
+        if (searchAlgo == null)
+            searchAlgo = new LinearSearch<>();
+        return searchAlgo;
+    }
 
-    public abstract E deleteMin();
+    protected BinTreeNode<E> getExtremaNodeFromArr(BinTreeNode<E> nodes[], boolean max) {
+        BinTreeNode<E> extremaNode = null;
 
-    public abstract E searchMax();
-
-    public abstract E searchMin();
-
-    protected TreeNode<E> getExtremaNodeFromArr(TreeNode<E> nodes[], boolean max) {
-        TreeNode<E> extremaNode = null;
-
-        for (TreeNode<E> currentNode : nodes) {
+        for (BinTreeNode<E> currentNode : nodes) {
             if (currentNode == null) continue;
             if (extremaNode == null)
                 extremaNode = currentNode;
@@ -35,8 +36,8 @@ public abstract class DoubleEndedHeap<E extends Comparable<? super E>> extends H
         return extremaNode;
     }
 
-    protected TreeNode<E> searchExtremaNode(boolean max) {
-        TreeNode<E> root = getRoot();
+    protected BinTreeNode<E> searchExtremaNode(boolean max) {
+        BinTreeNode<E> root = getRoot();
         if (root == null) return null;
         else if (max && !root.hasRightChild()) return root.getLeftChild();
         else return max ? root.getRightChild() : root.getLeftChild();

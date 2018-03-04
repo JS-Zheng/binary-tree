@@ -1,16 +1,16 @@
 package com.jszheng.searchtree.rotation;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 abstract class AbstractRotation implements RotationState {
 
     @Override
-    public <E> void rotate(BinaryTree<E> bt, TreeNode<E> parent) {
-        TreeNode<E> grandParent = parent.getParent();
+    public <E> void rotate(BinaryTree<E> bt, BinTreeNode<E> parent) {
+        BinTreeNode<E> grandParent = parent.getParent();
         boolean orinLeft = parent.isLeftChild();
 
-        TreeNode<E> pivot = rotateTree(bt, parent);
+        BinTreeNode<E> pivot = rotateTree(bt, parent);
 
         if (pivot == null) return;
 
@@ -19,19 +19,6 @@ abstract class AbstractRotation implements RotationState {
         if (grandParent == null)
             bt.setRoot(pivot);
     }
-
-    private <E> void setGrandParent(TreeNode<E> grandParent, boolean orinLeft, TreeNode<E> newParent) {
-        if (grandParent != null) {
-            if (orinLeft)
-                grandParent.setLeftChildWithIndex(newParent);
-            else
-                grandParent.setRightChildWithIndex(newParent);
-        } else {
-            newParent.deleteParent();
-        }
-    }
-
-    abstract <E> TreeNode<E> rotateTree(BinaryTree<E> bt, TreeNode<E> parent);
 
     /*
      * Tri-node restructuring
@@ -58,7 +45,7 @@ abstract class AbstractRotation implements RotationState {
      * B   D
      *
      */
-    <E> void rotateLeft(TreeNode<E> parent, TreeNode<E> pivot, TreeNode<E> lChild) {
+    <E> void rotateLeft(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> lChild) {
         parent.setRightChild(lChild);
         pivot.setLeftChildWithIndex(parent);
     }
@@ -88,8 +75,21 @@ abstract class AbstractRotation implements RotationState {
      *       E   C
      *
      */
-    <E> void rotateRight(TreeNode<E> parent, TreeNode<E> pivot, TreeNode<E> rChild) {
+    <E> void rotateRight(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> rChild) {
         parent.setLeftChild(rChild);
         pivot.setRightChildWithIndex(parent);
+    }
+
+    abstract <E> BinTreeNode<E> rotateTree(BinaryTree<E> bt, BinTreeNode<E> parent);
+
+    private <E> void setGrandParent(BinTreeNode<E> grandParent, boolean orinLeft, BinTreeNode<E> newParent) {
+        if (grandParent != null) {
+            if (orinLeft)
+                grandParent.setLeftChildWithIndex(newParent);
+            else
+                grandParent.setRightChildWithIndex(newParent);
+        } else {
+            newParent.deleteParentAndCheckItsChild();
+        }
     }
 }

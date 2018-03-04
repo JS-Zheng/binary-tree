@@ -1,8 +1,8 @@
 package com.jszheng.traversal.level;
 
 import com.jszheng.base.BinaryTree;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.node.LinkedTreeNode;
-import com.jszheng.node.TreeNode;
 import com.jszheng.traversal.AbstractIterativeTraversal;
 import com.jszheng.util.BFSAlgo;
 
@@ -12,17 +12,17 @@ import static com.jszheng.base.BinaryTreeLemma.lChildIndex;
 import static com.jszheng.base.BinaryTreeLemma.rChildIndex;
 
 public class LevelOrderTraversal<E> extends AbstractIterativeTraversal<E>
-        implements ILevelOrderTraversal<E>, BFSAlgo<BinaryTree<E>, TreeNode<E>, List<TreeNode<E>>> {
+        implements ILevelOrderTraversal<E>, BFSAlgo<BinaryTree<E>, BinTreeNode<E>, List<BinTreeNode<E>>> {
 
-    private List<TreeNode<E>> dataList = new ArrayList<>();
-    private Map<TreeNode<E>, Integer> indexMap = new HashMap<>();
-    private Map<TreeNode<E>, Integer> levelMap = new HashMap<>();
-    private Map<TreeNode<E>, Boolean> pseudoNode = new HashMap<>();
+    private List<BinTreeNode<E>> dataList = new ArrayList<>();
+    private Map<BinTreeNode<E>, Integer> indexMap = new HashMap<>();
+    private Map<BinTreeNode<E>, Integer> levelMap = new HashMap<>();
+    private Map<BinTreeNode<E>, Boolean> pseudoNode = new HashMap<>();
     private int maxCount;
     private boolean fullBtMode = false;
 
     @Override
-    public boolean execute(Queue<TreeNode<E>> queue, TreeNode<E> node, List<TreeNode<E>> dataList) {
+    public boolean execute(Queue<BinTreeNode<E>> queue, BinTreeNode<E> node, List<BinTreeNode<E>> dataList) {
         if (node == null)
             return false;
 
@@ -33,8 +33,8 @@ public class LevelOrderTraversal<E> extends AbstractIterativeTraversal<E>
         int index = indexMap.get(node);
         int level = levelMap.get(node);
 
-        TreeNode<E> lChild = node.getLeftChild();
-        TreeNode<E> rChild = node.getRightChild();
+        BinTreeNode<E> lChild = node.getLeftChild();
+        BinTreeNode<E> rChild = node.getRightChild();
 
         offerChild(queue, lChild, true, index, level);
         offerChild(queue, rChild, false, index, level);
@@ -43,8 +43,8 @@ public class LevelOrderTraversal<E> extends AbstractIterativeTraversal<E>
     }
 
     @Override
-    public TreeNode<E> firstItem(BinaryTree<E> bt) {
-        TreeNode<E> root = bt.getRoot();
+    public BinTreeNode<E> firstItem(BinaryTree<E> bt) {
+        BinTreeNode<E> root = bt.getRoot();
 
         indexMap.put(root, 0);
         levelMap.put(root, 1);
@@ -62,18 +62,18 @@ public class LevelOrderTraversal<E> extends AbstractIterativeTraversal<E>
     }
 
     @Override
-    public boolean onDataPolled(Queue<TreeNode<E>> queue, TreeNode<E> node) {
+    public boolean onDataPolled(Queue<BinTreeNode<E>> queue, BinTreeNode<E> node) {
         return execute(queue, node, dataList);
     }
 
     @Override
-    public List<TreeNode<E>> onFinish(BinaryTree<E> bt) {
+    public List<BinTreeNode<E>> onFinish(BinaryTree<E> bt) {
         getNodeHandler().afterTraversed(bt);
         return dataList;
     }
 
     @Override
-    public List<TreeNode<E>> traverse(BinaryTree<E> bt) {
+    public List<BinTreeNode<E>> traverse(BinaryTree<E> bt) {
         return execute(bt);
     }
 
@@ -87,19 +87,19 @@ public class LevelOrderTraversal<E> extends AbstractIterativeTraversal<E>
         this.fullBtMode = isFullMode;
     }
 
-    protected int getIndex(TreeNode<E> node) {
+    protected int getIndex(BinTreeNode<E> node) {
         return indexMap.get(node);
     }
 
-    protected int getLevel(TreeNode<E> node) {
+    protected int getLevel(BinTreeNode<E> node) {
         return levelMap.get(node);
     }
 
-    protected boolean isPseudoNode(TreeNode<E> node) {
+    protected boolean isPseudoNode(BinTreeNode<E> node) {
         return pseudoNode.getOrDefault(node, false);
     }
 
-    private void offerChild(Queue<TreeNode<E>> queue, TreeNode<E> child, boolean isLeft, int parentIndex, int level) {
+    private void offerChild(Queue<BinTreeNode<E>> queue, BinTreeNode<E> child, boolean isLeft, int parentIndex, int level) {
         int maxChildIndex = isLeft ? lChildIndex(dataList.size() - 1) : rChildIndex(dataList.size() - 1);
 
         if (child == null && fullBtMode &&

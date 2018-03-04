@@ -2,7 +2,7 @@ package com.jszheng.searchtree.rotation;
 
 import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 public class LrRotation extends AbstractRotation {
 
@@ -55,15 +55,15 @@ public class LrRotation extends AbstractRotation {
      *
      */
     @Override
-    <E> TreeNode<E> rotateTree(BinaryTree<E> bt, TreeNode<E> parent) {
-        TreeNode<E> middle = parent.getLeftChild();
+    <E> BinTreeNode<E> rotateTree(BinaryTree<E> bt, BinTreeNode<E> parent) {
+        BinTreeNode<E> middle = parent.getLeftChild();
         if (middle == null) return null;
 
-        TreeNode<E> pivot = middle.getRightChild();
+        BinTreeNode<E> pivot = middle.getRightChild();
         if (pivot == null) return null;
 
         if (Env.debug)
-            System.out.println("LR Case: Pivot is " + pivot.getData() + ".\n");
+            System.out.println("[rotate] LR case: pivot is " + pivot.getData());
 
         // Note the first argument.
         rotateLeft(middle, pivot, pivot.getLeftChild()); // RR

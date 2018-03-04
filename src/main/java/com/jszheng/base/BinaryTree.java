@@ -1,9 +1,11 @@
 package com.jszheng.base;
 
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
+import com.jszheng.printer.BtPrinter;
+import com.jszheng.printer.MyBtPrinter;
 import com.jszheng.traversal.Traversable;
 
-public interface BinaryTree<E> extends Traversable<E>, Cloneable {
+public interface BinaryTree<E> extends Tree<E>, Traversable<E>, Cloneable {
 
     void clearRoot();
 
@@ -11,15 +13,15 @@ public interface BinaryTree<E> extends Traversable<E>, Cloneable {
 
     int count();
 
-    int count(TreeNode<E> node);
+    int count(BinTreeNode<E> node);
 
     default String getLevelString(int level) {
         return "";
     }
 
-    TreeNode<E> getNodeByIndex(int index);
+    BinTreeNode<E> getNodeByIndex(int index);
 
-    default String getNodeString(TreeNode<E> node) {
+    default String getNodeString(BinTreeNode<E> node) {
         Object data = node != null ? node.getData() : null;
         return data != null ? data.toString() :
                 (getRoot() == node ? "⊙" : " "); // Keep one space to mock null.
@@ -28,35 +30,36 @@ public interface BinaryTree<E> extends Traversable<E>, Cloneable {
     // root is 1.
     int height();
 
-    int height(TreeNode<E> node);
-
-    void insert(E... data);
+    int height(BinTreeNode<E> node);
 
     int leavesCount();
 
-    int leavesCount(TreeNode<E> node);
+    int leavesCount(BinTreeNode<E> node);
 
     int maxCount();
 
     BinaryTree<E> newTree();
 
-    TreeNode<E> search(E data);
+    default void print() {
+        BtPrinter printer = new MyBtPrinter();
+        printer.print(this);
+    }
+
+    BinTreeNode<E> getRoot();
+
+    void setRoot(E data);
+
+    BinTreeNode<E> search(E data);
 
     void setDataByArr(E[] data);
 
-    void setRoot(E data);
+    void setRoot(BinTreeNode<E> root);
 
     SkewedState skewedState();
 
     void swap();
 
-    void swap(TreeNode<E> node);
+    void swap(BinTreeNode<E> node);
 
-    TreeNode<E> getLastNode();
-
-    TreeNode<E> getRoot();
-
-    void setRoot(TreeNode<E> root);
-
-    boolean isEmpty();
+    BinTreeNode<E> getLastNode();
 }

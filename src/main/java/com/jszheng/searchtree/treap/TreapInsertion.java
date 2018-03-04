@@ -1,26 +1,19 @@
 package com.jszheng.searchtree.treap;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstInsertion;
 
 /*
  * O(Log n)
  */
-public class TreapInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
+class TreapInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
 
+    private boolean maxHeap = true;
     private boolean specifiedPriority = false;
-    private boolean minHeapImplement = true;
     private int priority;
 
-    public TreapInsertion(boolean minHeapImplement) {
-        this.minHeapImplement = minHeapImplement;
-    }
-
-    public TreapInsertion(boolean minHeapImplement, int priority) {
-        this.minHeapImplement = minHeapImplement;
-        this.priority = priority;
-        specifiedPriority = true;
+    TreapInsertion() {
     }
 
     @Override
@@ -30,13 +23,26 @@ public class TreapInsertion<E extends Comparable<? super E>> extends BstInsertio
     }
 
     @Override
-    protected void fixAfterInsertion(TreeNode<E> newNode) {
+    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         Treap<E> treap = getBt();
         if (specifiedPriority)
             treap.putPriority(newNode, priority);
         else
             treap.putRandomPriority(newNode);
 
-        treap.upHeap(newNode, !minHeapImplement);
+        treap.upHeap(newNode, maxHeap);
+    }
+
+    void setMaxHeap(boolean maxHeap) {
+        this.maxHeap = maxHeap;
+    }
+
+    void specifiedPriority(int priority) {
+        this.specifiedPriority = true;
+        this.priority = priority;
+    }
+
+    void useRandomPriority() {
+        this.specifiedPriority = false;
     }
 }
