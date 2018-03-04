@@ -7,6 +7,7 @@ import com.jszheng.heap.DoubleEndedHeap;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 
+// Source -- https://pdfs.semanticscholar.org/e1e5/eafb44abc04834caf752b147256335a73bb3.pdf
 public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> implements CompleteBinaryTree<E> {
 
     public Deap(BinaryTree<E> component) {
@@ -52,6 +53,24 @@ public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> im
         return insertionAlgo;
     }
 
+    /*
+     * call the element to be insert X
+     *
+     * if (the first free position is in the minheap){
+     *   compare X with the corresponding element in the maxheap (indexed I)
+     *
+     *   if (X is the larger){
+     *     move the element in position I to the freed position
+     *     perform a binary search in the path from I to the root of the heap we are working on [3]
+     *     move all elements smaller than X one level down in the maxheap
+     *     store X in the freed position
+     *   } else {
+     *     perform the binary search and data movements in the corresponding way in th minheap
+     *   }
+     * } else {
+     *   proceed in a corresponding way as above
+     * }
+     */
     void insertionFixUp(BinTreeNode<E> newNode) {
         // 取得 Deap 對應節點
         BinTreeNode<E> correspondingNode = getCorrespondingNode(newNode);
