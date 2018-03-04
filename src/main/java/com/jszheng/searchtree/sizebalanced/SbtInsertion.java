@@ -1,7 +1,7 @@
 package com.jszheng.searchtree.sizebalanced;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstInsertion;
 
 /*
@@ -16,9 +16,9 @@ class SbtInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
     }
 
     @Override
-    protected void fixAfterInsertion(TreeNode<E> newNode) {
+    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         SizeBalancedTree<E> sbt = getBt();
-        TreeNode<E> parent = newNode.getParent();
+        BinTreeNode<E> parent = newNode.getParent();
 
         while (parent != null) {
             int compareResult = newNode.getData().compareTo(parent.getData());

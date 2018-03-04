@@ -5,7 +5,7 @@ import com.jszheng.base.BinaryTreeLemma;
 import com.jszheng.base.complete.CompleteBinaryTree;
 import com.jszheng.heap.DoubleEndedHeap;
 import com.jszheng.insertion.InsertionAlgo;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> implements CompleteBinaryTree<E> {
 
@@ -30,7 +30,7 @@ public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> im
 
     @Override
     public E searchMax() {
-        TreeNode<E> maxNode = searchExtremaNode(true);
+        BinTreeNode<E> maxNode = searchExtremaNode(true);
         return maxNode != null ? maxNode.getData() : null;
     }
 
@@ -41,7 +41,7 @@ public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> im
 
     @Override
     public E searchMin() {
-        TreeNode<E> minNode = searchExtremaNode(false);
+        BinTreeNode<E> minNode = searchExtremaNode(false);
         return minNode != null ? minNode.getData() : null;
     }
 
@@ -52,59 +52,9 @@ public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> im
         return insertionAlgo;
     }
 
-    private E deleteExtrema(boolean max) {
-        TreeNode<E> target = searchExtremaNode(max);
-        if (target == null) return null;
-        E extrema = target.getData();
-
-        TreeNode<E> lastNode = getLastNode();
-        E lastNodeData = lastNode.getData();
-        lastNode.deleteParent();
-
-        // If the target is lastNode, simply delete it.
-        if (lastNode == target)
-            return extrema;
-
-        while (target.degree() != 0) {
-            TreeNode<E> lChild = target.getLeftChild();
-            TreeNode<E> rChild = target.getRightChild();
-            TreeNode<E> extremaDescendant = compareNode(lChild, rChild, max);
-            E extremaDescendantData = extremaDescendant.getData();
-
-            target.setData(extremaDescendantData);
-            target = extremaDescendant;
-        }
-
-        target.setData(lastNodeData);
-        insertionFixUp(target);
-
-        return extrema;
-    }
-
-    private TreeNode<E> getCorrespondingNode(TreeNode<E> node) {
-        TreeNode<E> result = null;
-
-        int currentIndex = node.getIndex();
-        boolean isNodeInLTree = BinaryTreeLemma.isDescendantIndex(1, currentIndex);
-        int lastLevel = node.getLevel() - 1;
-        int lastLevelMaxNodeCount = BinaryTreeLemma.getMaxCountByLevel(lastLevel);
-
-        int correspondingIndex = isNodeInLTree ? currentIndex + lastLevelMaxNodeCount
-                : currentIndex - lastLevelMaxNodeCount;
-
-        while (result == null && correspondingIndex > -1) {
-            result = getNodeByIndex(correspondingIndex);
-
-            if (result == null)
-                correspondingIndex = BinaryTreeLemma.parentIndex(correspondingIndex);
-        }
-
-        return result;
-    }
-
-    void insertionFixUp(TreeNode<E> newNode) {
+    void insertionFixUp(BinTreeNode<E> newNode) {
         // 取得 Deap 對應節點
-        TreeNode<E> correspondingNode = getCorrespondingNode(newNode);
+        BinTreeNode<E> correspondingNode = getCorrespondingNode(newNode);
         if (correspondingNode == null || correspondingNode == getRoot()) return;
 
         E data = newNode.getData();
@@ -126,5 +76,55 @@ public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> im
         } else
             // 若新節點原本位於 min-heap，則進行 min-heap 之調整；反之
             upHeap(newNode, !isNewNodeInLTree);
+    }
+
+    private E deleteExtrema(boolean max) {
+        BinTreeNode<E> target = searchExtremaNode(max);
+        if (target == null) return null;
+        E extrema = target.getData();
+
+        BinTreeNode<E> lastNode = getLastNode();
+        E lastNodeData = lastNode.getData();
+        lastNode.deleteParentAndCheckItsChild();
+
+        // If the target is lastNode, simply delete it.
+        if (lastNode == target)
+            return extrema;
+
+        while (target.degree() != 0) {
+            BinTreeNode<E> lChild = target.getLeftChild();
+            BinTreeNode<E> rChild = target.getRightChild();
+            BinTreeNode<E> extremaDescendant = compareNode(lChild, rChild, max);
+            E extremaDescendantData = extremaDescendant.getData();
+
+            target.setData(extremaDescendantData);
+            target = extremaDescendant;
+        }
+
+        target.setData(lastNodeData);
+        insertionFixUp(target);
+
+        return extrema;
+    }
+
+    private BinTreeNode<E> getCorrespondingNode(BinTreeNode<E> node) {
+        BinTreeNode<E> result = null;
+
+        int currentIndex = node.getIndex();
+        boolean isNodeInLTree = BinaryTreeLemma.isDescendantIndex(1, currentIndex);
+        int lastLevel = node.getLevel() - 1;
+        int lastLevelMaxNodeCount = BinaryTreeLemma.getMaxCountByLevel(lastLevel);
+
+        int correspondingIndex = isNodeInLTree ? currentIndex + lastLevelMaxNodeCount
+                : currentIndex - lastLevelMaxNodeCount;
+
+        while (result == null && correspondingIndex > -1) {
+            result = getNodeByIndex(correspondingIndex);
+
+            if (result == null)
+                correspondingIndex = BinaryTreeLemma.parentIndex(correspondingIndex);
+        }
+
+        return result;
     }
 }

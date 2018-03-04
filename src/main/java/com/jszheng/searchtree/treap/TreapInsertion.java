@@ -1,7 +1,7 @@
 package com.jszheng.searchtree.treap;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstInsertion;
 
 /*
@@ -23,7 +23,7 @@ class TreapInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
     }
 
     @Override
-    protected void fixAfterInsertion(TreeNode<E> newNode) {
+    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         Treap<E> treap = getBt();
         if (specifiedPriority)
             treap.putPriority(newNode, priority);
@@ -31,6 +31,10 @@ class TreapInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
             treap.putRandomPriority(newNode);
 
         treap.upHeap(newNode, maxHeap);
+    }
+
+    void setMaxHeap(boolean maxHeap) {
+        this.maxHeap = maxHeap;
     }
 
     void specifiedPriority(int priority) {
@@ -41,10 +45,4 @@ class TreapInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
     void useRandomPriority() {
         this.specifiedPriority = false;
     }
-
-    void setMaxHeap(boolean maxHeap) {
-        this.maxHeap = maxHeap;
-    }
-
-
 }

@@ -2,7 +2,7 @@ package com.jszheng.searchtree.rotation;
 
 import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 public class RlRotation extends AbstractRotation {
 
@@ -55,11 +55,11 @@ public class RlRotation extends AbstractRotation {
      * H I   J K
      */
     @Override
-    <E> TreeNode<E> rotateTree(BinaryTree<E> bt, TreeNode<E> parent) {
-        TreeNode<E> middle = parent.getRightChild();
+    <E> BinTreeNode<E> rotateTree(BinaryTree<E> bt, BinTreeNode<E> parent) {
+        BinTreeNode<E> middle = parent.getRightChild();
         if (middle == null) return null;
 
-        TreeNode<E> pivot = middle.getLeftChild();
+        BinTreeNode<E> pivot = middle.getLeftChild();
         if (pivot == null) return null;
 
         if (Env.debug)

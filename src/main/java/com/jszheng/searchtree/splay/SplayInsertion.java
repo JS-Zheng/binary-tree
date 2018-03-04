@@ -1,6 +1,6 @@
 package com.jszheng.searchtree.splay;
 
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstInsertion;
 
 class SplayInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
@@ -11,7 +11,7 @@ class SplayInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
     }
 
     @Override
-    protected void fixAfterInsertion(TreeNode<E> newNode) {
+    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         getBt().fixAfterOperation(newNode);
     }
 }

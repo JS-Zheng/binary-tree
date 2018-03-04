@@ -2,7 +2,7 @@ package com.jszheng.searchtree.avl;
 
 import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstInsertion;
 
 import java.util.Stack;
@@ -19,11 +19,11 @@ class AvlInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
     }
 
     @Override
-    protected void fixAfterInsertion(TreeNode<E> newNode) {
+    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         AvlTree<E> avlTree = getBt();
         Stack<Boolean> stack = new Stack<>();
-        TreeNode<E> lastNode;
-        TreeNode<E> currentNode = newNode;
+        BinTreeNode<E> lastNode;
+        BinTreeNode<E> currentNode = newNode;
 
         while (currentNode != null) {
             lastNode = currentNode;

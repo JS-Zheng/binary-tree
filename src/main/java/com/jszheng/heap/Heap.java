@@ -1,6 +1,6 @@
 package com.jszheng.heap;
 
-import com.jszheng.base.BinaryTree;
+import com.jszheng.base.Tree;
 
-public interface Heap<E> extends BinaryTree<E> {
+public interface Heap<E> extends Tree<E> {
 }

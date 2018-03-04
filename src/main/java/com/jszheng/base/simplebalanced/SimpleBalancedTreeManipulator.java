@@ -1,9 +1,9 @@
 package com.jszheng.base.simplebalanced;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.manipulator.TreeManipulator;
+import com.jszheng.manipulator.BinTreeManipulator;
 
-public class SimpleBalancedTreeManipulator extends TreeManipulator {
+public class SimpleBalancedTreeManipulator extends BinTreeManipulator {
 
     public SimpleBalancedTreeManipulator(Class dataType) {
         super(dataType);

@@ -1,6 +1,6 @@
 package com.jszheng.searchtree.treap;
 
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BinarySearchTree;
 import com.jszheng.searchtree.BstDeletion;
 import com.jszheng.searchtree.rotation.LlRotation;
@@ -17,17 +17,17 @@ class TreapDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
 
     // Degree 2
     @Override
-    protected void deleteNodeByExtremaChild(BinarySearchTree<E> bst, TreeNode<E> targetNode, boolean replaceByLMax) {
+    protected void deleteNodeByExtremaChild(BinarySearchTree<E> bst, BinTreeNode<E> targetNode, boolean replaceByLMax) {
         Treap<E> treap = getBt();
         boolean isMaxHeapImpl = treap.isMaxHeap();
 
         while (targetNode.degree() == 2) {
-            TreeNode<E> lChild = targetNode.getLeftChild();
-            TreeNode<E> rChild = targetNode.getRightChild();
+            BinTreeNode<E> lChild = targetNode.getLeftChild();
+            BinTreeNode<E> rChild = targetNode.getRightChild();
             int lChildPriority = treap.priorityOf(lChild);
             int rChildPriority = treap.priorityOf(rChild);
 
-            TreeNode<E> extremaPriorityChild = !isMaxHeapImpl && lChildPriority < rChildPriority ? lChild : rChild;
+            BinTreeNode<E> extremaPriorityChild = !isMaxHeapImpl && lChildPriority < rChildPriority ? lChild : rChild;
 
             RotationState state = extremaPriorityChild == lChild ? new LlRotation() : new RrRotation();
             state.rotate(treap, targetNode);
@@ -37,7 +37,7 @@ class TreapDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
     }
 
     @Override
-    protected void fixAfterDeletion(TreeNode<E> parent, TreeNode<E> sibling, TreeNode<E> targetNode, boolean isTargetLeft, int degree) {
+    protected void fixAfterDeletion(BinTreeNode<E> parent, BinTreeNode<E> sibling, BinTreeNode<E> targetNode, boolean isTargetLeft, int degree) {
         getBt().removePriority(targetNode);
     }
 }

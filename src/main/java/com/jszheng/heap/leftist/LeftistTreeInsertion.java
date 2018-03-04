@@ -2,7 +2,7 @@ package com.jszheng.heap.leftist;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.InsertionAlgo;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 public class LeftistTreeInsertion<E extends Comparable<? super E>> implements InsertionAlgo<E> {
 
@@ -11,7 +11,7 @@ public class LeftistTreeInsertion<E extends Comparable<? super E>> implements In
         if (bt.isEmpty())
             bt.setRoot(data);
         else {
-            TreeNode<E> node = bt.getRoot().newNode();
+            BinTreeNode<E> node = bt.getRoot().newNode();
             node.setData(data);
             ((LeftistTree<E>) bt).merge(node);
         }

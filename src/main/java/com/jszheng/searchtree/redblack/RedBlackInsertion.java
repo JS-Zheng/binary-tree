@@ -2,7 +2,7 @@ package com.jszheng.searchtree.redblack;
 
 import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstInsertion;
 import com.jszheng.searchtree.rotation.LlRotation;
 import com.jszheng.searchtree.rotation.RotationState;
@@ -23,9 +23,9 @@ class RedBlackInsertion<E extends Comparable<? super E>> extends BstInsertion<E>
     }
 
     @Override
-    protected boolean handleNode(TreeNode<E> node) {
-        TreeNode<E> lChild = node.getLeftChild();
-        TreeNode<E> rChild = node.getRightChild();
+    protected boolean handleNode(BinTreeNode<E> node) {
+        BinTreeNode<E> lChild = node.getLeftChild();
+        BinTreeNode<E> rChild = node.getRightChild();
 
         // 搜尋過程中，若遇兩子點是 RED 則先做 color change
         checkNeedColorChange(node, lChild, rChild);
@@ -33,7 +33,7 @@ class RedBlackInsertion<E extends Comparable<? super E>> extends BstInsertion<E>
     }
 
     @Override
-    protected void fixAfterInsertion(TreeNode<E> newNode) {
+    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         RedBlackTree<E> rbt = getBt();
 
         // 新節點必為 RED
@@ -44,7 +44,7 @@ class RedBlackInsertion<E extends Comparable<? super E>> extends BstInsertion<E>
     }
 
     // 三點變黑，父點變紅 (if not root)
-    private void changeColor(TreeNode<E> parent, TreeNode<E> lChild, TreeNode<E> rChild) {
+    private void changeColor(BinTreeNode<E> parent, BinTreeNode<E> lChild, BinTreeNode<E> rChild) {
         RedBlackTree<E> rbt = getBt();
 
         if (Env.debug)
@@ -67,11 +67,11 @@ class RedBlackInsertion<E extends Comparable<? super E>> extends BstInsertion<E>
     }
 
     // 檢查 child 與 parent 有無連續 RED，若有則需作 Rotation
-    private void checkContinuousRedNode(TreeNode<E> child) {
+    private void checkContinuousRedNode(BinTreeNode<E> child) {
         RedBlackTree<E> rbt = getBt();
 
-        TreeNode<E> parent = child.getParent();
-        TreeNode<E> grandParent = parent != null ? parent.getParent() : null;
+        BinTreeNode<E> parent = child.getParent();
+        BinTreeNode<E> grandParent = parent != null ? parent.getParent() : null;
         if (grandParent == null || rbt.colorOf(parent) != RED) return;
 
         if (Env.debug)
@@ -90,7 +90,7 @@ class RedBlackInsertion<E extends Comparable<? super E>> extends BstInsertion<E>
         }
     }
 
-    private void checkNeedColorChange(TreeNode<E> parent, TreeNode<E> lChild, TreeNode<E> rChild) {
+    private void checkNeedColorChange(BinTreeNode<E> parent, BinTreeNode<E> lChild, BinTreeNode<E> rChild) {
         RedBlackTree<E> rbt = getBt();
         RedBlackTree.Color lColor = rbt.colorOf(lChild);
         RedBlackTree.Color rColor = rbt.colorOf(rChild);

@@ -2,7 +2,7 @@ package com.jszheng.manipulator;
 
 import com.jszheng.base.BinaryTree;
 
-class TraversalManipulator extends Manipulator<TreeOperation> {
+class TraversalManipulator extends Manipulator<TreeOperation<BinaryTree>> {
 
     private BinaryTree bt;
 

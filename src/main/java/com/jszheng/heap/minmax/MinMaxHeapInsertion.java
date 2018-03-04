@@ -2,7 +2,7 @@ package com.jszheng.heap.minmax;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.heap.HeapInsertion;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 public class MinMaxHeapInsertion<E extends Comparable<? super E>> extends HeapInsertion<E> {
 
@@ -13,8 +13,8 @@ public class MinMaxHeapInsertion<E extends Comparable<? super E>> extends HeapIn
     }
 
     @Override
-    protected void fixAfterInsertion(TreeNode<E> newNode) {
-        TreeNode<E> parent = newNode.getParent();
+    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
+        BinTreeNode<E> parent = newNode.getParent();
         if (parent == null) return;
 
         MinMaxHeap<E> heap = getBt();
@@ -26,7 +26,7 @@ public class MinMaxHeapInsertion<E extends Comparable<? super E>> extends HeapIn
         boolean adjustMax = isParentMinLevel;
         boolean swapCondition = isParentMinLevel ? compareWithParent < 0 : compareWithParent > 0;
 
-        TreeNode<E> adjustStart = newNode;
+        BinTreeNode<E> adjustStart = newNode;
 
         if (swapCondition) {
             // Swap data between newNode and its parent

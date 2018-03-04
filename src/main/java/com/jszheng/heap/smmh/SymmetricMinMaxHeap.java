@@ -4,7 +4,7 @@ import com.jszheng.base.BinaryTree;
 import com.jszheng.base.complete.CompleteBinaryTree;
 import com.jszheng.heap.DoubleEndedHeap;
 import com.jszheng.insertion.InsertionAlgo;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 public class SymmetricMinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> implements CompleteBinaryTree<E> {
 
@@ -29,7 +29,7 @@ public class SymmetricMinMaxHeap<E extends Comparable<? super E>> extends Double
 
     @Override
     public E searchMax() {
-        TreeNode<E> maxNode = searchExtremaNode(true);
+        BinTreeNode<E> maxNode = searchExtremaNode(true);
         return maxNode != null ? maxNode.getData() : null;
     }
 
@@ -40,7 +40,7 @@ public class SymmetricMinMaxHeap<E extends Comparable<? super E>> extends Double
 
     @Override
     public E searchMin() {
-        TreeNode<E> minNode = searchExtremaNode(false);
+        BinTreeNode<E> minNode = searchExtremaNode(false);
         return minNode != null ? minNode.getData() : null;
     }
 
@@ -50,23 +50,23 @@ public class SymmetricMinMaxHeap<E extends Comparable<? super E>> extends Double
     }
 
     private E deleteExtrema(boolean max) {
-        TreeNode<E> target = searchExtremaNode(max);
+        BinTreeNode<E> target = searchExtremaNode(max);
         if (target == null) return null;
         E extrema = target.getData();
 
-        TreeNode<E> lastNode = getLastNode();
+        BinTreeNode<E> lastNode = getLastNode();
         E lastNodeData = lastNode.getData();
-        lastNode.deleteParent();
+        lastNode.deleteParentAndCheckItsChild();
 
         // If the target is lastNode, simply delete it.
         if (lastNode == target)
             return extrema;
 
         while (target.degree() != 0) {
-            TreeNode<E> sibling = target.getSibling();
-            TreeNode<E> targetChild = max ? target.getRightChild() : target.getLeftChild();
-            TreeNode<E> siblingChild = max ? sibling.getRightChild() : sibling.getLeftChild();
-            TreeNode<E> extremaChild = compareNode(targetChild, siblingChild, max);
+            BinTreeNode<E> sibling = target.getSibling();
+            BinTreeNode<E> targetChild = max ? target.getRightChild() : target.getLeftChild();
+            BinTreeNode<E> siblingChild = max ? sibling.getRightChild() : sibling.getLeftChild();
+            BinTreeNode<E> extremaChild = compareNode(targetChild, siblingChild, max);
             E extremaChildData = extremaChild.getData();
 
             int compareResult = lastNodeData.compareTo(extremaChildData);
@@ -80,7 +80,7 @@ public class SymmetricMinMaxHeap<E extends Comparable<? super E>> extends Double
         }
 
         target.setData(lastNodeData);
-        TreeNode<E> sibling = target.getSibling();
+        BinTreeNode<E> sibling = target.getSibling();
 
         if (sibling != null) {
             E siblingData = sibling.getData();

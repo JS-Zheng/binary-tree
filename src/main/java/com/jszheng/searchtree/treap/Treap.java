@@ -2,7 +2,7 @@ package com.jszheng.searchtree.treap;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.InsertionAlgo;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstDeletion;
 import com.jszheng.searchtree.SelfBalancingBst;
 import com.jszheng.searchtree.rotation.LlRotation;
@@ -18,7 +18,7 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E> 
     private final boolean maxHeap;
     private TreapInsertion<E> insertionAlgo;
 
-    private Map<TreeNode<E>, Integer> priority = new HashMap<>();
+    private Map<BinTreeNode<E>, Integer> priority = new HashMap<>();
 
     public Treap(BinaryTree<E> component) {
         super(component);
@@ -31,7 +31,7 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E> 
     }
 
     @Override
-    public String getNodeString(TreeNode<E> node) {
+    public String getNodeString(BinTreeNode<E> node) {
         Object data = node != null ? node.getData() : null;
         return data != null ? data.toString() + " (" + priorityOf(node) + ")" :
                 (getRoot() == node ? "⊙" : " "); // Keep one space to mock null.
@@ -76,35 +76,24 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E> 
         return insertionAlgo;
     }
 
-    private void putRandomPriority(TreeNode<E> node, int bound) {
-        Random rdm = new Random();
-        int i = rdm.nextInt(bound);
-        priority.put(node, i);
-    }
-
-    private void setRoot(E data, int p) {
-        super.setRoot(data);
-        putPriority(getRoot(), p);
-    }
-
-    Integer priorityOf(TreeNode<E> node) {
+    Integer priorityOf(BinTreeNode<E> node) {
         return priority.get(node);
     }
 
-    void putPriority(TreeNode<E> node, int p) {
+    void putPriority(BinTreeNode<E> node, int p) {
         priority.put(node, p);
     }
 
-    void putRandomPriority(TreeNode<E> node) {
+    void putRandomPriority(BinTreeNode<E> node) {
         putRandomPriority(node, 1000);
     }
 
-    void removePriority(TreeNode<E> node) {
+    void removePriority(BinTreeNode<E> node) {
         priority.remove(node);
     }
 
-    void upHeap(TreeNode<E> node, boolean maxHeap) {
-        TreeNode<E> parent = node.getParent();
+    void upHeap(BinTreeNode<E> node, boolean maxHeap) {
+        BinTreeNode<E> parent = node.getParent();
 
         while (parent != null) {
             Integer parentPriority = priorityOf(parent);
@@ -121,5 +110,16 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E> 
 
             parent = node.getParent();
         }
+    }
+
+    private void putRandomPriority(BinTreeNode<E> node, int bound) {
+        Random rdm = new Random();
+        int i = rdm.nextInt(bound);
+        priority.put(node, i);
+    }
+
+    private void setRoot(E data, int p) {
+        super.setRoot(data);
+        putPriority(getRoot(), p);
     }
 }

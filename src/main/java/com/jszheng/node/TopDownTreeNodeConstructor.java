@@ -10,22 +10,22 @@ import java.util.Queue;
  *
  * O(n)
  */
-class TopDownTreeNodeConstructor<E> implements TreeNodeConstructor<E>, BFSAlgo<TreeNode<E>, TreeNode<E>, Void> {
+class TopDownTreeNodeConstructor<E> implements TreeNodeConstructor<E>, BFSAlgo<BinTreeNode<E>, BinTreeNode<E>, Void> {
 
-    private final TreeNode<E> node;
+    private final BinTreeNode<E> node;
     private E[] data;
 
-    TopDownTreeNodeConstructor(TreeNode<E> node) {
+    TopDownTreeNodeConstructor(BinTreeNode<E> node) {
         this.node = node;
     }
 
     @Override
-    public TreeNode<E> firstItem(TreeNode<E> node) {
+    public BinTreeNode<E> firstItem(BinTreeNode<E> node) {
         return node;
     }
 
     @Override
-    public boolean init(TreeNode<E> node) {
+    public boolean init(BinTreeNode<E> node) {
         if (data != null && data.length > 0) {
             node.setIndex(0);
             node.setData(data[0]);
@@ -36,10 +36,10 @@ class TopDownTreeNodeConstructor<E> implements TreeNodeConstructor<E>, BFSAlgo<T
     }
 
     @Override
-    public boolean onDataPolled(Queue<TreeNode<E>> queue, TreeNode<E> currentNode) {
+    public boolean onDataPolled(Queue<BinTreeNode<E>> queue, BinTreeNode<E> currentNode) {
         int index = currentNode.getIndex();
-        TreeNode<E> lChild = setChild(currentNode, index, true);
-        TreeNode<E> rChild = setChild(currentNode, index, false);
+        BinTreeNode<E> lChild = setChild(currentNode, index, true);
+        BinTreeNode<E> rChild = setChild(currentNode, index, false);
 
         if (lChild != null)
             queue.offer(lChild);
@@ -56,11 +56,11 @@ class TopDownTreeNodeConstructor<E> implements TreeNodeConstructor<E>, BFSAlgo<T
         execute(node);
     }
 
-    private TreeNode<E> setChild(TreeNode<E> currentNode, int index, boolean isLeft) {
+    private BinTreeNode<E> setChild(BinTreeNode<E> currentNode, int index, boolean isLeft) {
         int childIndex = isLeft ? BinaryTreeLemma.lChildIndex(index) : BinaryTreeLemma.rChildIndex(index);
 
         if (childIndex < data.length) {
-            TreeNode<E> child = null;
+            BinTreeNode<E> child = null;
             E childData = data[childIndex];
 
             if (childData != null) {

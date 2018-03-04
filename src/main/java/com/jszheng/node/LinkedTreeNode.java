@@ -2,13 +2,16 @@ package com.jszheng.node;
 
 import com.jszheng.base.BinaryTreeLemma;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by zhengzhongsheng on 2017/10/7.
  */
-public class LinkedTreeNode<E> implements TreeNode<E> {
+public class LinkedTreeNode<E> implements BinTreeNode<E> {
 
     protected E data;
-    protected TreeNode<E> lChild = null, rChild = null, parent = null;
+    protected BinTreeNode<E> lChild = null, rChild = null, parent = null;
     private int index;
 
     public LinkedTreeNode() {
@@ -24,8 +27,8 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
     }
 
     @Override
-    public TreeNode<E> copy() {
-        TreeNode<E> copy = null;
+    public BinTreeNode<E> copy() {
+        BinTreeNode<E> copy = null;
         try {
             copy = clone();
         } catch (CloneNotSupportedException e) {
@@ -36,26 +39,16 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
     }
 
     @Override
-    public int degree() {
-        if (lChild != null && rChild != null)
-            return 2;
-        else if (lChild == null && rChild == null)
-            return 0;
-        else
-            return 1;
-    }
-
-    @Override
-    public void deleteParent() {
+    public void deleteParentAndCheckItsChild() {
         if (parent == null) return;
 
-        TreeNode<E> formerParent = parent;
+        BinTreeNode<E> formerParent = parent;
         boolean isOriginalLChild = isLeftChild();
 
         this.parent = null;
         this.setIndex(0, true);
 
-        TreeNode<E> pChild = isOriginalLChild ? formerParent.getLeftChild() : formerParent.getRightChild();
+        BinTreeNode<E> pChild = isOriginalLChild ? formerParent.getLeftChild() : formerParent.getRightChild();
         if (pChild != null) {
             if (isOriginalLChild) formerParent.setLeftChildWithIndex(null);
             else formerParent.setRightChildWithIndex(null);
@@ -73,7 +66,7 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
     }
 
     @Override
-    public TreeNode<E> newNode() {
+    public BinTreeNode<E> newNode() {
         return new LinkedTreeNode<>();
     }
 
@@ -90,8 +83,8 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
 
         if (!withDescendant) return;
 
-        TreeNode<E> lChild = getLeftChild();
-        TreeNode<E> rChild = getRightChild();
+        BinTreeNode<E> lChild = getLeftChild();
+        BinTreeNode<E> rChild = getRightChild();
 
         if (lChild != null)
             lChild.setIndex(lChildIndex(), true);
@@ -101,25 +94,25 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
     }
 
     @Override
-    public void setLeftChildWithIndex(TreeNode<E> node) {
+    public void setLeftChildWithIndex(BinTreeNode<E> node) {
         setChild(node, true, true);
     }
 
     @Override
-    public void setParent(TreeNode<E> node, boolean isLeft) {
+    public void setParent(BinTreeNode<E> node, boolean isLeft) {
         setParent(node, isLeft, true);
     }
 
     @Override
-    public void setParent(TreeNode<E> newParent, boolean isLeft, boolean validateChildIndex) {
-        TreeNode<E> formerParent = this.parent;
+    public void setParent(BinTreeNode<E> newParent, boolean isLeft, boolean validateChildIndex) {
+        BinTreeNode<E> formerParent = this.parent;
         boolean isOriginalLChild = isLeftChild();
 
         if (formerParent == newParent && isLeft == isOriginalLChild)
             return;
 
         if (formerParent != null)
-            deleteParent();
+            deleteParentAndCheckItsChild();
 
         this.parent = newParent;
 
@@ -129,7 +122,7 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
         }
 
         int index;
-        TreeNode<E> validateChild;
+        BinTreeNode<E> validateChild;
 
         if (isLeft) {
             index = parent.lChildIndex();
@@ -152,7 +145,7 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
 
         // Don't setIndex() directly, otherwise it will waste time.
         // Delegate to parent and just set one index,
-        // In this way, parent can easily decide whether need to deleteParent when it setChild().
+        // In this way, parent can easily decide whether need to deleteParentAndCheckItsChild when it setChild().
         this.index = index;
 
         if (isLeft)
@@ -162,18 +155,8 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
     }
 
     @Override
-    public void setRightChildWithIndex(TreeNode<E> node) {
+    public void setRightChildWithIndex(BinTreeNode<E> node) {
         setChild(node, false, true);
-    }
-
-    @Override
-    public E getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(E item) {
-        this.data = item;
     }
 
     @Override
@@ -187,7 +170,7 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
     }
 
     @Override
-    public TreeNode<E> getLeftChild() {
+    public BinTreeNode<E> getLeftChild() {
         return lChild;
     }
 
@@ -205,22 +188,22 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
     }
 
     @Override
-    public TreeNode<E> getParent() {
+    public BinTreeNode<E> getParent() {
         return parent;
     }
 
     @Override
-    public TreeNode<E> getRightChild() {
+    public BinTreeNode<E> getRightChild() {
         return rChild;
     }
 
     @Override
-    public void setRightChild(TreeNode<E> node) {
+    public void setRightChild(BinTreeNode<E> node) {
         setChild(node, false, false);
     }
 
     @Override
-    public TreeNode<E> getSibling() {
+    public BinTreeNode<E> getSibling() {
         if (isRoot())
             return null;
 
@@ -233,7 +216,7 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
     }
 
     @Override
-    public void setLeftChild(TreeNode<E> node) {
+    public void setLeftChild(BinTreeNode<E> node) {
         setChild(node, true, false);
     }
 
@@ -243,14 +226,47 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
     }
 
     @Override
+    public int degree() {
+        if (lChild != null && rChild != null)
+            return 2;
+        else if (lChild == null && rChild == null)
+            return 0;
+        else
+            return 1;
+    }
+
+    @Override
+    public void deleteParent() {
+        parent = null;
+    }
+
+    @Override
+    public List<TreeNode<E>> getChildren() {
+        List<TreeNode<E>> children = new ArrayList<>();
+        if (lChild != null) children.add(lChild);
+        if (rChild != null) children.add(rChild);
+        return children;
+    }
+
+    @Override
+    public E getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(E item) {
+        this.data = item;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
 
-        if (obj instanceof TreeNode) {
+        if (obj instanceof BinTreeNode) {
             try {
                 @SuppressWarnings({"rawtypes", "unchecked"})
-                TreeNode<E> node = (TreeNode<E>) obj;
+                BinTreeNode<E> node = (BinTreeNode<E>) obj;
                 return equals(this, node);
 
             } catch (Exception e) {
@@ -265,16 +281,16 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
 
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
-    protected TreeNode<E> clone() throws CloneNotSupportedException {
-        return (TreeNode<E>) super.clone();
+    protected BinTreeNode<E> clone() throws CloneNotSupportedException {
+        return (BinTreeNode<E>) super.clone();
     }
 
-    public TreeNode<E> getRoot() {
+    public BinTreeNode<E> getRoot() {
         if (isRoot())
             return this;
 
-        TreeNode<E> root = null;
-        TreeNode<E> tmp = this;
+        BinTreeNode<E> root = null;
+        BinTreeNode<E> tmp = this;
 
         while (tmp != null) {
             root = tmp;
@@ -283,7 +299,7 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
         return root;
     }
 
-    private boolean equals(TreeNode<E> orig, TreeNode<E> node) {
+    private boolean equals(BinTreeNode<E> orig, BinTreeNode<E> node) {
         boolean result = false;
 
         if (orig == null && node == null)
@@ -300,23 +316,23 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
         return result;
     }
 
-    private void setChild(TreeNode<E> child, boolean isLeft, boolean adjustIndex) {
+    private void setChild(BinTreeNode<E> child, boolean isLeft, boolean adjustIndex) {
         if (child == this)
             throw new RuntimeException("Can't set self as subTree.");
 
         // Check Former Child.
-        TreeNode<E> formerChild = isLeft ? lChild : rChild;
+        BinTreeNode<E> formerChild = isLeft ? lChild : rChild;
 
         if (formerChild == child) return;
 
         if (formerChild != null)
-            formerChild.deleteParent();
+            formerChild.deleteParentAndCheckItsChild();
 
         int childIndex = isLeft ? lChildIndex() : rChildIndex();
 
         if (child != null &&
                 (child.getParent() != this || child.getIndex() != childIndex))
-            child.deleteParent();
+            child.deleteParentAndCheckItsChild();
 
         if (isLeft)
             lChild = child;
@@ -328,7 +344,7 @@ public class LinkedTreeNode<E> implements TreeNode<E> {
 
         if (child == null) return;
 
-        TreeNode<E> validateParent = child.getParent();
+        BinTreeNode<E> validateParent = child.getParent();
         if (validateParent != this)
             child.setParent(this, isLeft, adjustIndex);
     }

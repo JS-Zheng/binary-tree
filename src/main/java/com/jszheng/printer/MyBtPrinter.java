@@ -2,7 +2,7 @@ package com.jszheng.printer;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.SkewedState;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.traversal.TraversalNodeHandler;
 import com.jszheng.traversal.level.ILevelOrderTraversal;
 import com.jszheng.traversal.level.LevelOrderTraversal;
@@ -65,6 +65,57 @@ public class MyBtPrinter implements BtPrinter {
         result.append("\n"); // just a delimiter
 
         return result.toString();
+    }
+
+    void calculateMaxWidth() {
+        this.maxLeavesCount = getMaxCountByLevel(maxLevel);
+
+        this.maxWidth =
+                getWidth(maxLeavesCount, leavesSiblingPadding, leavesSiblingGapLength, leavesMiddlePadding);
+    }
+
+    int getMarginLeft(int level) {
+        if (level >= maxLevel)
+            return 0;
+
+        if (level == 1)
+            return (maxWidth - maxDataLength) / 2;
+
+        // setup middlePadding to origin leavesSiblingGapLength
+        int subTreeWidth = getSubTreeMaxWidth(level - 1);
+
+        return (subTreeWidth - maxDataLength) / 2;
+    }
+
+    int getMiddlePadding(int level) {
+        if (level >= maxLevel)
+            return leavesMiddlePadding;
+
+        if (level == 1)
+            return 0;
+
+        int marginLeft = getMarginLeft(level);
+        int maxCountForLevel = getMaxCountByLevel(level);
+        int siblingGapCount = Math.max(maxCountForLevel - 2, 0);
+
+        if (level == 2) {
+            return maxWidth - (maxDataLength << 1) - (marginLeft << 1);
+        }
+
+        int siblingPaddingForLevel = getSiblingPadding(level, marginLeft);
+
+        return maxWidth - maxCountForLevel * maxDataLength - (marginLeft << 1)
+                - siblingGapCount * siblingPaddingForLevel;
+    }
+
+    void setMaxLevel(int maxLevel) {
+        this.maxLevel = maxLevel;
+    }
+
+    void setRenderCoefficient(int leavesSiblingPadding, int leavesSiblingGapLength, int leavesMiddlePadding) {
+        this.leavesSiblingPadding = leavesSiblingPadding;
+        this.leavesSiblingGapLength = leavesSiblingGapLength;
+        this.leavesMiddlePadding = leavesMiddlePadding;
     }
 
     private int getSiblingGapLength(int level) {
@@ -133,7 +184,7 @@ public class MyBtPrinter implements BtPrinter {
         else
             skewedPrinter = new LeftSkewedBtPrinter();
 
-        skewedPrinter.printBt(bt);
+        skewedPrinter.print(bt);
     }
 
     private void handleTree(BinaryTree bt, StringBuilder result) {
@@ -249,6 +300,40 @@ public class MyBtPrinter implements BtPrinter {
             };
         }
 
+        void addEdgeSlashToBuffer(boolean isForward) {
+            for (StringBuilder aBuilderList : builderList)
+                if (isForward)
+                    aBuilderList.append("/");
+                else
+                    aBuilderList.append("\\");
+        }
+
+        void addEdgeSpacesToBuffer(int length, boolean nextIsForward) {
+            for (int i = 0; i < builderList.size(); i++) {
+                if (nextIsForward)
+                    for (int j = 0; j < length - (i << 1); j++)
+                        builderList.get(i).append(" ");
+
+                else
+                    for (int j = 0; j < length + (i << 1); j++)
+                        builderList.get(i).append(" ");
+            }
+        }
+
+        void addLeftMarginOfEdgesToBuffer(int currentMarginLeft) {
+            for (int i = 0; i < builderList.size(); i++) {
+                StringBuilder builder = builderList.get(i);
+
+                for (int j = 0; j < (currentMarginLeft - i - 1) + Math.floorDiv(maxDataLength, 2); j++)
+                    builder.append(" ");
+            }
+        }
+
+        void addSpacesToBuffer() {
+            for (StringBuilder aBuilderList : builderList)
+                aBuilderList.append(" ");
+        }
+
         private void checkNewLevel(int level) {
             if (level != lastLevel) {
                 nodeCountForLevel = 0;
@@ -293,7 +378,7 @@ public class MyBtPrinter implements BtPrinter {
             return " ";
         }
 
-        private void prepareEdges(TreeNode node) {
+        private void prepareEdges(BinTreeNode node) {
             if (node.hasLeftChild()) {
                 addEdgeSlashToBuffer(true);
                 addEdgeSpacesToBuffer(1, false); // prepare for backSlash
@@ -307,7 +392,7 @@ public class MyBtPrinter implements BtPrinter {
                 addSpacesToBuffer(); // mock backSlash
         }
 
-        private void printData(TreeNode node) {
+        private void printData(BinTreeNode node) {
             String dataStr;
             if (node.getData() == null && isPseudoNode(node)) {
                 dataStr = nullNodeStr();
@@ -365,90 +450,5 @@ public class MyBtPrinter implements BtPrinter {
                 }
             }
         }
-
-        void addEdgeSlashToBuffer(boolean isForward) {
-            for (StringBuilder aBuilderList : builderList)
-                if (isForward)
-                    aBuilderList.append("/");
-                else
-                    aBuilderList.append("\\");
-        }
-
-        void addEdgeSpacesToBuffer(int length, boolean nextIsForward) {
-            for (int i = 0; i < builderList.size(); i++) {
-                if (nextIsForward)
-                    for (int j = 0; j < length - (i << 1); j++)
-                        builderList.get(i).append(" ");
-
-                else
-                    for (int j = 0; j < length + (i << 1); j++)
-                        builderList.get(i).append(" ");
-            }
-        }
-
-        void addLeftMarginOfEdgesToBuffer(int currentMarginLeft) {
-            for (int i = 0; i < builderList.size(); i++) {
-                StringBuilder builder = builderList.get(i);
-
-                for (int j = 0; j < (currentMarginLeft - i - 1) + Math.floorDiv(maxDataLength, 2); j++)
-                    builder.append(" ");
-            }
-        }
-
-        void addSpacesToBuffer() {
-            for (StringBuilder aBuilderList : builderList)
-                aBuilderList.append(" ");
-        }
-    }
-
-    void calculateMaxWidth() {
-        this.maxLeavesCount = getMaxCountByLevel(maxLevel);
-
-        this.maxWidth =
-                getWidth(maxLeavesCount, leavesSiblingPadding, leavesSiblingGapLength, leavesMiddlePadding);
-    }
-
-    int getMarginLeft(int level) {
-        if (level >= maxLevel)
-            return 0;
-
-        if (level == 1)
-            return (maxWidth - maxDataLength) / 2;
-
-        // setup middlePadding to origin leavesSiblingGapLength
-        int subTreeWidth = getSubTreeMaxWidth(level - 1);
-
-        return (subTreeWidth - maxDataLength) / 2;
-    }
-
-    int getMiddlePadding(int level) {
-        if (level >= maxLevel)
-            return leavesMiddlePadding;
-
-        if (level == 1)
-            return 0;
-
-        int marginLeft = getMarginLeft(level);
-        int maxCountForLevel = getMaxCountByLevel(level);
-        int siblingGapCount = Math.max(maxCountForLevel - 2, 0);
-
-        if (level == 2) {
-            return maxWidth - (maxDataLength << 1) - (marginLeft << 1);
-        }
-
-        int siblingPaddingForLevel = getSiblingPadding(level, marginLeft);
-
-        return maxWidth - maxCountForLevel * maxDataLength - (marginLeft << 1)
-                - siblingGapCount * siblingPaddingForLevel;
-    }
-
-    void setMaxLevel(int maxLevel) {
-        this.maxLevel = maxLevel;
-    }
-
-    void setRenderCoefficient(int leavesSiblingPadding, int leavesSiblingGapLength, int leavesMiddlePadding) {
-        this.leavesSiblingPadding = leavesSiblingPadding;
-        this.leavesSiblingGapLength = leavesSiblingGapLength;
-        this.leavesMiddlePadding = leavesMiddlePadding;
     }
 }

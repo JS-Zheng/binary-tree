@@ -1,6 +1,6 @@
 package com.jszheng.traversal.level;
 
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.traversal.TraversalAlgo;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Queue;
 public interface ILevelOrderTraversal<E> extends TraversalAlgo<E> {
 
     // Template Method.
-    default boolean execute(Queue<TreeNode<E>> queue, TreeNode<E> node, List<TreeNode<E>> dataList) {
+    default boolean execute(Queue<BinTreeNode<E>> queue, BinTreeNode<E> node, List<BinTreeNode<E>> dataList) {
         if (node == null && !isFullBtMode())
             return false;
 

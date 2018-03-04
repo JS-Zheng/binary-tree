@@ -1,7 +1,7 @@
 package com.jszheng.printer;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 class LeftSkewedBtPrinter implements BtPrinter {
 
@@ -12,8 +12,8 @@ class LeftSkewedBtPrinter implements BtPrinter {
 
         StringBuilder builder = new StringBuilder();
 
-        TreeNode root = bt.getRoot();
-        TreeNode currentNode = bt.getLastNode();
+        BinTreeNode root = bt.getRoot();
+        BinTreeNode currentNode = bt.getLastNode();
         int lastLineLen = 0;
 
         while (currentNode != null) {

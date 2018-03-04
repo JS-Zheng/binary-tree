@@ -2,9 +2,9 @@ package com.jszheng.heap.binary;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.heap.MinHeap;
-import com.jszheng.manipulator.TreeManipulator;
+import com.jszheng.manipulator.BinTreeManipulator;
 
-public class MinHeapManipulator extends TreeManipulator {
+public class MinHeapManipulator extends BinTreeManipulator {
 
     public MinHeapManipulator(Class dataType) {
         super(dataType);
@@ -15,8 +15,13 @@ public class MinHeapManipulator extends TreeManipulator {
         super.addDeleteOp();
         addOperation("delete min", bt -> {
             ((MinHeap) bt).deleteMin();
-            printBt();
+            printTree();
         });
+    }
+
+    @Override
+    protected BinaryTree createTree() {
+        return new MinBinaryHeap(baseBt());
     }
 
     @Override
@@ -26,10 +31,5 @@ public class MinHeapManipulator extends TreeManipulator {
             Object obj = ((MinHeap) bt).searchMin();
             System.out.println(obj);
         });
-    }
-
-    @Override
-    protected BinaryTree createTree() {
-        return new MinBinaryHeap(baseBt());
     }
 }

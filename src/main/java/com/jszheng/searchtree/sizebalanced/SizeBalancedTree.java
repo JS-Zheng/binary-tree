@@ -3,7 +3,7 @@ package com.jszheng.searchtree.sizebalanced;
 import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.InsertionAlgo;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.SelfBalancingBst;
 import com.jszheng.searchtree.rotation.LlRotation;
 import com.jszheng.searchtree.rotation.RrRotation;
@@ -32,17 +32,17 @@ public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalan
     }
 
     @Override
-    public String getNodeString(TreeNode<E> node) {
+    public String getNodeString(BinTreeNode<E> node) {
         Object data = node != null ? node.getData() : null;
         return data != null ? node.getData() + "(" + count(node) + ")" :
                 (getRoot() == node ? "⊙" : " ");
     }
 
-    public TreeNode<E> selectKth(int k) {
-        TreeNode<E> target = getRoot();
+    public BinTreeNode<E> selectKth(int k) {
+        BinTreeNode<E> target = getRoot();
 
         while (target != null) {
-            TreeNode<E> lChild = target.getLeftChild();
+            BinTreeNode<E> lChild = target.getLeftChild();
             int lChildSize = sizeOf(lChild);
 
             int rankOfTarget = lChildSize + 1;
@@ -58,15 +58,10 @@ public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalan
         return null;
     }
 
-    // witchcraft (Omit the maintenance of size)
-    private int sizeOf(TreeNode<E> node) {
-        return count(node);
-    }
-
-    void maintain(TreeNode<E> node, boolean checkLGrandSon) {
+    void maintain(BinTreeNode<E> node, boolean checkLGrandSon) {
         if (node == null) return;
-        TreeNode<E> lChild = node.getLeftChild();
-        TreeNode<E> rChild = node.getRightChild();
+        BinTreeNode<E> lChild = node.getLeftChild();
+        BinTreeNode<E> rChild = node.getRightChild();
         int lChildSize = sizeOf(lChild);
         int rChildSize = sizeOf(rChild);
 
@@ -104,5 +99,10 @@ public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalan
         maintain(node.getRightChild(), false);   //maintain the right subtree
         maintain(node, true);      //maintain the whole tree
         maintain(node, false);       //maintain the whole tree
+    }
+
+    // witchcraft (Omit the maintenance of size)
+    private int sizeOf(BinTreeNode<E> node) {
+        return count(node);
     }
 }

@@ -15,6 +15,7 @@ public class Env {
     public final static String SIZE_BALANCED_TREE = "大小平衡樹";
     public final static String MIN_HEAP = "Min-Heap";
     public final static String MAX_HEAP = "Max-Heap";
+    public final static String BINOMIAL_HEAP = "二項式堆積";
     public final static String MIN_MAX_HEAP = "Min-Max Heap";
     public final static String DEAP = "DEAP";
     public final static String SMMH = "SMMH";

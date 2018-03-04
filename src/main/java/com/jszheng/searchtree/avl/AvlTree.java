@@ -3,7 +3,7 @@ package com.jszheng.searchtree.avl;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BinaryTreeLemma;
 import com.jszheng.insertion.InsertionAlgo;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstDeletion;
 import com.jszheng.searchtree.SelfBalancingBst;
 import com.jszheng.searchtree.rotation.*;
@@ -41,7 +41,7 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
         return insertionAlgo;
     }
 
-    public int getBalanceFactor(TreeNode<E> node) {
+    public int getBalanceFactor(BinTreeNode<E> node) {
         int hL = height(node.getLeftChild());
         int hR = height(node.getRightChild());
 
@@ -69,15 +69,15 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
     }
 
     @Override
-    public String getNodeString(TreeNode<E> node) {
+    public String getNodeString(BinTreeNode<E> node) {
         E data = node != null ? node.getData() : null;
         int bf = getBalanceFactor(node);
         return data != null ? data.toString() + (bf == 0 ? "" : "(" + bf + ")") : " ";
     }
 
-    TreeNode<E> getHigherChild(TreeNode<E> parent) {
-        TreeNode<E> lChild = parent.getLeftChild();
-        TreeNode<E> rChild = parent.getRightChild();
+    BinTreeNode<E> getHigherChild(BinTreeNode<E> parent) {
+        BinTreeNode<E> lChild = parent.getLeftChild();
+        BinTreeNode<E> rChild = parent.getRightChild();
 
         if (lChild == null && rChild == null) {
             return null;
@@ -100,7 +100,7 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
 
     }
 
-    void handleUnbalancedNode(TreeNode<E> unbalancedNode, int bf, boolean isGrandChildLeft) {
+    void handleUnbalancedNode(BinTreeNode<E> unbalancedNode, int bf, boolean isGrandChildLeft) {
         if (unbalancedNode == null)
             throw new RuntimeException("Unbalanced Node cannot be null.");
 

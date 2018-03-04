@@ -2,7 +2,7 @@ package com.jszheng.base;
 
 import com.jszheng.Env;
 import com.jszheng.insertion.InsertionAlgo;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.search.SearchAlgo;
 import com.jszheng.search.SearchResult;
 
@@ -19,7 +19,7 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
     }
 
     @Override
-    public int count(TreeNode<E> node) {
+    public int count(BinTreeNode<E> node) {
         if (node == null)
             return 0;
 
@@ -34,7 +34,7 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
     }
 
     @Override
-    public int height(TreeNode<E> node) {
+    public int height(BinTreeNode<E> node) {
         if (node == null)
             return 0;
 
@@ -44,28 +44,12 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
     }
 
     @Override
-    public void insert(E... data) {
-        if (data.length < 1) return;
-
-        // Default Algo
-        InsertionAlgo<E> algo = createInsertionAlgo();
-
-        for (E d : data) {
-            if (Env.debug)
-                System.out.println("[insert] data: " + d);
-            algo.insert(this, d);
-            if (Env.debug)
-                System.out.println();
-        }
-    }
-
-    @Override
     public int leavesCount() {
         return leavesCount(getRoot());
     }
 
     @Override
-    public int leavesCount(TreeNode<E> node) {
+    public int leavesCount(BinTreeNode<E> node) {
         if (node == null)
             return 0;
 
@@ -83,7 +67,7 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
     }
 
     @Override
-    public TreeNode<E> search(E data) {
+    public BinTreeNode<E> search(E data) {
         if (data == null)
             return null;
 
@@ -108,13 +92,13 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
     }
 
     @Override
-    public void swap(TreeNode<E> node) {
+    public void swap(BinTreeNode<E> node) {
         if (node != null) {
             swap(node.getLeftChild());
             swap(node.getRightChild());
 
-            TreeNode<E> tmpLeft = node.getLeftChild();
-            TreeNode<E> tmpRight = node.getRightChild();
+            BinTreeNode<E> tmpLeft = node.getLeftChild();
+            BinTreeNode<E> tmpRight = node.getRightChild();
             if (tmpLeft == null && tmpRight == null) return;
 
             node.setLeftChildWithIndex(tmpRight);
@@ -123,7 +107,23 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
         }
     }
 
-    protected <T extends Comparable<? super T>> TreeNode<T> compareNode(TreeNode<T> t1, TreeNode<T> t2, boolean findGreater) {
+    @Override
+    public void insert(E... data) {
+        if (data.length < 1) return;
+
+        // Default Algo
+        InsertionAlgo<E> algo = createInsertionAlgo();
+
+        for (E d : data) {
+            if (Env.debug)
+                System.out.println("[insert] data: " + d);
+            algo.insert(this, d);
+            if (Env.debug)
+                System.out.println();
+        }
+    }
+
+    protected <T extends Comparable<? super T>> BinTreeNode<T> compareNode(BinTreeNode<T> t1, BinTreeNode<T> t2, boolean findGreater) {
         T t1Data = t1 != null ? t1.getData() : null;
         T t2Data = t2 != null ? t2.getData() : null;
 
@@ -144,10 +144,28 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
 
     protected abstract SearchAlgo<E> createSearchAlgo();
 
+    BinTreeNode<E> copyNodes(BinTreeNode<E> node, boolean deep) {
+        if (node == null)
+            return null;
+
+        BinTreeNode<E> copyNode;
+
+        if (!deep)
+            copyNode = node;
+        else {
+            copyNode = node.newNode();
+
+            copyNode.setData(node.getData());
+            copyNode.setLeftChildWithIndex(copyNodes(node.getLeftChild(), true));
+            copyNode.setRightChildWithIndex(copyNodes(node.getRightChild(), true));
+        }
+        return copyNode;
+    }
+
     private SkewedState checkTreeSkewed(boolean checkLeft) {
-        TreeNode<E> lastNode = null;
-        TreeNode<E> root = getRoot();
-        TreeNode<E> currentNode = root;
+        BinTreeNode<E> lastNode = null;
+        BinTreeNode<E> root = getRoot();
+        BinTreeNode<E> currentNode = root;
 
         // Check Root.
         if (getRoot() == null)
@@ -179,23 +197,5 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
             return null;
         else
             return checkLeft ? LEFT_SKEWED : RIGHT_SKEWED;
-    }
-
-    TreeNode<E> copyNodes(TreeNode<E> node, boolean deep) {
-        if (node == null)
-            return null;
-
-        TreeNode<E> copyNode;
-
-        if (!deep)
-            copyNode = node;
-        else {
-            copyNode = node.newNode();
-
-            copyNode.setData(node.getData());
-            copyNode.setLeftChildWithIndex(copyNodes(node.getLeftChild(), true));
-            copyNode.setRightChildWithIndex(copyNodes(node.getRightChild(), true));
-        }
-        return copyNode;
     }
 }

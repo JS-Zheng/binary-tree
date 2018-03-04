@@ -2,7 +2,7 @@ package com.jszheng.searchtree.splay;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.InsertionAlgo;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstSearch;
 import com.jszheng.searchtree.SelfBalancingBst;
 import com.jszheng.searchtree.rotation.LlRotation;
@@ -39,15 +39,15 @@ public class SplayTree<E extends Comparable<? super E>> extends SelfBalancingBst
         return searchAlgo;
     }
 
-    public void fixAfterOperation(TreeNode<E> targetNode) {
+    public void fixAfterOperation(BinTreeNode<E> targetNode) {
         if (targetNode == null) return;
 
         RotationState state;
         while (!targetNode.isRoot()) {
-            TreeNode<E> parent = targetNode.getParent();
+            BinTreeNode<E> parent = targetNode.getParent();
             if (parent == null) return;
-            TreeNode<E> grandParent = parent.getParent();
-            TreeNode<E> rotateTarget;
+            BinTreeNode<E> grandParent = parent.getParent();
+            BinTreeNode<E> rotateTarget;
 
             if (grandParent == null) { // targetNode is child of root
                 boolean isTargetNodeLChild = targetNode.isLeftChild();

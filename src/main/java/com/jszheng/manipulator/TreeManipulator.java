@@ -1,24 +1,17 @@
 package com.jszheng.manipulator;
 
-import com.jszheng.base.BinaryTree;
-import com.jszheng.base.LinkedBinaryTree;
-import com.jszheng.node.TreeNode;
-import com.jszheng.printer.BtPrinter;
-import com.jszheng.printer.MyBtPrinter;
-import com.jszheng.util.ScannerUtil;
+import com.jszheng.base.Tree;
 
-import static com.jszheng.Env.osName;
 import static com.jszheng.util.ScannerUtil.*;
 
-public abstract class TreeManipulator extends Manipulator<TreeOperation> {
+public abstract class TreeManipulator<TreeType extends Tree> extends Manipulator<TreeOperation<TreeType>> {
 
-    protected BinaryTree bt;
-    private Class dataType;
-    private BtPrinter printer = new MyBtPrinter(1, 1, 1);
+    protected TreeType tree;
+    protected Class dataType;
 
     protected TreeManipulator(Class dataType) {
         this.dataType = dataType;
-        bt = createTree();
+        tree = createTree();
         comment();
     }
 
@@ -27,7 +20,7 @@ public abstract class TreeManipulator extends Manipulator<TreeOperation> {
         if (!super.handleOperation(operationId))
             return false;
 
-        this.operations.get(operationId - 1).execute(bt);
+        this.operations.get(operationId - 1).execute(tree);
         return true;
     }
 
@@ -50,9 +43,34 @@ public abstract class TreeManipulator extends Manipulator<TreeOperation> {
     }
 
     protected void addDeleteOp() {
+        // default do nothing
     }
 
-    protected void addInsertOp() {
+    protected void addOtherOp() {
+        // default do nothing
+    }
+
+    protected void addSearchOp() {
+        // default do nothing
+    }
+
+    protected void comment() {
+        // default do nothing
+    }
+
+    protected abstract TreeType createTree();
+
+    protected Object getInput(String prompt) {
+        if (dataType == Integer.class) {
+            return getInteger(prompt);
+        } else {
+            return getString(prompt);
+        }
+    }
+
+    protected abstract void printTree();
+
+    private void addInsertOp() {
         addOperation("insert", bt -> {
             String str = getLine("Insert Data (多筆資料以空白間隔):");
             str = str.trim();
@@ -77,55 +95,9 @@ public abstract class TreeManipulator extends Manipulator<TreeOperation> {
             } else
                 bt.insert(data);
 
-            printBt();
+            printTree();
         });
     }
 
-    protected void addOtherOp() {
-        addOperation("traverse", bt -> {
-            TraversalManipulator manipulator = new TraversalManipulator(bt);
-            int operationId = ScannerUtil.getInteger(manipulator.getPrompt());
-            if (operationId == 0) return;
-            manipulator.handleOperation(operationId);
-            System.out.println();
-        });
 
-        addOperation("print", bt -> printer.printBt(bt));
-    }
-
-    protected void addSearchOp() {
-        addOperation("search", bt -> {
-            Object searchData = getInput("Search Data:");
-            TreeNode node = bt.search(searchData);
-            if (node != null)
-                System.out.println("Found " + bt.getNodeString(node)
-                        + " on Level" + node.getLevel());
-            else {
-                boolean isWindows = osName.contains("Windows");
-                System.out.println("Not Found " + (isWindows ? ":(" : "😞"));
-            }
-        });
-    }
-
-    protected BinaryTree baseBt() {
-        return new LinkedBinaryTree();
-    }
-
-    protected void comment() {
-        // default do nothing
-    }
-
-    protected abstract BinaryTree createTree();
-
-    protected Object getInput(String prompt) {
-        if (dataType == Integer.class) {
-            return getInteger(prompt);
-        } else {
-            return getString(prompt);
-        }
-    }
-
-    protected void printBt() {
-        printer.printBt(bt);
-    }
 }

@@ -4,7 +4,7 @@ import com.jszheng.base.BinaryTree;
 import com.jszheng.base.complete.CompleteBinaryTree;
 import com.jszheng.heap.DoubleEndedHeap;
 import com.jszheng.insertion.InsertionAlgo;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 public class MinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> implements CompleteBinaryTree<E> {
 
@@ -34,7 +34,7 @@ public class MinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap
 
     @Override
     public E searchMax() {
-        TreeNode<E> maxNode = searchExtremaNode(true);
+        BinTreeNode<E> maxNode = searchExtremaNode(true);
         return maxNode != null ? maxNode.getData() : null;
     }
 
@@ -45,7 +45,7 @@ public class MinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap
 
     @Override
     public E searchMin() {
-        TreeNode<E> minNode = searchExtremaNode(false);
+        BinTreeNode<E> minNode = searchExtremaNode(false);
         return minNode != null ? minNode.getData() : null;
     }
 
@@ -55,41 +55,46 @@ public class MinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap
     }
 
     @Override
-    protected TreeNode<E> lastLevelNode(TreeNode<E> currentNode) {
-        TreeNode<E> parent = currentNode.getParent();
+    protected BinTreeNode<E> lastLevelNode(BinTreeNode<E> currentNode) {
+        BinTreeNode<E> parent = currentNode.getParent();
         return parent != null ? parent.getParent() : null;
     }
 
     @Override
-    protected void upHeap(TreeNode<E> node, boolean maxHeap) {
+    protected void upHeap(BinTreeNode<E> node, boolean maxHeap) {
         super.upHeap(node, maxHeap);
     }
 
     @Override
-    protected TreeNode<E> searchExtremaNode(boolean max) {
-        TreeNode<E> root = getRoot();
+    protected BinTreeNode<E> searchExtremaNode(boolean max) {
+        BinTreeNode<E> root = getRoot();
         if (root == null) return null;
         if (!max) return root;
 
         // Find Max
-        TreeNode<E> lChild = root.getLeftChild();
-        TreeNode<E> rChild = root.getRightChild();
+        BinTreeNode<E> lChild = root.getLeftChild();
+        BinTreeNode<E> rChild = root.getRightChild();
         if (lChild == null && rChild == null)
             return root;
         else
             return compareNode(lChild, rChild, true);
     }
 
+    boolean isMinLevel(BinTreeNode<E> node) {
+        int level = node.getLevel();
+        return level % 2 == 1;
+    }
+
     private E deleteExtrema(boolean max) {
-        TreeNode<E> root = getRoot();
-        TreeNode<E> target = max ? searchExtremaNode(true) : root;
+        BinTreeNode<E> root = getRoot();
+        BinTreeNode<E> target = max ? searchExtremaNode(true) : root;
         if (target == null) return null;
 
         E extrema = target.getData();
 
-        TreeNode<E> lastNode = getLastNode();
+        BinTreeNode<E> lastNode = getLastNode();
         E lastNodeData = lastNode.getData();
-        lastNode.deleteParent();
+        lastNode.deleteParentAndCheckItsChild();
 
         // If the target is lastNode, simply delete it.
         if (lastNode == target) {
@@ -100,18 +105,18 @@ public class MinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap
         }
 
         while (true) {
-            TreeNode<E> lChild = target.getLeftChild();
-            TreeNode<E> rChild = target.getRightChild();
+            BinTreeNode<E> lChild = target.getLeftChild();
+            BinTreeNode<E> rChild = target.getRightChild();
 
             if (lChild == null && rChild == null) {
                 target.setData(lastNodeData);
                 break;
             }
 
-            TreeNode<E> lLNode = null;
-            TreeNode<E> lRNode = null;
-            TreeNode<E> rLNode = null;
-            TreeNode<E> rRNode = null;
+            BinTreeNode<E> lLNode = null;
+            BinTreeNode<E> lRNode = null;
+            BinTreeNode<E> rLNode = null;
+            BinTreeNode<E> rRNode = null;
 
             if (lChild != null) {
                 lLNode = lChild.getLeftChild();
@@ -121,8 +126,8 @@ public class MinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap
                 rLNode = rChild.getLeftChild();
                 rRNode = rChild.getRightChild();
             }
-            TreeNode arr[] = {lChild, rChild, lLNode, lRNode, rLNode, rRNode};
-            TreeNode<E> extremaDescendant = getExtremaNodeFromArr(arr, max);
+            BinTreeNode arr[] = {lChild, rChild, lLNode, lRNode, rLNode, rRNode};
+            BinTreeNode<E> extremaDescendant = getExtremaNodeFromArr(arr, max);
             E extremaDescendantData = extremaDescendant.getData();
 
             int compareResult = extremaDescendantData.compareTo(lastNodeData);
@@ -140,7 +145,7 @@ public class MinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap
                     target.setData(extremaDescendantData);
                     target = extremaDescendant;
 
-                    TreeNode<E> p = extremaDescendant.getParent();
+                    BinTreeNode<E> p = extremaDescendant.getParent();
                     E pData = p.getData();
 
                     int parentCompareResult = lastNodeData.compareTo(pData);
@@ -162,10 +167,5 @@ public class MinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap
         }
 
         return extrema;
-    }
-
-    boolean isMinLevel(TreeNode<E> node) {
-        int level = node.getLevel();
-        return level % 2 == 1;
     }
 }

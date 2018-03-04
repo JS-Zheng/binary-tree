@@ -2,7 +2,7 @@ package com.jszheng.searchtree.redblack;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.InsertionAlgo;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstDeletion;
 import com.jszheng.searchtree.SelfBalancingBst;
 
@@ -24,14 +24,14 @@ import static com.jszheng.searchtree.redblack.RedBlackTree.Color.BLACK;
  */
 public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancingBst<E> {
 
-    private Map<TreeNode<E>, Color> colors = new HashMap<>();
+    private Map<BinTreeNode<E>, Color> colors = new HashMap<>();
 
     public RedBlackTree(BinaryTree<E> component) {
         super(component);
     }
 
     // use 'public access modifier' to facilitate testing
-    public Color colorOf(TreeNode<E> node) {
+    public Color colorOf(BinTreeNode<E> node) {
         // BLACK of default value is prepared for External Node.
         return colors.getOrDefault(node, BLACK);
     }
@@ -61,7 +61,7 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
     }
 
     @Override
-    public String getNodeString(TreeNode<E> node) {
+    public String getNodeString(BinTreeNode<E> node) {
         E data = node != null ? node.getData() : null;
         if (osName.contains("Windows"))
             return data != null ? data.toString() +
@@ -77,15 +77,15 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
         colors.put(getRoot(), BLACK);
     }
 
-    public enum Color {
-        RED, BLACK
-    }
-
-    void putColor(TreeNode<E> node, Color color) {
+    void putColor(BinTreeNode<E> node, Color color) {
         colors.put(node, color);
     }
 
-    void removeColor(TreeNode<E> node) {
+    void removeColor(BinTreeNode<E> node) {
         colors.remove(node);
+    }
+
+    public enum Color {
+        RED, BLACK
     }
 }

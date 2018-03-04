@@ -2,7 +2,7 @@ package com.jszheng.heap;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BtDecorator;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 public abstract class AbstractHeap<E extends Comparable<? super E>> extends BtDecorator<E> implements Heap<E> {
 
@@ -10,10 +10,10 @@ public abstract class AbstractHeap<E extends Comparable<? super E>> extends BtDe
         super(component);
     }
 
-    protected void downHeap(TreeNode<E> node, boolean maxHeap) {
-        TreeNode<E> lChild = node.getLeftChild();
-        TreeNode<E> rChild = node.getRightChild();
-        TreeNode<E> targetChild;
+    protected void downHeap(BinTreeNode<E> node, boolean maxHeap) {
+        BinTreeNode<E> lChild = node.getLeftChild();
+        BinTreeNode<E> rChild = node.getRightChild();
+        BinTreeNode<E> targetChild;
 
         while (lChild != null || rChild != null) {
             E data = node.getData();
@@ -37,14 +37,14 @@ public abstract class AbstractHeap<E extends Comparable<? super E>> extends BtDe
         }
     }
 
-    protected TreeNode<E> lastLevelNode(TreeNode<E> currentNode) {
+    protected BinTreeNode<E> lastLevelNode(BinTreeNode<E> currentNode) {
         // Root of Tree probably has parent (i.e., SubTree)
         if (currentNode == getRoot()) return null;
         return currentNode.getParent();
     }
 
-    protected void upHeap(TreeNode<E> node, boolean maxHeap) {
-        TreeNode<E> parent = lastLevelNode(node);
+    protected void upHeap(BinTreeNode<E> node, boolean maxHeap) {
+        BinTreeNode<E> parent = lastLevelNode(node);
 
         while (parent != null) {
             E parentData = parent.getData();

@@ -1,7 +1,7 @@
 package com.jszheng.searchtree.redblack;
 
 import com.jszheng.Env;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BinarySearchTree;
 import com.jszheng.searchtree.BstDeletion;
 import com.jszheng.searchtree.rotation.LlRotation;
@@ -20,7 +20,7 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
     }
 
     @Override
-    protected void fixAfterDeletion(TreeNode<E> parent, TreeNode<E> sibling, TreeNode<E> targetNode, boolean isTargetLeft, int degree) {
+    protected void fixAfterDeletion(BinTreeNode<E> parent, BinTreeNode<E> sibling, BinTreeNode<E> targetNode, boolean isTargetLeft, int degree) {
         RedBlackTree<E> rbt = getBt();
 
         RedBlackTree.Color targetColor = rbt.colorOf(targetNode);
@@ -39,10 +39,10 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
         rbt.removeColor(targetNode);
     }
 
-    private void handleDegreeOne(TreeNode<E> parent, boolean isTargetLeft) {
+    private void handleDegreeOne(BinTreeNode<E> parent, boolean isTargetLeft) {
         RedBlackTree<E> rbt = getBt();
 
-        TreeNode<E> currentNode;
+        BinTreeNode<E> currentNode;
         if (parent == null)
             currentNode = rbt.getRoot();
         else
@@ -51,12 +51,12 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
         rbt.putColor(currentNode, BLACK);
     }
 
-    private void handleLeaf(TreeNode<E> sibling) {
+    private void handleLeaf(BinTreeNode<E> sibling) {
         RedBlackTree<E> rbt = getBt();
 
         while (true) {
             RedBlackTree.Color siblingColor = rbt.colorOf(sibling);
-            TreeNode<E> parent = sibling.getParent();
+            BinTreeNode<E> parent = sibling.getParent();
             boolean isSiblingLeft = sibling.isLeftChild();
 
             // Case 1 -- sibling is RED (parent 必為 BLACK)
@@ -80,8 +80,8 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
                 continue;
             }
 
-            TreeNode<E> siblingLChild = sibling.getLeftChild();
-            TreeNode<E> siblingRChild = sibling.getRightChild();
+            BinTreeNode<E> siblingLChild = sibling.getLeftChild();
+            BinTreeNode<E> siblingRChild = sibling.getRightChild();
             RedBlackTree.Color siblingLColor = rbt.colorOf(siblingLChild);
             RedBlackTree.Color siblingRColor = rbt.colorOf(siblingRChild);
 
@@ -108,8 +108,8 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
                 }
             }
 
-            TreeNode<E> outsideChild = isSiblingLeft ? siblingLChild : siblingRChild;
-            TreeNode<E> interiorChild = isSiblingLeft ? siblingRChild : siblingLChild;
+            BinTreeNode<E> outsideChild = isSiblingLeft ? siblingLChild : siblingRChild;
+            BinTreeNode<E> interiorChild = isSiblingLeft ? siblingRChild : siblingLChild;
             RedBlackTree.Color outsideChildColor = rbt.colorOf(outsideChild);
             RedBlackTree.Color interiorChildColor = rbt.colorOf(interiorChild);
 

@@ -2,9 +2,9 @@ package com.jszheng.heap.binary;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.heap.MaxHeap;
-import com.jszheng.manipulator.TreeManipulator;
+import com.jszheng.manipulator.BinTreeManipulator;
 
-public class MaxHeapManipulator extends TreeManipulator {
+public class MaxHeapManipulator extends BinTreeManipulator {
 
     public MaxHeapManipulator(Class dataType) {
         super(dataType);
@@ -15,8 +15,13 @@ public class MaxHeapManipulator extends TreeManipulator {
         super.addDeleteOp();
         addOperation("delete max", bt -> {
             ((MaxHeap) bt).deleteMax();
-            printBt();
+            printTree();
         });
+    }
+
+    @Override
+    protected BinaryTree createTree() {
+        return new MaxBinaryHeap(baseBt());
     }
 
     @Override
@@ -26,10 +31,5 @@ public class MaxHeapManipulator extends TreeManipulator {
             Object obj = ((MaxHeap) bt).searchMax();
             System.out.println(obj);
         });
-    }
-
-    @Override
-    protected BinaryTree createTree() {
-        return new MaxBinaryHeap(baseBt());
     }
 }

@@ -1,10 +1,10 @@
 package com.jszheng.searchtree;
 
 import com.jszheng.base.BinaryTree;
-import com.jszheng.manipulator.TreeManipulator;
+import com.jszheng.manipulator.BinTreeManipulator;
 import com.jszheng.search.SearchResult;
 
-public class BstManipulator extends TreeManipulator {
+public class BstManipulator extends BinTreeManipulator {
 
     public BstManipulator(Class dataType) {
         super(dataType);
@@ -17,15 +17,8 @@ public class BstManipulator extends TreeManipulator {
             Object input = getInput("Delete Data:");
             ((BinarySearchTree) bt).delete((Comparable) input);
 
-            printBt();
+            printTree();
         });
-    }
-
-    @Override
-    protected void addSearchOp() {
-        super.addSearchOp();
-        addOperation("search max", bt -> searchExtrema(bt, true));
-        addOperation("search min", bt -> searchExtrema(bt, false));
     }
 
     @Override
@@ -37,6 +30,13 @@ public class BstManipulator extends TreeManipulator {
     @Override
     protected BinarySearchTree createTree() {
         return new BinarySearchTree(baseBt());
+    }
+
+    @Override
+    protected void addSearchOp() {
+        super.addSearchOp();
+        addOperation("search max", bt -> searchExtrema(bt, true));
+        addOperation("search min", bt -> searchExtrema(bt, false));
     }
 
     private void searchExtrema(BinaryTree bt, boolean searchMax) {

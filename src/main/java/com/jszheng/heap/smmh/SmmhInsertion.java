@@ -2,7 +2,7 @@ package com.jszheng.heap.smmh;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.complete.CompleteBtInsertion;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 
 public class SmmhInsertion<E extends Comparable<? super E>> extends CompleteBtInsertion<E> {
 
@@ -21,11 +21,11 @@ public class SmmhInsertion<E extends Comparable<? super E>> extends CompleteBtIn
     }
 
     @Override
-    protected void fixAfterInsertion(TreeNode<E> newNode) {
+    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         int newNodeIndex = newNode.getIndex();
         if (newNodeIndex == 1) return;
-        TreeNode<E> target = newNode;
-        TreeNode<E> sibling = target.getSibling();
+        BinTreeNode<E> target = newNode;
+        BinTreeNode<E> sibling = target.getSibling();
         E targetData = target.getData();
 
         if (sibling != null) {
@@ -41,13 +41,13 @@ public class SmmhInsertion<E extends Comparable<? super E>> extends CompleteBtIn
             }
         }
 
-        TreeNode<E> parent = target.getParent();
+        BinTreeNode<E> parent = target.getParent();
         if (parent == null) return;
-        TreeNode<E> grandParent = parent.getParent();
+        BinTreeNode<E> grandParent = parent.getParent();
 
         while (grandParent != null) {
-            TreeNode<E> lElder = grandParent.getLeftChild();
-            TreeNode<E> rElder = grandParent.getRightChild();
+            BinTreeNode<E> lElder = grandParent.getLeftChild();
+            BinTreeNode<E> rElder = grandParent.getRightChild();
             // 理論上，不需檢查節點為空 (∵ Complete Binary Tree)
             E lData = lElder.getData();
             E rData = rElder.getData();

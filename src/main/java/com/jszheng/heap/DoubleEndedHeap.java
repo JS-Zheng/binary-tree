@@ -2,7 +2,7 @@ package com.jszheng.heap;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.complete.LinearSearch;
-import com.jszheng.node.TreeNode;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.search.SearchAlgo;
 
 public abstract class DoubleEndedHeap<E extends Comparable<? super E>> extends AbstractHeap<E> implements MaxHeap<E>, MinHeap<E> {
@@ -18,10 +18,10 @@ public abstract class DoubleEndedHeap<E extends Comparable<? super E>> extends A
         return searchAlgo;
     }
 
-    protected TreeNode<E> getExtremaNodeFromArr(TreeNode<E> nodes[], boolean max) {
-        TreeNode<E> extremaNode = null;
+    protected BinTreeNode<E> getExtremaNodeFromArr(BinTreeNode<E> nodes[], boolean max) {
+        BinTreeNode<E> extremaNode = null;
 
-        for (TreeNode<E> currentNode : nodes) {
+        for (BinTreeNode<E> currentNode : nodes) {
             if (currentNode == null) continue;
             if (extremaNode == null)
                 extremaNode = currentNode;
@@ -36,8 +36,8 @@ public abstract class DoubleEndedHeap<E extends Comparable<? super E>> extends A
         return extremaNode;
     }
 
-    protected TreeNode<E> searchExtremaNode(boolean max) {
-        TreeNode<E> root = getRoot();
+    protected BinTreeNode<E> searchExtremaNode(boolean max) {
+        BinTreeNode<E> root = getRoot();
         if (root == null) return null;
         else if (max && !root.hasRightChild()) return root.getLeftChild();
         else return max ? root.getRightChild() : root.getLeftChild();

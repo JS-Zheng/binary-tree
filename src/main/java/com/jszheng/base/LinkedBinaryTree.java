@@ -4,8 +4,8 @@ import com.jszheng.Env;
 import com.jszheng.base.complete.CompleteBtInsertion;
 import com.jszheng.base.complete.LinearSearch;
 import com.jszheng.insertion.InsertionAlgo;
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.node.LinkedTreeNode;
-import com.jszheng.node.TreeNode;
 import com.jszheng.search.SearchAlgo;
 import com.jszheng.traversal.TraversalAlgo;
 import com.jszheng.traversal.TraversalAlgoFactory;
@@ -17,7 +17,7 @@ import static com.jszheng.base.BinaryTreeLemma.parentIndex;
 
 public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 
-    private TreeNode<E> root;
+    private BinTreeNode<E> root;
 
     // Prevent execute empty-varargs constructor
     public LinkedBinaryTree() {
@@ -35,7 +35,7 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 
     @Override
     public BinaryTree<E> copy(boolean deep) {
-        TreeNode<E> newNode = null;
+        BinTreeNode<E> newNode = null;
         if (!isEmpty())
             newNode = copyNodes(root, deep);
 
@@ -46,15 +46,15 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     }
 
     @Override
-    public TreeNode<E> getNodeByIndex(int index) {
-        TreeNode<E> root = getRoot();
+    public BinTreeNode<E> getNodeByIndex(int index) {
+        BinTreeNode<E> root = getRoot();
         if (index == 0) return root;
         else if (index == 1) return root.getLeftChild();
         else if (index == 2) return root.getRightChild();
         else if (index < 0) return null;
 
         int parentIndex = parentIndex(index);
-        TreeNode<E> parent = getNodeByIndex(parentIndex);
+        BinTreeNode<E> parent = getNodeByIndex(parentIndex);
         if (parent == null) return null;
 
 
@@ -67,9 +67,8 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     }
 
     @Override
-    public void setDataByArr(E[] data) {
-        root = new LinkedTreeNode<>();
-        root.setDataByArr(data);
+    public BinTreeNode<E> getRoot() {
+        return this.root;
     }
 
     @Override
@@ -81,38 +80,39 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     }
 
     @Override
-    public TreeNode<E> getLastNode() {
-        List<TreeNode<E>> list = traverse("Level", false, false, node -> true);
+    public void setDataByArr(E[] data) {
+        root = new LinkedTreeNode<>();
+        root.setDataByArr(data);
+    }
+
+    @Override
+    public void setRoot(BinTreeNode<E> node) {
+        this.root = node;
+    }
+
+    @Override
+    public BinTreeNode<E> getLastNode() {
+        List<BinTreeNode<E>> list = traverse("Level", false, false, node -> true);
         int i = list.size() - 1;
         return list.get(i);
     }
 
     @Override
-    public TreeNode<E> getRoot() {
-        return this.root;
-    }
-
-    @Override
-    public void setRoot(TreeNode<E> node) {
-        this.root = node;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return root == null;
-    }
-
-    @Override
-    public List<TreeNode<E>> traverse(Class clz) {
+    public List<BinTreeNode<E>> traverse(Class clz) {
         TraversalAlgo algo = TraversalAlgoFactory.create(clz, false, null);
         return traverse(algo);
     }
 
     @Override
-    public List<TreeNode<E>> traverse(String order, boolean recursive,
-                                      boolean isFullMode, TraversalNodeHandler<E> handler) {
+    public List<BinTreeNode<E>> traverse(String order, boolean recursive,
+                                         boolean isFullMode, TraversalNodeHandler<E> handler) {
         TraversalAlgo algo = TraversalAlgoFactory.create(order, recursive, isFullMode, handler);
         return traverse(algo);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return root == null;
     }
 
     @Override
@@ -132,8 +132,8 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private List<TreeNode<E>> traverse(TraversalAlgo algo) {
-        List<TreeNode<E>> result = null;
+    private List<BinTreeNode<E>> traverse(TraversalAlgo algo) {
+        List<BinTreeNode<E>> result = null;
 
         if (algo != null)
             result = algo.traverse(this);
