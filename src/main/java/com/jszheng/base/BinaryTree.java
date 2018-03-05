@@ -11,10 +11,6 @@ public interface BinaryTree<E> extends Tree<E, BinTreeNode<E>>, Traversable<E>, 
 
     BinaryTree<E> copy(boolean deep);
 
-    int count();
-
-    int count(BinTreeNode<E> node);
-
     default String getLevelString(int level) {
         return "";
     }
@@ -41,13 +37,13 @@ public interface BinaryTree<E> extends Tree<E, BinTreeNode<E>>, Traversable<E>, 
 
     BinTreeNode<E> getRoot();
 
-    void setRoot(E data);
+    void setRoot(BinTreeNode<E> root);
 
     BinTreeNode<E> search(E data);
 
     void setDataByArr(E[] data);
 
-    void setRoot(BinTreeNode<E> root);
+    void setRoot(E data);
 
     SkewedState skewedState();
 

@@ -22,6 +22,12 @@ public interface Tree<E, Node extends TreeNode<E>> {
         printer.print(this);
     }
 
+    default int size() {
+        return size(getRoot());
+    }
+
+    int size(Node node);
+
     Node getRoot();
 
     boolean isEmpty();

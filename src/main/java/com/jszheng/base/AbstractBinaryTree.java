@@ -14,21 +14,6 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
     protected SearchAlgo<E> searchAlgo;
 
     @Override
-    public int count() {
-        return count(getRoot());
-    }
-
-    @Override
-    public int count(BinTreeNode<E> node) {
-        if (node == null)
-            return 0;
-
-        int nL = count(node.getLeftChild());
-        int nR = count(node.getRightChild());
-        return nL + nR + 1;
-    }
-
-    @Override
     public int height() {
         return height(getRoot());
     }
@@ -121,6 +106,16 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
             if (Env.debug)
                 System.out.println();
         }
+    }
+
+    @Override
+    public int size(BinTreeNode<E> node) {
+        if (node == null)
+            return 0;
+
+        int nL = size(node.getLeftChild());
+        int nR = size(node.getRightChild());
+        return nL + nR + 1;
     }
 
     protected <T extends Comparable<? super T>> BinTreeNode<T> compareNode(BinTreeNode<T> t1, BinTreeNode<T> t2, boolean findGreater) {

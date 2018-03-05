@@ -108,6 +108,17 @@ public class BinomialHeap<E extends Comparable<? super E>>
     }
 
     @Override
+    public int size(BinomialTreeNode<E> node) {
+        BinomialTreeNode<E> tmp = node;
+        int count = 0;
+        while (tmp != null) {
+            count += (1 << tmp.degree);  // 2^degree
+            tmp = tmp.getRightSibling();
+        }
+        return count;
+    }
+
+    @Override
     public BinomialTreeNode<E> getRoot() {
         return root;
     }
@@ -143,7 +154,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
         }
         do {
             postOrderTraverse(tmp);
-            tmp = tmp.rLink;
+            tmp = tmp.getRightSibling();
         } while (tmp != root);
         System.out.println("\n");
     }
@@ -154,17 +165,6 @@ public class BinomialHeap<E extends Comparable<? super E>>
 
     private BinomialTreeNode<E> getRightmostRoot() {
         return first.lLink;
-    }
-
-    int size() {
-        BinomialTreeNode<E> tmp = root;
-        int count = 0;
-        if (tmp == null) return 0;
-        do {
-            count += (1 << tmp.degree);  // 2^degree
-            tmp = tmp.rLink;
-        } while (tmp != root);
-        return count;
     }
 
     private void concatRootList(BinomialTreeNode<E> target) {
