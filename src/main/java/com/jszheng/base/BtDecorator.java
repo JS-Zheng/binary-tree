@@ -99,6 +99,16 @@ public abstract class BtDecorator<E> extends AbstractBinaryTree<E> {
     }
 
     @Override
+    public BinTreeNode<E> newNode() {
+        return component.newNode();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return component.isEmpty();
+    }
+
+    @Override
     public List<BinTreeNode<E>> traverse(Class clz) {
         return component.traverse(clz);
     }
@@ -106,10 +116,5 @@ public abstract class BtDecorator<E> extends AbstractBinaryTree<E> {
     @Override
     public List<BinTreeNode<E>> traverse(String order, boolean recursive, boolean isFullBtMode, TraversalNodeHandler<E> handler) {
         return component.traverse(order, recursive, isFullBtMode, handler);
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return component.isEmpty();
     }
 }

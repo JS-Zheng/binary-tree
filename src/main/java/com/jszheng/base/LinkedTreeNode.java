@@ -1,6 +1,7 @@
-package com.jszheng.node;
+package com.jszheng.base;
 
-import com.jszheng.base.BinaryTreeLemma;
+import com.jszheng.node.BinTreeNode;
+import com.jszheng.node.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,21 +9,17 @@ import java.util.List;
 /**
  * Created by zhengzhongsheng on 2017/10/7.
  */
-public class LinkedTreeNode<E> implements BinTreeNode<E> {
+class LinkedTreeNode<E> implements BinTreeNode<E> {
 
-    protected E data;
-    protected BinTreeNode<E> lChild = null, rChild = null, parent = null;
+    private E data;
+    private BinTreeNode<E> lChild = null, rChild = null, parent = null;
     private int index;
 
-    public LinkedTreeNode() {
-    }
-
-    public LinkedTreeNode(E item) {
-        data = item;
+    LinkedTreeNode() {
     }
 
     @SafeVarargs
-    public LinkedTreeNode(E... items) { // care heap pollution
+    LinkedTreeNode(E... items) { // care heap pollution
         setDataByArr(items);
     }
 

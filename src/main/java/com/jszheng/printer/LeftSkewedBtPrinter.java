@@ -29,7 +29,6 @@ class LeftSkewedBtPrinter implements BtPrinter {
             if (currentNode.getParent() == null || currentNode == root) break;
             builder.insert(0, "/" + "\n");
 
-
             // Print Margin-left of edge.
             lastLineLen += str.length();
 

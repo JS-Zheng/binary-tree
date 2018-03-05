@@ -2,8 +2,9 @@ package com.jszheng.heap.leftist;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.heap.MaxHeap;
+import com.jszheng.node.BinTreeNode;
 
-public class MaxLeftistTree<E extends Comparable<? super E>> extends LeftistTree<E> implements MaxHeap<E> {
+public class MaxLeftistTree<E extends Comparable<? super E>> extends LeftistTree<E> implements MaxHeap<E, BinTreeNode<E>> {
 
     public MaxLeftistTree(BinaryTree<E> component) {
         super(component);

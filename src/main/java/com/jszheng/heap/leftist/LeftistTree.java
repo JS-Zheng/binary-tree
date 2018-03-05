@@ -13,7 +13,8 @@ import com.jszheng.search.SearchAlgo;
 // for all nodes are internal node
 //
 // It's not a Complete Binary Tree.
-abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<E> implements MeldableHeap<LeftistTree<E>, E> {
+abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<E>
+        implements MeldableHeap<LeftistTree<E>, E, BinTreeNode<E>> {
 
     private final boolean maxHeap;
 

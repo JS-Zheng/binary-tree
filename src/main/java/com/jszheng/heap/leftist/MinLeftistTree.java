@@ -2,8 +2,9 @@ package com.jszheng.heap.leftist;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.heap.MinHeap;
+import com.jszheng.node.BinTreeNode;
 
-public class MinLeftistTree<E extends Comparable<? super E>> extends LeftistTree<E> implements MinHeap<E> {
+public class MinLeftistTree<E extends Comparable<? super E>> extends LeftistTree<E> implements MinHeap<E, BinTreeNode<E>> {
 
     public MinLeftistTree(BinaryTree<E> component) {
         super(component);

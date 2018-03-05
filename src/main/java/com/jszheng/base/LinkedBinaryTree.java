@@ -5,7 +5,6 @@ import com.jszheng.base.complete.CompleteBtInsertion;
 import com.jszheng.base.complete.LinearSearch;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
-import com.jszheng.node.LinkedTreeNode;
 import com.jszheng.search.SearchAlgo;
 import com.jszheng.traversal.TraversalAlgo;
 import com.jszheng.traversal.TraversalAlgoFactory;
@@ -98,6 +97,16 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     }
 
     @Override
+    public BinTreeNode<E> newNode() {
+        return new LinkedTreeNode<>();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return root == null;
+    }
+
+    @Override
     public List<BinTreeNode<E>> traverse(Class clz) {
         TraversalAlgo algo = TraversalAlgoFactory.create(clz, false, null);
         return traverse(algo);
@@ -108,11 +117,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
                                          boolean isFullMode, TraversalNodeHandler<E> handler) {
         TraversalAlgo algo = TraversalAlgoFactory.create(order, recursive, isFullMode, handler);
         return traverse(algo);
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return root == null;
     }
 
     @Override

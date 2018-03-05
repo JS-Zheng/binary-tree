@@ -13,12 +13,13 @@ import java.util.List;
 public class HorizontalTreePrinter implements TreePrinter {
 
     private StringBuilder result;
+    private Tree tree;
 
     @Override
     public String getPrintString(Tree tree) {
         if (tree == null || tree.isEmpty())
             return "Tree is empty.";
-
+        this.tree = tree;
         result = new StringBuilder();
         print(tree.getRoot(), "", true);
         return result.toString();
@@ -32,7 +33,7 @@ public class HorizontalTreePrinter implements TreePrinter {
         List<TreeNode> children = createChildList(node);
 
         result.append(prefix).append(isTail ? "└── " : "├── ")
-                .append(node.getData()).append("\n");
+                .append(tree.getNodeString(node)).append("\n");
 
         for (int i = 0; i < children.size() - 1; i++)
             print(children.get(i), prefix + (isTail ? "    " : "│   "), false);

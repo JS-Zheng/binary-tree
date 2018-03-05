@@ -5,7 +5,7 @@ import com.jszheng.printer.BtPrinter;
 import com.jszheng.printer.MyBtPrinter;
 import com.jszheng.traversal.Traversable;
 
-public interface BinaryTree<E> extends Tree<E>, Traversable<E>, Cloneable {
+public interface BinaryTree<E> extends Tree<E, BinTreeNode<E>>, Traversable<E>, Cloneable {
 
     void clearRoot();
 
@@ -20,12 +20,6 @@ public interface BinaryTree<E> extends Tree<E>, Traversable<E>, Cloneable {
     }
 
     BinTreeNode<E> getNodeByIndex(int index);
-
-    default String getNodeString(BinTreeNode<E> node) {
-        Object data = node != null ? node.getData() : null;
-        return data != null ? data.toString() :
-                (getRoot() == node ? "⊙" : " "); // Keep one space to mock null.
-    }
 
     // root is 1.
     int height();

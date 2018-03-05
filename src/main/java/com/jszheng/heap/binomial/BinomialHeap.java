@@ -2,7 +2,6 @@ package com.jszheng.heap.binomial;
 
 import com.jszheng.heap.MeldableHeap;
 import com.jszheng.heap.MinHeap;
-import com.jszheng.node.BinomialTreeNode;
 import com.jszheng.node.TreeNode;
 import com.jszheng.printer.HorizontalTreePrinter;
 import com.jszheng.printer.TreePrinter;
@@ -11,9 +10,13 @@ import java.util.*;
 
 import static com.jszheng.printer.Printer.printByCount;
 
-public class BinomialHeap<E extends Comparable<? super E>> implements MinHeap<E>, MeldableHeap<BinomialHeap<E>, E> {
+public class BinomialHeap<E extends Comparable<? super E>>
+        implements MinHeap<E, BinomialTreeNode<E>>, MeldableHeap<BinomialHeap<E>, E, BinomialTreeNode<E>> {
 
-    private BinomialTreeNode<E> root; //  sibling 串列之最左節點
+    // Root List
+    private BinomialTreeNode<E> first;
+    private BinomialTreeNode<E> root; // min
+
     private TreePrinter printer;
 
     @Override
@@ -21,17 +24,21 @@ public class BinomialHeap<E extends Comparable<? super E>> implements MinHeap<E>
         if (root == null) return null;
         E min = root.data;
 
-        BinomialTreeNode<E> rSibling = root.rSibling;
-        cutOffSibling(root, true);
+        BinomialTreeNode<E> rSibling = root.rLink;
+        if (rSibling == root) rSibling = null;
         List<TreeNode<E>> children = root.getChildren();
+        deleteNode(root);
+
         BinomialTreeNode<E> minChild = null;
 
         for (TreeNode<E> n : children) {
             BinomialTreeNode<E> node = (BinomialTreeNode<E>) n;
             node.deleteParent();
-            if (minChild == null)
+
+            if (minChild == null) {
+                first = node;
                 minChild = node;
-            else {
+            } else {
                 E minChildData = minChild.data;
                 E currentNodeData = node.data;
                 if (currentNodeData.compareTo(minChildData) < 0)
@@ -39,11 +46,11 @@ public class BinomialHeap<E extends Comparable<? super E>> implements MinHeap<E>
             }
         }
 
-
         if (minChild != null) {
             root = minChild;
             merge(rSibling);
         } else {
+            first = rSibling;
             root = rSibling;
         }
 
@@ -61,6 +68,11 @@ public class BinomialHeap<E extends Comparable<? super E>> implements MinHeap<E>
     public final void insert(E... value) {
         for (E v : value)
             insertValue(v);
+    }
+
+    @Override
+    public BinomialTreeNode<E> newNode() {
+        return new BinomialTreeNode<>();
     }
 
     @Override
@@ -88,7 +100,7 @@ public class BinomialHeap<E extends Comparable<? super E>> implements MinHeap<E>
             tmp.root = currentNode;
             printer.print(tmp);
 
-            currentNode = currentNode.rSibling;
+            currentNode = currentNode.getRightSibling();
         }
 
         printByCount(35, "=");
@@ -105,6 +117,14 @@ public class BinomialHeap<E extends Comparable<? super E>> implements MinHeap<E>
         return root == null;
     }
 
+    private void setRoot(BinomialTreeNode<E> node) {
+        first = node;
+        root = node;
+        node.rLink = node.lLink = node;
+        node.isLLinkCircular = true;
+        node.isRLinkCircular = true;
+    }
+
     @Override
     public void merge(BinomialHeap<E> bh) {
         BinomialTreeNode<E> targetNode;
@@ -114,92 +134,87 @@ public class BinomialHeap<E extends Comparable<? super E>> implements MinHeap<E>
         merge(targetNode);
     }
 
-    // 將 root 之 sibling 串列，視為不同樹
+    // 將 rootList 之節點分別視為不同樹
     public void postOrder() {
         BinomialTreeNode<E> tmp = root;
-        while (tmp != null) {
-            postOrderTraverse(tmp);
-            tmp = tmp.rSibling;
+        if (tmp == null) {
+            System.out.println("Tree is empty.");
+            return;
         }
+        do {
+            postOrderTraverse(tmp);
+            tmp = tmp.rLink;
+        } while (tmp != root);
         System.out.println("\n");
     }
 
     private BinomialTreeNode<E> getLeftmostRoot() {
-        return getLMostOrRMostNode(root, true);
+        return first;
     }
 
     private BinomialTreeNode<E> getRightmostRoot() {
-        return getLMostOrRMostNode(root, false);
+        return first.lLink;
     }
 
     int size() {
         BinomialTreeNode<E> tmp = root;
         int count = 0;
-        while (tmp != null) {
+        if (tmp == null) return 0;
+        do {
             count += (1 << tmp.degree);  // 2^degree
-            tmp = tmp.rSibling;
-        }
+            tmp = tmp.rLink;
+        } while (tmp != root);
         return count;
     }
 
-    private void cutOffSibling(BinomialTreeNode<E> node, boolean rSibling) {
-        if (node == null) return;
+    private void concatRootList(BinomialTreeNode<E> target) {
+        if (target == null) return;
+        target = getLMostOrRMostNode(target, true);
+        target.isLLinkCircular = false;
 
-        BinomialTreeNode<E> sibling = rSibling ? node.rSibling : node.lSibling;
-        if (rSibling) {
-            node.rSibling = null;
-            if (sibling != null)
-                sibling.lSibling = null;
-        } else {
-            node.lSibling = null;
-            if (sibling != null)
-                sibling.rSibling = null;
-        }
+        BinomialTreeNode<E> rMostRootOfTarget = target.lLink;
+
+        // Precondition: root值 小於 targetNode值 && targetNode.lLink==null
+        BinomialTreeNode<E> rMostRoot = getRightmostRoot();
+        rMostRoot.isRLinkCircular = false;
+
+        setSibling(rMostRoot, target);
+        first.lLink = rMostRootOfTarget;
+
+        rMostRootOfTarget.rLink = first;
+        rMostRootOfTarget.isRLinkCircular = true;
     }
 
-    private void findSameDegreeToMerge() {
-        BinomialTreeNode<E> currentNode = root;
-
-        PriorityQueue<Integer> degreeQueue = new PriorityQueue<>();
-        Map<Integer, PriorityQueue<BinomialTreeNode<E>>> degreeMap = new HashMap<>();
-
-        while (currentNode != null) {
-            int currentDegree = currentNode.degree;
-            if (!degreeQueue.contains(currentDegree))
-                degreeQueue.add(currentDegree);
-
-            PriorityQueue<BinomialTreeNode<E>> nodeQueue = getNodeQueueFromDegreeMap(degreeMap, currentDegree);
-            nodeQueue.add(currentNode);
-
-            currentNode = currentNode.rSibling;
+    private void deleteNode(BinomialTreeNode<E> node) {
+        if (node == first) {
+            first = node.rLink;
+            if (node == first) {
+                first = null;
+                return;
+            }
         }
 
-        while (!degreeQueue.isEmpty()) {
-            int targetDegree = degreeQueue.peek();
-            PriorityQueue<BinomialTreeNode<E>> nodeQueue = degreeMap.get(targetDegree);
-            if (nodeQueue.size() < 2) {
-                degreeQueue.poll();
-            } else {
-                BinomialTreeNode<E> smallerNode = nodeQueue.poll();
-                BinomialTreeNode<E> greaterNode = nodeQueue.poll();
-                mergeSameDegreeTree(smallerNode, greaterNode);
+        node.lLink.rLink = node.rLink;
+        node.rLink.lLink = node.lLink;
 
-                int newDegree = smallerNode.degree;
-                PriorityQueue<BinomialTreeNode<E>> newNodeQueue = getNodeQueueFromDegreeMap(degreeMap, newDegree);
-                newNodeQueue.add(smallerNode);
-            }
+        if (node.isLLinkCircular) {
+            node.rLink.isLLinkCircular = true;
+            node.lLink.isRLinkCircular = true;
+        } else if (node.isRLinkCircular) {
+            node.rLink.isLLinkCircular = true;
+            node.lLink.isRLinkCircular = true;
         }
     }
 
     private BinomialTreeNode<E> getLMostOrRMostNode(BinomialTreeNode<E> start, boolean leftmost) {
         BinomialTreeNode<E> result = start;
-        BinomialTreeNode<E> currentRoot = start;
-        while (currentRoot != null) {
+        BinomialTreeNode<E> currentRoot = leftmost ? start.lLink : start.rLink;
+        while (currentRoot != start) {
             result = currentRoot;
             if (leftmost)
-                currentRoot = currentRoot.lSibling;
+                currentRoot = currentRoot.lLink;
             else
-                currentRoot = currentRoot.rSibling;
+                currentRoot = currentRoot.rLink;
         }
         return result;
     }
@@ -209,115 +224,139 @@ public class BinomialHeap<E extends Comparable<? super E>> implements MinHeap<E>
         if (!map.containsKey(degree)) {
             queue = new PriorityQueue<>();
             map.put(degree, queue);
-        } else {
+        } else
             queue = map.get(degree);
-        }
+
         return queue;
     }
 
     private void insertValue(E value) {
         BinomialHeap<E> bh = new BinomialHeap<>();
-        bh.root = new BinomialTreeNode<>();
-        bh.root.data = value;
+        BinomialTreeNode<E> node = new BinomialTreeNode<>();
+        node.data = value;
+        bh.setRoot(node);
         merge(bh);
-    }
-
-    private int maxRootDegree() {
-        if (root == null) return 0;
-        int result = root.degree;
-        BinomialTreeNode<E> currentNode = root;
-        while (currentNode != null) {
-            if (currentNode.degree > result)
-                result = currentNode.degree;
-            currentNode = currentNode.rSibling;
-        }
-        return result;
     }
 
     private void merge(BinomialTreeNode<E> targetNode) {
         if (root == null) {
-            root = targetNode;
+            setRoot(targetNode);
             return;
         }
 
-        if (targetNode != null) {
-            targetNode = setNewRootIfNecessary(targetNode);
-            targetNode = getLMostOrRMostNode(targetNode, true);
+        if (targetNode != null)
+            concatRootList(targetNode);
 
-            // Precondition: root值 小於 targetNode值 && targetNode.lSibling==null
-            setSibling(getRightmostRoot(), targetNode);
-        }
-
-        sortRootSibling(getLeftmostRoot());
-        findSameDegreeToMerge();
+        sortRootListAndMerge(getLeftmostRoot());
     }
 
     // 將 greaterRoot 作為 smallerRoot 之子樹
     private void mergeSameDegreeTree(BinomialTreeNode<E> smallerRoot, BinomialTreeNode<E> greaterRoot) {
-        // greaterRoot sibling part
-        if (greaterRoot.rSibling != null)
-            greaterRoot.rSibling.lSibling = greaterRoot.lSibling;
-        greaterRoot.lSibling.rSibling = greaterRoot.rSibling;
+        if (greaterRoot.isRLinkCircular) {
+            first.lLink = greaterRoot.lLink;
+            greaterRoot.lLink.isRLinkCircular = true;
+        } else
+            greaterRoot.rLink.lLink = greaterRoot.lLink;
 
-        greaterRoot.lSibling = null;
-        greaterRoot.rSibling = smallerRoot.child;
+        greaterRoot.lLink.rLink = greaterRoot.rLink;
+
+        greaterRoot.lLink = greaterRoot;
+        greaterRoot.rLink = greaterRoot;
         greaterRoot.parent = smallerRoot;
+        greaterRoot.isLLinkCircular = true;
+        greaterRoot.isRLinkCircular = true;
 
-        if (smallerRoot.child != null)
-            smallerRoot.child.lSibling = greaterRoot;
+        BinomialTreeNode<E> child = smallerRoot.child;
+
+        if (child != null) {
+            greaterRoot.rLink = child;
+            greaterRoot.isRLinkCircular = false;
+
+            BinomialTreeNode<E> rMostNodeOfChild = child.lLink;
+            greaterRoot.lLink = rMostNodeOfChild;
+            rMostNodeOfChild.rLink = greaterRoot;
+
+            child.lLink = greaterRoot;
+            child.isLLinkCircular = false;
+        }
+
         smallerRoot.child = greaterRoot;
 
         smallerRoot.degree++;
     }
 
-    // 以 parent 判斷節點是否位於 root 之 sibling 串列
+    // 以 parent 判斷節點是否位於 rootList
     private void postOrderTraverse(BinomialTreeNode<E> node) {
-        if (node == null)
-            return;
+        if (node == null) return;
+
         postOrderTraverse(node.child);
         if (node.parent != null)
-            postOrderTraverse(node.rSibling);
+            postOrderTraverse(node.getRightSibling());
         System.out.printf("%s ", node.data);
     }
 
-    // 若 mergeTarget值 小於 root值，則以之作為新根節點
-    // @return 若已設置新根節點，則回傳舊根節點作為 merge目標，否則回傳原 mergeTarget
-    private BinomialTreeNode<E> setNewRootIfNecessary(BinomialTreeNode<E> mergeTarget) {
-        BinomialTreeNode<E> currentRoot = root;
-        E currentRootData = currentRoot.data;
-        E targetNodeData = mergeTarget.data;
-        BinomialTreeNode<E> minRoot = currentRootData.compareTo(targetNodeData) > 0 ? mergeTarget : currentRoot;
-        if (minRoot != root) {
-            this.root = mergeTarget;
-            mergeTarget = currentRoot;
-        }
-        return mergeTarget;
-    }
-
+    // low-level API -- Do not need to maintain circular state of link.
     private void setSibling(BinomialTreeNode<E> n1, BinomialTreeNode<E> n2) {
-        n1.rSibling = n2;
-        n2.lSibling = n1;
+        n1.rLink = n2;
+        n2.lLink = n1;
     }
 
-    private void sortRootSibling(BinomialTreeNode<E> leftmostRoot) {
+    private void sortRootListAndMerge(BinomialTreeNode<E> leftmostRoot) {
+        if (leftmostRoot == null) return;
         BinomialTreeNode<E> currentRoot = leftmostRoot;
         List<BinomialTreeNode<E>> roots = new ArrayList<>();
-        while (currentRoot != null) {
+        PriorityQueue<Integer> degreeQueue = new PriorityQueue<>();
+        Map<Integer, PriorityQueue<BinomialTreeNode<E>>> degreeMap = new HashMap<>();
+        do {
             roots.add(currentRoot);
-            currentRoot = currentRoot.rSibling;
-        }
+            int currentDegree = currentRoot.degree;
+            if (!degreeQueue.contains(currentDegree))
+                degreeQueue.add(currentDegree);
+
+            PriorityQueue<BinomialTreeNode<E>> nodeQueue = getNodeQueueFromDegreeMap(degreeMap, currentDegree);
+            nodeQueue.add(currentRoot);
+
+            currentRoot = currentRoot.rLink;
+        } while (currentRoot != leftmostRoot);
 
         roots.sort(BinomialTreeNode::compareTo);
+
         int i = 0;
         for (; i < roots.size() - 1; i++) {
             BinomialTreeNode<E> n1 = roots.get(i);
             if (i == 0) {
+                first = n1;
                 root = n1;
-                root.lSibling = null;
             }
             BinomialTreeNode<E> n2 = roots.get(i + 1);
             setSibling(n1, n2);
+
+            n1.isRLinkCircular = false;
+            n2.isLLinkCircular = false;
         }
-        roots.get(i).rSibling = null;
+
+        BinomialTreeNode<E> rMostRoot = roots.get(i);
+        rMostRoot.rLink = first;
+        rMostRoot.isRLinkCircular = true;
+
+        first.lLink = rMostRoot;
+        first.isLLinkCircular = true;
+
+        while (!degreeQueue.isEmpty()) {
+            int targetDegree = degreeQueue.peek();
+            PriorityQueue<BinomialTreeNode<E>> nodeQueue = degreeMap.get(targetDegree);
+
+            if (nodeQueue.size() < 2)
+                degreeQueue.poll();
+            else {
+                BinomialTreeNode<E> smallerNode = nodeQueue.poll();
+                BinomialTreeNode<E> greaterNode = nodeQueue.poll();
+                mergeSameDegreeTree(smallerNode, greaterNode);
+
+                int newDegree = smallerNode.degree;
+                PriorityQueue<BinomialTreeNode<E>> newNodeQueue = getNodeQueueFromDegreeMap(degreeMap, newDegree);
+                newNodeQueue.add(smallerNode);
+            }
+        }
     }
 }
