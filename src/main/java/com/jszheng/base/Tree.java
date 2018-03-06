@@ -30,5 +30,7 @@ public interface Tree<E, Node extends TreeNode<E>> {
 
     Node getRoot();
 
+    void setRoot(Node node);
+
     boolean isEmpty();
 }

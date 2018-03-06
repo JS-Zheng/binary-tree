@@ -5,6 +5,7 @@ import com.jszheng.base.simplebalanced.SimpleBalancedTreeManipulator;
 import com.jszheng.heap.binary.MaxHeapManipulator;
 import com.jszheng.heap.binary.MinHeapManipulator;
 import com.jszheng.heap.binomial.BinomialHeapManipulator;
+import com.jszheng.heap.binomial.FibonacciHeapManipulator;
 import com.jszheng.heap.deap.DeapManipulator;
 import com.jszheng.heap.leftist.MaxLeftistTreeManipulator;
 import com.jszheng.heap.leftist.MinLeftistTreeManipulator;
@@ -43,6 +44,7 @@ public class Main {
         factory.register(MAX_HEAP, MaxHeapManipulator.class);
         factory.register(MIN_HEAP, MinHeapManipulator.class);
         factory.register(BINOMIAL_HEAP, BinomialHeapManipulator.class);
+        factory.register(FIBONACCI_HEAP, FibonacciHeapManipulator.class);
         factory.register(MIN_LEFTIST_TREE, MinLeftistTreeManipulator.class);
         factory.register(MAX_LEFTIST_TREE, MaxLeftistTreeManipulator.class);
         factory.register(MIN_MAX_HEAP, MinMaxHeapManipulator.class);

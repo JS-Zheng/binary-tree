@@ -71,22 +71,17 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     }
 
     @Override
-    public void setRoot(BinTreeNode<E> node) {
-        this.root = node;
+    public void setRoot(E data) {
+        if (root == null)
+            root = new LinkedTreeNode<>();
+
+        root.setData(data);
     }
 
     @Override
     public void setDataByArr(E[] data) {
         root = new LinkedTreeNode<>();
         root.setDataByArr(data);
-    }
-
-    @Override
-    public void setRoot(E data) {
-        if (root == null)
-            root = new LinkedTreeNode<>();
-
-        root.setData(data);
     }
 
     @Override
@@ -97,13 +92,18 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     }
 
     @Override
-    public BinTreeNode<E> newNode() {
-        return new LinkedTreeNode<>();
+    public void setRoot(BinTreeNode<E> node) {
+        this.root = node;
     }
 
     @Override
     public boolean isEmpty() {
         return root == null;
+    }
+
+    @Override
+    public BinTreeNode<E> newNode() {
+        return new LinkedTreeNode<>();
     }
 
     @Override

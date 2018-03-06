@@ -16,6 +16,7 @@ public class Env {
     public final static String MIN_HEAP = "Min-Heap";
     public final static String MAX_HEAP = "Max-Heap";
     public final static String BINOMIAL_HEAP = "二項式堆積";
+    public final static String FIBONACCI_HEAP = "費氏堆積";
     public final static String MIN_MAX_HEAP = "Min-Max Heap";
     public final static String DEAP = "DEAP";
     public final static String SMMH = "SMMH";

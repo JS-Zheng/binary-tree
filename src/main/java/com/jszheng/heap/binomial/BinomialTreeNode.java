@@ -10,12 +10,12 @@ public class BinomialTreeNode<E extends Comparable<? super E>>
 
     E data;
     int degree = 0;
-    BinomialTreeNode<E> parent;
-    BinomialTreeNode<E> child;
-    BinomialTreeNode<E> lLink;
-    BinomialTreeNode<E> rLink;
-    boolean isRLinkCircular = false;
-    boolean isLLinkCircular = false;
+    BinomialTreeNode<E> parent = null;
+    BinomialTreeNode<E> child = null;
+    BinomialTreeNode<E> lLink = this;
+    BinomialTreeNode<E> rLink = this;
+    boolean isRLinkCircular = true;
+    boolean isLLinkCircular = true;
 
     BinomialTreeNode() {
     }

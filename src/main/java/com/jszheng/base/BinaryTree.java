@@ -37,13 +37,11 @@ public interface BinaryTree<E> extends Tree<E, BinTreeNode<E>>, Traversable<E>, 
 
     BinTreeNode<E> getRoot();
 
-    void setRoot(BinTreeNode<E> root);
+    void setRoot(E data);
 
     BinTreeNode<E> search(E data);
 
     void setDataByArr(E[] data);
-
-    void setRoot(E data);
 
     SkewedState skewedState();
 
