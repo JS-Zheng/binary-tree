@@ -8,6 +8,8 @@ import java.util.List;
 public class BinomialTreeNode<E extends Comparable<? super E>>
         implements Comparable<BinomialTreeNode<E>>, TreeNode<E> {
 
+    // 在成為其他節點的子節點後，是否曾失去過 child
+    public boolean mark;
     E data;
     int degree = 0;
     BinomialTreeNode<E> parent = null;
@@ -74,6 +76,10 @@ public class BinomialTreeNode<E extends Comparable<? super E>>
 
     public BinomialTreeNode<E> getRightSibling() {
         return getSibling(true);
+    }
+
+    public boolean isMark() {
+        return mark;
     }
 
     private BinomialTreeNode<E> getSibling(boolean rSibling) {

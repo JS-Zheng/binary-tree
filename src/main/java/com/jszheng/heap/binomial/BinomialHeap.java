@@ -35,7 +35,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
 
         BinomialTreeNode<E> consolidateTarget = root.getRightSibling();
 
-        deleteNodeWithConcatChild(root);
+        deleteRootWithConcatChild(root);
 
         if (consolidateTarget == null) consolidateTarget = first;
         consolidate(consolidateTarget);
@@ -92,6 +92,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
         }
 
         printByCount(35, "=");
+        System.out.println();
         System.out.println();
     }
 
@@ -320,8 +321,18 @@ public class BinomialHeap<E extends Comparable<? super E>>
         }
     }
 
+    // low-level API -- Do not need to maintain its sibling.
+    void isolateNodeFromSibling(BinomialTreeNode<E> node) {
+        node.parent = null;
+        node.mark = false;
+        node.lLink = node;
+        node.rLink = node;
+        node.isLLinkCircular = true;
+        node.isRLinkCircular = true;
+    }
+
     // 需維護 first node
-    private void deleteNodeWithConcatChild(BinomialTreeNode<E> node) {
+    private void deleteRootWithConcatChild(BinomialTreeNode<E> node) {
         if (node == null) return;
         BinomialTreeNode<E> lSibling = node.getLeftSibling();
         BinomialTreeNode<E> rSibling = node.getRightSibling();
