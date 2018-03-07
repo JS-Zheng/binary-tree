@@ -32,14 +32,14 @@ public class BinomialHeap<E extends Comparable<? super E>>
     public E deleteMin() {
         if (min == null) return null;
         E min = this.min.data;
-
+        if (Env.debug) System.out.println("[delete] data: " + min);
         BinomialTreeNode<E> consolidateTarget = this.min.getRightSibling();
 
         deleteRootWithConcatChild(this.min);
 
         if (consolidateTarget == null) consolidateTarget = first;
         consolidate(consolidateTarget);
-
+        if (Env.debug) System.out.println();
         return min;
     }
 
@@ -506,7 +506,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
 
         @Override
         public boolean handle(BinomialTreeNode<E> node) {
-            if (node.data == target) {
+            if (node.data.equals(target)) { // use equals rather than == operator
                 result = node;
                 return false;
             }

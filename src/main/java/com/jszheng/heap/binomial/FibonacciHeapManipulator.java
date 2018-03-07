@@ -11,6 +11,12 @@ public class FibonacciHeapManipulator extends AbstractBinomialHeapManipulator<Fi
 
     @Override
     protected void addDeleteOp() {
+        addOperation("delete", tree -> {
+            Object input = getInput("Delete Data:");
+            tree.delete((Comparable) input);
+            tree.print();
+        });
+
         super.addDeleteOp();
 
         addOperation("decrease key", tree -> {

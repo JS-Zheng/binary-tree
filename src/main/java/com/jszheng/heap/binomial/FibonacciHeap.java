@@ -12,8 +12,10 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
     }
 
     public void decreaseKey(BinomialTreeNode<E> node, E newKey) {
-        if (newKey.compareTo(node.data) > 0)
-            throw new RuntimeException("new key is greater than current key.");
+        if (newKey.compareTo(node.data) > 0) {
+            System.out.println("new key is greater than current key.");
+            return;
+        }
 
         node.data = newKey;
         BinomialTreeNode<E> parent = node.parent;
@@ -27,10 +29,18 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
             min = node;
     }
 
+    public E delete(E value) {
+        BinomialTreeNode<E> node = search(value);
+        if (node != null) return delete(node);
+        else if (Env.debug) System.out.println("[delete] not found\n");
+        return null;
+    }
+
     public E delete(BinomialTreeNode<E> node) {
         E data = node.data;
         decreaseKeyToMin(node);
         deleteMin(); // it will find new min
+        if (Env.debug) System.out.println();
         return data;
     }
 
