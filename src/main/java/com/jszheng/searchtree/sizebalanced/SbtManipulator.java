@@ -1,9 +1,8 @@
 package com.jszheng.searchtree.sizebalanced;
 
-import com.jszheng.searchtree.BinarySearchTree;
-import com.jszheng.searchtree.BstManipulator;
+import com.jszheng.searchtree.AbstractBstManipulator;
 
-public class SbtManipulator extends BstManipulator {
+public final class SbtManipulator extends AbstractBstManipulator<SizeBalancedTree> {
 
     public SbtManipulator(Class dataType) {
         super(dataType);
@@ -16,7 +15,7 @@ public class SbtManipulator extends BstManipulator {
     }
 
     @Override
-    protected BinarySearchTree createTree() {
-        return new SizeBalancedTree(baseBt());
+    protected SizeBalancedTree createTree() {
+        return new SizeBalancedTree<>(baseBt());
     }
 }

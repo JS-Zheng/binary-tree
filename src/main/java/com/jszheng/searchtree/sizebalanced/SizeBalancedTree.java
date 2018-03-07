@@ -34,7 +34,7 @@ public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalan
     @Override
     public String getNodeString(BinTreeNode<E> node) {
         Object data = node != null ? node.getData() : null;
-        return data != null ? node.getData() + "(" + count(node) + ")" :
+        return data != null ? node.getData() + "(" + size(node) + ")" :
                 (getRoot() == node ? "⊙" : " ");
     }
 
@@ -103,6 +103,6 @@ public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalan
 
     // witchcraft (Omit the maintenance of size)
     private int sizeOf(BinTreeNode<E> node) {
-        return count(node);
+        return size(node);
     }
 }

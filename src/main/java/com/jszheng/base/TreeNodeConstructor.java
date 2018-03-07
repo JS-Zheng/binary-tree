@@ -1,4 +1,4 @@
-package com.jszheng.node;
+package com.jszheng.base;
 
 @FunctionalInterface
 interface TreeNodeConstructor<E> {

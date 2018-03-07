@@ -9,7 +9,7 @@ import com.jszheng.util.ScannerUtil;
 
 import static com.jszheng.Env.osName;
 
-public abstract class BinTreeManipulator extends TreeManipulator<BinaryTree> {
+public abstract class BinTreeManipulator<T extends BinaryTree> extends TreeManipulator<T> {
 
     private BtPrinter printer = new MyBtPrinter(1, 1, 1);
 

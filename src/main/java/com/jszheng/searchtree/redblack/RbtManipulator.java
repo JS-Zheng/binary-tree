@@ -1,9 +1,8 @@
 package com.jszheng.searchtree.redblack;
 
-import com.jszheng.searchtree.BinarySearchTree;
-import com.jszheng.searchtree.BstManipulator;
+import com.jszheng.searchtree.AbstractBstManipulator;
 
-public class RbtManipulator extends BstManipulator {
+public final class RbtManipulator extends AbstractBstManipulator<RedBlackTree> {
 
     public RbtManipulator(Class dataType) {
         super(dataType);
@@ -16,7 +15,7 @@ public class RbtManipulator extends BstManipulator {
     }
 
     @Override
-    protected BinarySearchTree createTree() {
-        return new RedBlackTree(baseBt());
+    protected RedBlackTree createTree() {
+        return new RedBlackTree<>(baseBt());
     }
 }

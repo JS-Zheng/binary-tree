@@ -13,7 +13,8 @@ import com.jszheng.search.SearchAlgo;
 // for all nodes are internal node
 //
 // It's not a Complete Binary Tree.
-abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<E> implements MeldableHeap<LeftistTree<E>, E> {
+abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<E>
+        implements MeldableHeap<LeftistTree<E>, E, BinTreeNode<E>> {
 
     private final boolean maxHeap;
 
@@ -52,7 +53,7 @@ abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<
 
             if (parent != root) {
                 if (i == 0) {
-                    if (Env.debug) System.out.println("[merge] set new root: " + parent.getData());
+                    if (Env.debug) System.out.println("[merge] set new min: " + parent.getData());
                     setRoot(parent);
                 } else
                     lastParent.setRightChildWithIndex(parent);

@@ -39,8 +39,8 @@ class SimpleBalancedInsertion<E> extends AbstractInsertionAlgo<E> {
                     currentNode = lChild;
                     isLeft = true;
                 } else if (hL == hR) {
-                    int cL = bt.count(lChild);
-                    int cR = bt.count(rChild);
+                    int cL = bt.size(lChild);
+                    int cR = bt.size(rChild);
 
                     if (cL <= cR) {
                         currentNode = lChild;

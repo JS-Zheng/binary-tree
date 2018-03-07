@@ -1,16 +1,15 @@
 package com.jszheng.heap.leftist;
 
-import com.jszheng.base.BinaryTree;
-import com.jszheng.heap.binary.MinHeapManipulator;
+import com.jszheng.heap.binary.AbsMinBinaryHeapManipulator;
 
-public class MinLeftistTreeManipulator extends MinHeapManipulator {
+public class MinLeftistTreeManipulator extends AbsMinBinaryHeapManipulator<MinLeftistTree<Comparable<? super Comparable>>> {
 
     public MinLeftistTreeManipulator(Class dataType) {
         super(dataType);
     }
 
     @Override
-    protected BinaryTree createTree() {
-        return new MinLeftistTree(baseBt());
+    protected MinLeftistTree<Comparable<? super Comparable>> createTree() {
+        return new MinLeftistTree<>(baseBt());
     }
 }

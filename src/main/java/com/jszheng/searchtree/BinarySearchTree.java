@@ -31,13 +31,11 @@ public class BinarySearchTree<E extends Comparable<? super E>> extends BtDecorat
     }
 
     public void delete(E data, boolean replaceByLMax) {
-        if (Env.debug)
-            System.out.println("[delete] data: " + data);
+        if (Env.debug) System.out.println("[delete] data: " + data);
         BstDeletion<E> algo = createDeletionAlgo();
         algo.setReplaceByLMax(replaceByLMax);
         algo.delete(this, data);
-        if (Env.debug)
-            System.out.println();
+        if (Env.debug) System.out.println();
     }
 
     public SearchResult<E> searchMax() {

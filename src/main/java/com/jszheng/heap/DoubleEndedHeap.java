@@ -5,7 +5,8 @@ import com.jszheng.base.complete.LinearSearch;
 import com.jszheng.node.BinTreeNode;
 import com.jszheng.search.SearchAlgo;
 
-public abstract class DoubleEndedHeap<E extends Comparable<? super E>> extends AbstractHeap<E> implements MaxHeap<E>, MinHeap<E> {
+public abstract class DoubleEndedHeap<E extends Comparable<? super E>> extends AbstractHeap<E>
+        implements MaxHeap<E, BinTreeNode<E>>, MinHeap<E, BinTreeNode<E>> {
 
     public DoubleEndedHeap(BinaryTree<E> component) {
         super(component);

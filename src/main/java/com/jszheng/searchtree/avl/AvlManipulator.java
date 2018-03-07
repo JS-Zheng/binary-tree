@@ -1,13 +1,11 @@
 package com.jszheng.searchtree.avl;
 
-import com.jszheng.searchtree.BinarySearchTree;
-import com.jszheng.searchtree.BstManipulator;
+import com.jszheng.searchtree.AbstractBstManipulator;
 
-public class AvlManipulator extends BstManipulator {
+public final class AvlManipulator extends AbstractBstManipulator<AvlTree> {
 
     public AvlManipulator(Class dataType) {
         super(dataType);
-
     }
 
     @Override
@@ -17,7 +15,7 @@ public class AvlManipulator extends BstManipulator {
     }
 
     @Override
-    protected BinarySearchTree createTree() {
-        return new AvlTree(baseBt());
+    protected AvlTree createTree() {
+        return new AvlTree<>(baseBt());
     }
 }

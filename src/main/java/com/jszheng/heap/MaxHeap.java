@@ -1,6 +1,8 @@
 package com.jszheng.heap;
 
-public interface MaxHeap<E extends Comparable<? super E>> extends Heap<E> {
+import com.jszheng.node.TreeNode;
+
+public interface MaxHeap<E extends Comparable<? super E>, Node extends TreeNode<E>> extends Heap<E, Node> {
 
     E deleteMax();
 
