@@ -1,4 +1,4 @@
-package com.jszheng.heap.binomial;
+package com.jszheng.heap.mway;
 
 import static com.jszheng.util.ScannerUtil.errorPrompt;
 import static com.jszheng.util.ScannerUtil.getLine;

@@ -1,4 +1,4 @@
-package com.jszheng.heap.binomial;
+package com.jszheng.heap.mway;
 
 public class BinomialHeapManipulator extends AbstractBinomialHeapManipulator<BinomialHeap> {
 

@@ -1,4 +1,4 @@
-package com.jszheng.heap.binomial;
+package com.jszheng.heap.mway;
 
 import com.jszheng.Env;
 import com.jszheng.heap.MeldableHeap;

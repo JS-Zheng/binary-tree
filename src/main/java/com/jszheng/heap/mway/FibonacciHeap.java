@@ -1,4 +1,4 @@
-package com.jszheng.heap.binomial;
+package com.jszheng.heap.mway;
 
 import com.jszheng.Env;
 
@@ -13,7 +13,7 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
 
     public void decreaseKey(BinomialTreeNode<E> node, E newKey) {
         if (newKey.compareTo(node.data) > 0) {
-            System.out.println("new key is greater than current key.");
+            System.out.println("[decrease key] new key is greater than current key.\n");
             return;
         }
 
@@ -27,6 +27,8 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
 
         if (node.compareTo(min) < 0)
             min = node;
+
+        if (Env.debug) System.out.println();
     }
 
     public E delete(E value) {
@@ -65,10 +67,8 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
         if (!parent.childCut)
             parent.childCut = true;
         else {
-            if (Env.debug) {
-                System.out.println("[cut] cascading cut: " + parent.getData() + " was marked.");
-                System.out.println();
-            }
+            if (Env.debug)
+                System.out.println("[cut] cascading cut: " + parent.data + " was marked.");
 
             cut(parent, grandParent);
             cascadingCut(grandParent);
@@ -77,6 +77,7 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
 
     // 移除 parent 的 子節點 -- child，將其新增至 min list
     private void cut(BinomialTreeNode<E> child, BinomialTreeNode<E> parent) {
+        if (Env.debug) System.out.println("[cut] cut child: " + child.data);
         BinomialTreeNode<E> lSibling = child.getLeftSibling();
         BinomialTreeNode<E> rSibling = child.getRightSibling();
         if (lSibling != null && rSibling != null) {

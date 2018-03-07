@@ -1,32 +1,20 @@
-package com.jszheng.heap.binomial;
+package com.jszheng.heap.mway;
 
 import com.jszheng.node.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BinomialTreeNode<E extends Comparable<? super E>>
-        implements Comparable<BinomialTreeNode<E>>, TreeNode<E> {
+public class AbstractMWayTreeNode<E, Self extends AbstractMWayTreeNode<E, Self>> implements TreeNode<E> {
 
-    // 在成為其他節點的子節點後，是否曾失去過 child
-    public boolean childCut;
     E data;
     int degree = 0;
-    BinomialTreeNode<E> parent = null;
-    BinomialTreeNode<E> child = null;
-    BinomialTreeNode<E> lLink = this;
-    BinomialTreeNode<E> rLink = this;
+    Self parent = null;
+    Self child = null;
+    Self lLink; // need to init on subClass
+    Self rLink; // need to init on subClass
     boolean isRLinkCircular = true;
     boolean isLLinkCircular = true;
-
-    BinomialTreeNode() {
-    }
-
-    @Override
-    public int compareTo(BinomialTreeNode<E> node) {
-        if (node == null || node.data == null) return 1;
-        return data.compareTo(node.data);
-    }
 
     @Override
     public int degree() {
@@ -41,7 +29,7 @@ public class BinomialTreeNode<E extends Comparable<? super E>>
     @Override
     public List<TreeNode<E>> getChildren() {
         List<TreeNode<E>> children = new ArrayList<>();
-        BinomialTreeNode<E> tmp = child;
+        Self tmp = child;
 
         if (tmp == null) return children;
 
@@ -53,6 +41,7 @@ public class BinomialTreeNode<E extends Comparable<? super E>>
         return children;
     }
 
+    @Override
     public E getData() {
         return data;
     }
@@ -62,27 +51,23 @@ public class BinomialTreeNode<E extends Comparable<? super E>>
         this.data = data;
     }
 
-    public BinomialTreeNode<E> getChild() {
+    public Self getChild() {
         return child;
     }
 
-    public BinomialTreeNode<E> getLeftSibling() {
+    public Self getLeftSibling() {
         return getSibling(false);
     }
 
-    public BinomialTreeNode<E> getParent() {
+    public Self getParent() {
         return parent;
     }
 
-    public BinomialTreeNode<E> getRightSibling() {
+    public Self getRightSibling() {
         return getSibling(true);
     }
 
-    public boolean isChildCut() {
-        return childCut;
-    }
-
-    private BinomialTreeNode<E> getSibling(boolean rSibling) {
+    private Self getSibling(boolean rSibling) {
         if (rSibling && isRLinkCircular) return null;
         else if (!rSibling && isLLinkCircular) return null;
         else return rSibling ? rLink : lLink;
