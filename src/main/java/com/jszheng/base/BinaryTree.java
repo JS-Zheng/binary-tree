@@ -17,7 +17,7 @@ public interface BinaryTree<E> extends Tree<E, BinTreeNode<E>>, Traversable<E>, 
 
     BinTreeNode<E> getNodeByIndex(int index);
 
-    // root is 1.
+    // min is 1.
     int height();
 
     int height(BinTreeNode<E> node);

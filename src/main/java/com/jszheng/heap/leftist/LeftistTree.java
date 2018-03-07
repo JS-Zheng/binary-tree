@@ -53,7 +53,7 @@ abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<
 
             if (parent != root) {
                 if (i == 0) {
-                    if (Env.debug) System.out.println("[merge] set new root: " + parent.getData());
+                    if (Env.debug) System.out.println("[merge] set new min: " + parent.getData());
                     setRoot(parent);
                 } else
                     lastParent.setRightChildWithIndex(parent);

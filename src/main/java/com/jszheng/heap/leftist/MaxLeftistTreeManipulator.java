@@ -1,16 +1,15 @@
 package com.jszheng.heap.leftist;
 
-import com.jszheng.base.BinaryTree;
-import com.jszheng.heap.binary.MaxHeapManipulator;
+import com.jszheng.heap.binary.AbsMaxBinaryHeapManipulator;
 
-public class MaxLeftistTreeManipulator extends MaxHeapManipulator {
+public class MaxLeftistTreeManipulator extends AbsMaxBinaryHeapManipulator<MaxLeftistTree<Comparable<? super Comparable>>> {
 
     public MaxLeftistTreeManipulator(Class dataType) {
         super(dataType);
     }
 
     @Override
-    protected BinaryTree createTree() {
-        return new MaxLeftistTree(baseBt());
+    protected MaxLeftistTree<Comparable<? super Comparable>> createTree() {
+        return new MaxLeftistTree<>(baseBt());
     }
 }

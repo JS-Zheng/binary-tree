@@ -15,7 +15,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
 
     // Root List
     protected BinomialTreeNode<E> first;
-    protected BinomialTreeNode<E> root; // min
+    protected BinomialTreeNode<E> min;
 
     private TreePrinter printer;
 
@@ -30,12 +30,12 @@ public class BinomialHeap<E extends Comparable<? super E>>
 
     @Override
     public E deleteMin() {
-        if (root == null) return null;
-        E min = root.data;
+        if (min == null) return null;
+        E min = this.min.data;
 
-        BinomialTreeNode<E> consolidateTarget = root.getRightSibling();
+        BinomialTreeNode<E> consolidateTarget = this.min.getRightSibling();
 
-        deleteRootWithConcatChild(root);
+        deleteRootWithConcatChild(this.min);
 
         if (consolidateTarget == null) consolidateTarget = first;
         consolidate(consolidateTarget);
@@ -45,8 +45,15 @@ public class BinomialHeap<E extends Comparable<? super E>>
 
     @Override
     public E searchMin() {
-        if (root == null) return null;
-        return root.data;
+        if (min == null) return null;
+        return min.data;
+    }
+
+    @Override
+    public String getNodeString(BinomialTreeNode<E> node) {
+        Object data = node != null ? node.getData() : null;
+        return data != null ? data.toString() + (node.isChildCut() ? "(#)" : "") :
+                (getRoot() == node ? "⊙" : " ");
     }
 
     @Override
@@ -57,7 +64,6 @@ public class BinomialHeap<E extends Comparable<? super E>>
             insertData(d);
             if (Env.debug) System.out.println();
         }
-
     }
 
     @Override
@@ -67,7 +73,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
 
     @Override
     public void print() {
-        if (root == null) {
+        if (min == null) {
             System.out.println("Tree is empty.");
             System.out.println();
             return;
@@ -82,10 +88,10 @@ public class BinomialHeap<E extends Comparable<? super E>>
         BinomialTreeNode<E> currentNode = first;
 
         while (currentNode != null) {
-            if (currentNode == root)
+            if (currentNode == min)
                 System.out.println("最小值");
             BinomialHeap<E> tmp = new BinomialHeap<>();
-            tmp.root = currentNode;
+            tmp.min = currentNode;
             printer.print(tmp);
 
             currentNode = currentNode.getRightSibling();
@@ -114,19 +120,19 @@ public class BinomialHeap<E extends Comparable<? super E>>
 
     @Override
     public BinomialTreeNode<E> getRoot() {
-        return root;
+        return min;
     }
 
-    // 設置新的根節點 (將取代現有之 root list)
+    // 設置新的根節點 (將取代現有之 min list)
     @Override
     public void setRoot(BinomialTreeNode<E> node) {
         first = node;
-        root = node;
+        min = node;
     }
 
     @Override
     public boolean isEmpty() {
-        return root == null;
+        return min == null;
     }
 
     public int maxDegree() {
@@ -139,15 +145,21 @@ public class BinomialHeap<E extends Comparable<? super E>>
     @Override
     public void merge(BinomialHeap<E> bh) {
         BinomialTreeNode<E> targetNode;
-        if (bh == null || (targetNode = bh.root) == null)
+        if (bh == null || (targetNode = bh.min) == null)
             return;
 
         merge(targetNode);
     }
 
     public void postOrder() {
-        postOrderTraverse(first);
+        postOrderTraverse(first, new DefaultNodeHandler());
         System.out.println("\n");
+    }
+
+    public BinomialTreeNode<E> search(E data) {
+        SearchNodeHandler handler = new SearchNodeHandler(data);
+        postOrderTraverse(first, handler);
+        return handler.result;
     }
 
     private BinomialTreeNode<E> getRightmostRoot() {
@@ -198,7 +210,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
     }
 
     // precondition: first 及 target 所在之串列，需維護好 circular doubly linked list
-    // postcondition: 將以 first 起始之 root list，與 target node list 進行串連
+    // postcondition: 將以 first 起始之 min list，與 target node list 進行串連
     void concatRootList(BinomialTreeNode<E> target) {
         if (target == null) return;
         target = getLMostOrRMostNode(target, true);
@@ -216,7 +228,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
         rMostRootOfTarget.isRLinkCircular = true;
     }
 
-    // 尋找、合併相同分支度節點，並維護 min root
+    // 尋找、合併相同分支度節點，並維護 min min
     void consolidate(BinomialTreeNode<E> start) {
         if (start == null) return;
         BinomialTreeNode<E> currentRoot = start;
@@ -231,7 +243,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
             currentRoot = currentRoot.rLink;
         } while (currentRoot != start);
 
-        root = minNode;
+        min = minNode;
 
         if (mergeWithSort)
             sortRootList(roots);
@@ -243,19 +255,21 @@ public class BinomialHeap<E extends Comparable<? super E>>
 
             while (nodes.containsKey(currentDegree)) {
                 // Another node with the same degree as currentRoot
-                BinomialTreeNode<E> y = nodes.get(currentDegree);
+                BinomialTreeNode<E> mergeTarget = nodes.get(currentDegree);
 
-                if (currentRoot.compareTo(y) > 0) {
+                if (currentRoot.compareTo(mergeTarget) > 0) {
                     BinomialTreeNode<E> tmp = currentRoot;
-                    currentRoot = y;
-                    y = tmp;
+                    currentRoot = mergeTarget;
+                    mergeTarget = tmp;
                 }
 
                 BinomialTreeNode<E> newFirst = null;
-                if (y == first)
+                if (mergeTarget == first)
                     newFirst = first.rLink;
 
-                mergeSameDegreeTree(currentRoot, y);
+                // Prevent same min issue
+                if (mergeTarget == min) min = currentRoot;
+                mergeSameDegreeTree(currentRoot, mergeTarget);
 
                 if (newFirst != null)
                     setFirstRoot(newFirst);
@@ -292,7 +306,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
             currentRoot = currentRoot.rLink;
         } while (currentRoot != start);
 
-        root = minNode;
+        min = minNode;
 
         if (mergeWithSort)
             sortRootList(roots);
@@ -324,7 +338,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
     // low-level API -- Do not need to maintain its sibling.
     void isolateNodeFromSibling(BinomialTreeNode<E> node) {
         node.parent = null;
-        node.mark = false;
+        node.childCut = false;
         node.lLink = node;
         node.rLink = node;
         node.isLLinkCircular = true;
@@ -342,7 +356,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
 
         if (lSibling == null && rSibling == null && child == null) {
             first = null;
-            root = null;
+            min = null;
             return;
         }
 
@@ -406,7 +420,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
     }
 
     private void merge(BinomialTreeNode<E> targetNode) {
-        if (root == null) {
+        if (min == null) {
             setRoot(targetNode);
             return;
         }
@@ -418,15 +432,14 @@ public class BinomialHeap<E extends Comparable<? super E>>
     }
 
     // 以 parent 判斷節點是否位於 rootList
-    private void postOrderTraverse(BinomialTreeNode<E> node) {
+    private void postOrderTraverse(BinomialTreeNode<E> node, BinomialTreeNodeHandler<E> handler) {
         if (node == null) return;
 
-        postOrderTraverse(node.child);
+        postOrderTraverse(node.child, handler);
 
-        // 已走訪完子節點，直接印 data
-        System.out.printf("%s ", node.data);
+        if (!handler.handle(node)) return;
 
-        postOrderTraverse(node.getRightSibling());
+        postOrderTraverse(node.getRightSibling(), handler);
     }
 
     private void setFirstRoot(BinomialTreeNode<E> node) {
@@ -460,7 +473,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
         }
 
         first = roots.get(0);
-        root = first;
+        min = first;
 
         BinomialTreeNode<E> rMostRoot = roots.get(i);
         rMostRoot.rLink = first;
@@ -468,5 +481,36 @@ public class BinomialHeap<E extends Comparable<? super E>>
 
         first.lLink = rMostRoot;
         first.isLLinkCircular = true;
+    }
+
+
+    private class DefaultNodeHandler implements BinomialTreeNodeHandler<E> {
+
+        @Override
+        public boolean handle(BinomialTreeNode<E> node) {
+            // 已走訪完子節點，直接印 data
+            System.out.printf("%s ", node.data);
+
+            return true;
+        }
+    }
+
+    private class SearchNodeHandler implements BinomialTreeNodeHandler<E> {
+
+        BinomialTreeNode<E> result;
+        private E target;
+
+        SearchNodeHandler(E target) {
+            this.target = target;
+        }
+
+        @Override
+        public boolean handle(BinomialTreeNode<E> node) {
+            if (node.data == target) {
+                result = node;
+                return false;
+            }
+            return true;
+        }
     }
 }

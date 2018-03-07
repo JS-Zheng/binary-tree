@@ -1,9 +1,8 @@
 package com.jszheng.searchtree.treap;
 
-import com.jszheng.searchtree.BinarySearchTree;
-import com.jszheng.searchtree.BstManipulator;
+import com.jszheng.searchtree.AbstractBstManipulator;
 
-public class TreapManipulator extends BstManipulator {
+public final class TreapManipulator extends AbstractBstManipulator<Treap> {
 
     public TreapManipulator(Class dataType) {
         super(dataType);
@@ -16,7 +15,7 @@ public class TreapManipulator extends BstManipulator {
     }
 
     @Override
-    protected BinarySearchTree createTree() {
+    protected Treap createTree() {
         return new Treap<>(baseBt());
     }
 }

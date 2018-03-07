@@ -17,13 +17,21 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
 
         node.data = newKey;
         BinomialTreeNode<E> parent = node.parent;
+
         if (parent != null && node.compareTo(parent) < 0) {
             cut(node, parent);
             cascadingCut(parent); // 瀑布/階層式截斷
         }
 
-        if (node.compareTo(root) < 0)
-            root = node;
+        if (node.compareTo(min) < 0)
+            min = node;
+    }
+
+    public E delete(BinomialTreeNode<E> node) {
+        E data = node.data;
+        decreaseKeyToMin(node);
+        deleteMin(); // it will find new min
+        return data;
     }
 
     @Override
@@ -35,17 +43,17 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
             setRoot(node);
         else {
             concatRootList(node);
-            E rootData = root.data;
+            E rootData = min.data;
             if (value.compareTo(rootData) < 0)
-                root = node;
+                min = node;
         }
     }
 
     private void cascadingCut(BinomialTreeNode<E> parent) {
         BinomialTreeNode<E> grandParent = parent.parent;
         if (grandParent == null) return;
-        if (!parent.mark)
-            parent.mark = true;
+        if (!parent.childCut)
+            parent.childCut = true;
         else {
             if (Env.debug) {
                 System.out.println("[cut] cascading cut: " + parent.getData() + " was marked.");
@@ -57,7 +65,7 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
         }
     }
 
-    // 移除 parent 的 子節點 -- child，將其新增至 root list
+    // 移除 parent 的 子節點 -- child，將其新增至 min list
     private void cut(BinomialTreeNode<E> child, BinomialTreeNode<E> parent) {
         BinomialTreeNode<E> lSibling = child.getLeftSibling();
         BinomialTreeNode<E> rSibling = child.getRightSibling();
@@ -81,5 +89,16 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
 
         isolateNodeFromSibling(child);
         concatRootList(child);
+    }
+
+    private void decreaseKeyToMin(BinomialTreeNode<E> node) {
+        BinomialTreeNode<E> parent = node.parent;
+
+        if (parent != null) {
+            cut(node, parent);
+            cascadingCut(parent); // 瀑布/階層式截斷
+        }
+
+        min = node;
     }
 }

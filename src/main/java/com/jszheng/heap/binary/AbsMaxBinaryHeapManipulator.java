@@ -1,10 +1,15 @@
-package com.jszheng.heap;
+package com.jszheng.heap.binary;
 
+import com.jszheng.base.BinaryTree;
+import com.jszheng.heap.MaxHeap;
 import com.jszheng.manipulator.BinTreeManipulator;
+import com.jszheng.node.BinTreeNode;
 
-public abstract class DoubleEndedHeapManipulator<E extends DoubleEndedHeap> extends BinTreeManipulator<E> {
+public abstract class AbsMaxBinaryHeapManipulator
+        <T extends BinaryTree<Comparable<? super Comparable>>
+                & MaxHeap<Comparable<? super Comparable>, BinTreeNode<Comparable<? super Comparable>>>> extends BinTreeManipulator<T> {
 
-    public DoubleEndedHeapManipulator(Class dataType) {
+    protected AbsMaxBinaryHeapManipulator(Class dataType) {
         super(dataType);
     }
 
@@ -15,11 +20,6 @@ public abstract class DoubleEndedHeapManipulator<E extends DoubleEndedHeap> exte
             bt.deleteMax();
             printTree();
         });
-
-        addOperation("delete min", bt -> {
-            bt.deleteMin();
-            printTree();
-        });
     }
 
     @Override
@@ -27,11 +27,6 @@ public abstract class DoubleEndedHeapManipulator<E extends DoubleEndedHeap> exte
         super.addSearchOp();
         addOperation("search max", bt -> {
             Object obj = bt.searchMax();
-            System.out.println(obj);
-        });
-
-        addOperation("search min", bt -> {
-            Object obj = bt.searchMin();
             System.out.println(obj);
         });
     }

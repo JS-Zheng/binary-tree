@@ -3,7 +3,7 @@ package com.jszheng;
 import com.jszheng.base.complete.CompleteBtManipulator;
 import com.jszheng.base.simplebalanced.SimpleBalancedTreeManipulator;
 import com.jszheng.heap.binary.MaxHeapManipulator;
-import com.jszheng.heap.binary.MinHeapManipulator;
+import com.jszheng.heap.binary.MinBinaryHeapManipulator;
 import com.jszheng.heap.binomial.BinomialHeapManipulator;
 import com.jszheng.heap.binomial.FibonacciHeapManipulator;
 import com.jszheng.heap.deap.DeapManipulator;
@@ -42,7 +42,7 @@ public class Main {
         factory.register(RED_BLACK_TREE, RbtManipulator.class);
         factory.register(SIZE_BALANCED_TREE, SbtManipulator.class);
         factory.register(MAX_HEAP, MaxHeapManipulator.class);
-        factory.register(MIN_HEAP, MinHeapManipulator.class);
+        factory.register(MIN_HEAP, MinBinaryHeapManipulator.class);
         factory.register(BINOMIAL_HEAP, BinomialHeapManipulator.class);
         factory.register(FIBONACCI_HEAP, FibonacciHeapManipulator.class);
         factory.register(MIN_LEFTIST_TREE, MinLeftistTreeManipulator.class);

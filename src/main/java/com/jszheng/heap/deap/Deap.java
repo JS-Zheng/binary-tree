@@ -61,7 +61,7 @@ public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> im
      *
      *   if (X is the larger){
      *     move the element in position I to the freed position
-     *     perform a binary search in the path from I to the root of the heap we are working on [3]
+     *     perform a binary search in the path from I to the min of the heap we are working on [3]
      *     move all elements smaller than X one level down in the maxheap
      *     store X in the freed position
      *   } else {

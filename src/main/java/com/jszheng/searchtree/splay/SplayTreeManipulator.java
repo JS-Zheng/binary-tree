@@ -1,8 +1,8 @@
 package com.jszheng.searchtree.splay;
 
-import com.jszheng.searchtree.BstManipulator;
+import com.jszheng.searchtree.AbstractBstManipulator;
 
-public class SplayTreeManipulator extends BstManipulator {
+public final class SplayTreeManipulator extends AbstractBstManipulator<SplayTree> {
 
     public SplayTreeManipulator(Class dataType) {
         super(dataType);
@@ -16,6 +16,6 @@ public class SplayTreeManipulator extends BstManipulator {
 
     @Override
     protected SplayTree createTree() {
-        return new SplayTree(baseBt());
+        return new SplayTree<>(baseBt());
     }
 }

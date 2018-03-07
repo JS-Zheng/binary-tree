@@ -174,11 +174,11 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
                 return NORMAL; // 非歪斜
 
             if (checkLeft && hasRChild
-                    && currentNode != root) // Must check root.
+                    && currentNode != root) // Must check min.
                 return NORMAL;
 
             if (!checkLeft && hasLChild
-                    && currentNode != root) // Must check root.
+                    && currentNode != root) // Must check min.
                 return NORMAL;
 
             lastNode = currentNode;
