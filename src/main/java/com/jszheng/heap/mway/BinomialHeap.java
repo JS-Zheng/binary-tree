@@ -3,21 +3,14 @@ package com.jszheng.heap.mway;
 import com.jszheng.Env;
 import com.jszheng.heap.MeldableHeap;
 import com.jszheng.heap.MinHeap;
-import com.jszheng.printer.HorizontalTreePrinter;
-import com.jszheng.printer.TreePrinter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static com.jszheng.printer.Printer.printByCount;
-
-public class BinomialHeap<E extends Comparable<? super E>>
+public class BinomialHeap<E extends Comparable<? super E>> extends AbstractMWayHeap<E, BinomialTreeNode<E>>
         implements MinHeap<E, BinomialTreeNode<E>>, MeldableHeap<BinomialHeap<E>, E, BinomialTreeNode<E>> {
-
-    // Root List
-    protected BinomialTreeNode<E> first;
-    protected BinomialTreeNode<E> min;
-
-    private TreePrinter printer;
 
     private boolean mergeWithSort;
 
@@ -57,57 +50,6 @@ public class BinomialHeap<E extends Comparable<? super E>>
     }
 
     @Override
-    @SafeVarargs
-    public final void insert(E... data) {
-        for (E d : data) {
-            if (Env.debug) System.out.println("[insert] data: " + d);
-            insertData(d);
-            if (Env.debug) System.out.println();
-        }
-    }
-
-    @Override
-    public BinomialTreeNode<E> newNode() {
-        return new BinomialTreeNode<>();
-    }
-
-    @Override
-    public void print() {
-        if (min == null) {
-            System.out.println("Tree is empty.");
-            System.out.println();
-            return;
-        }
-        if (printer == null)
-            printer = new HorizontalTreePrinter();
-
-
-        printByCount(35, "=");
-        System.out.println();
-
-        BinomialTreeNode<E> currentNode = first;
-
-        while (currentNode != null) {
-            if (currentNode == min)
-                System.out.println("最小值");
-            BinomialHeap<E> tmp = new BinomialHeap<>();
-            tmp.min = currentNode;
-            printer.print(tmp);
-
-            currentNode = currentNode.getRightSibling();
-        }
-
-        printByCount(35, "=");
-        System.out.println();
-        System.out.println();
-    }
-
-    @Override
-    public int size() {
-        return size(first);
-    }
-
-    @Override
     public int size(BinomialTreeNode<E> node) {
         BinomialTreeNode<E> tmp = node;
         int count = 0;
@@ -116,23 +58,6 @@ public class BinomialHeap<E extends Comparable<? super E>>
             tmp = tmp.getRightSibling();
         }
         return count;
-    }
-
-    @Override
-    public BinomialTreeNode<E> getRoot() {
-        return min;
-    }
-
-    // 設置新的根節點 (將取代現有之 min list)
-    @Override
-    public void setRoot(BinomialTreeNode<E> node) {
-        first = node;
-        min = node;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return min == null;
     }
 
     public int maxDegree() {
@@ -144,92 +69,37 @@ public class BinomialHeap<E extends Comparable<? super E>>
 
     @Override
     public void merge(BinomialHeap<E> bh) {
-        BinomialTreeNode<E> targetNode;
-        if (bh == null || (targetNode = bh.min) == null)
+        BinomialTreeNode<E> node;
+        if (bh == null || (node = bh.min) == null)
             return;
 
-        merge(targetNode);
+        merge(node);
+
+        if (Env.debug) System.out.println();
     }
 
-    public void postOrder() {
-        postOrderTraverse(first, new DefaultNodeHandler());
-        System.out.println("\n");
+    @Override
+    public BinomialTreeNode<E> newNode() {
+        return new BinomialTreeNode<>();
     }
 
+    @Override
+    public AbstractMWayHeap<E, BinomialTreeNode<E>> newTree() {
+        return new BinomialHeap<>();
+    }
+
+    @Override
     public BinomialTreeNode<E> search(E data) {
-        SearchNodeHandler handler = new SearchNodeHandler(data);
-        postOrderTraverse(first, handler);
-        return handler.result;
+        return super.search(data);
     }
 
-    private BinomialTreeNode<E> getRightmostRoot() {
-        return first.lLink;
-    }
-
-    protected void insertData(E value) {
-        BinomialHeap<E> bh = new BinomialHeap<>();
-        BinomialTreeNode<E> node = newNode();
-        node.data = value;
-        bh.setRoot(node);
-        merge(bh);
-    }
-
-    // 將 greaterRoot 作為 smallerRoot 之子樹
-    protected void mergeSameDegreeTree(BinomialTreeNode<E> smallerRoot, BinomialTreeNode<E> greaterRoot) {
-        if (greaterRoot.isRLinkCircular) {
-            first.lLink = greaterRoot.lLink;
-            greaterRoot.lLink.isRLinkCircular = true;
-        } else
-            greaterRoot.rLink.lLink = greaterRoot.lLink;
-
-        greaterRoot.lLink.rLink = greaterRoot.rLink;
-
-        greaterRoot.lLink = greaterRoot;
-        greaterRoot.rLink = greaterRoot;
-        greaterRoot.parent = smallerRoot;
-        greaterRoot.isLLinkCircular = true;
-        greaterRoot.isRLinkCircular = true;
-
-        BinomialTreeNode<E> child = smallerRoot.child;
-
-        if (child != null) {
-            greaterRoot.rLink = child;
-            greaterRoot.isRLinkCircular = false;
-
-            BinomialTreeNode<E> rMostNodeOfChild = child.lLink;
-            greaterRoot.lLink = rMostNodeOfChild;
-            rMostNodeOfChild.rLink = greaterRoot;
-
-            child.lLink = greaterRoot;
-            child.isLLinkCircular = false;
-        }
-
-        smallerRoot.child = greaterRoot;
-
-        smallerRoot.degree++;
-    }
-
-    // precondition: first 及 target 所在之串列，需維護好 circular doubly linked list
-    // postcondition: 將以 first 起始之 min list，與 target node list 進行串連
-    void concatRootList(BinomialTreeNode<E> target) {
-        if (target == null) return;
-        target = getLMostOrRMostNode(target, true);
-        target.isLLinkCircular = false;
-
-        BinomialTreeNode<E> rMostRootOfTarget = target.lLink;
-
-        BinomialTreeNode<E> rMostRoot = getRightmostRoot();
-        rMostRoot.isRLinkCircular = false;
-
-        setSibling(rMostRoot, target);
-        first.lLink = rMostRootOfTarget;
-
-        rMostRootOfTarget.rLink = first;
-        rMostRootOfTarget.isRLinkCircular = true;
+    @Override
+    protected void insertNode(BinomialTreeNode<E> node) {
+        merge(node);
     }
 
     // 尋找、合併相同分支度節點，並維護 min min
-    void consolidate(BinomialTreeNode<E> start) {
+    private void consolidate(BinomialTreeNode<E> start) {
         if (start == null) return;
         BinomialTreeNode<E> currentRoot = start;
         Map<Integer, BinomialTreeNode<E>> nodes = new HashMap<>();
@@ -239,7 +109,7 @@ public class BinomialHeap<E extends Comparable<? super E>>
         BinomialTreeNode<E> minNode = null;
         do {
             roots.add(currentRoot);
-            minNode = getSmallerNode(minNode, currentRoot);
+            minNode = compareNode(minNode, currentRoot, false);
             currentRoot = currentRoot.rLink;
         } while (currentRoot != start);
 
@@ -280,69 +150,6 @@ public class BinomialHeap<E extends Comparable<? super E>>
 
             nodes.put(currentDegree, currentRoot);
         }
-    }
-
-    void consolidateByPriority(BinomialTreeNode<E> start) {
-        if (start == null) return;
-        BinomialTreeNode<E> currentRoot = start;
-        List<BinomialTreeNode<E>> roots = new ArrayList<>();
-        PriorityQueue<Integer> degreeQueue = new PriorityQueue<>();
-        Map<Integer, PriorityQueue<BinomialTreeNode<E>>> degreeMap = new HashMap<>();
-
-        // 建分支表、節點串列，並尋找最小值
-        BinomialTreeNode<E> minNode = null;
-        do {
-            roots.add(currentRoot);
-
-            minNode = getSmallerNode(minNode, currentRoot);
-
-            int currentDegree = currentRoot.degree;
-            if (!degreeQueue.contains(currentDegree))
-                degreeQueue.add(currentDegree);
-
-            PriorityQueue<BinomialTreeNode<E>> nodeQueue = getNodeQueueFromDegreeMap(degreeMap, currentDegree);
-            nodeQueue.add(currentRoot);
-
-            currentRoot = currentRoot.rLink;
-        } while (currentRoot != start);
-
-        min = minNode;
-
-        if (mergeWithSort)
-            sortRootList(roots);
-
-        while (!degreeQueue.isEmpty()) {
-            int targetDegree = degreeQueue.peek(); // 取出最小目標 degree
-            PriorityQueue<BinomialTreeNode<E>> nodeQueue = degreeMap.get(targetDegree);
-
-            if (nodeQueue.size() < 2)
-                degreeQueue.poll(); // 至少需兩節點才能進行合併
-            else {
-                BinomialTreeNode<E> smallerNode = nodeQueue.poll(); // 較小節點
-                BinomialTreeNode<E> greaterNode = nodeQueue.poll(); // 較大節點
-
-                if (greaterNode == first)
-                    setFirstRoot(first.rLink);
-
-                mergeSameDegreeTree(smallerNode, greaterNode); // 分支度必相同，直接進行合併
-
-                int newDegree = smallerNode.degree;
-                degreeQueue.add(newDegree); // 新分支度可能不存在於 degreeQueue 中
-
-                PriorityQueue<BinomialTreeNode<E>> newNodeQueue = getNodeQueueFromDegreeMap(degreeMap, newDegree);
-                newNodeQueue.add(smallerNode);
-            }
-        }
-    }
-
-    // low-level API -- Do not need to maintain its sibling.
-    void isolateNodeFromSibling(BinomialTreeNode<E> node) {
-        node.parent = null;
-        node.childCut = false;
-        node.lLink = node;
-        node.rLink = node;
-        node.isLLinkCircular = true;
-        node.isRLinkCircular = true;
     }
 
     // 需維護 first node
@@ -392,66 +199,57 @@ public class BinomialHeap<E extends Comparable<? super E>>
         }
     }
 
-    private BinomialTreeNode<E> getLMostOrRMostNode(BinomialTreeNode<E> start, boolean leftmost) {
-        BinomialTreeNode<E> result = start;
-        BinomialTreeNode<E> currentRoot = start;
-        while (currentRoot != null) {
-            result = currentRoot;
-            currentRoot = leftmost ? currentRoot.getLeftSibling() : currentRoot.getRightSibling();
+    private void merge(BinomialTreeNode<E> node) {
+        if (node == null) return;
+
+        if (Env.debug) {
+            E data = node.getData();
+            System.out.println("[merge] target: " + data);
         }
-        return result;
-    }
 
-    private PriorityQueue<BinomialTreeNode<E>> getNodeQueueFromDegreeMap(Map<Integer, PriorityQueue<BinomialTreeNode<E>>> map, int degree) {
-        PriorityQueue<BinomialTreeNode<E>> queue;
-        if (!map.containsKey(degree)) {
-            queue = new PriorityQueue<>();
-            map.put(degree, queue);
-        } else
-            queue = map.get(degree);
-
-        return queue;
-    }
-
-    private BinomialTreeNode<E> getSmallerNode(BinomialTreeNode<E> n1, BinomialTreeNode<E> n2) {
-        if (n1 == null) return n2;
-        if (n2 == null) return n1;
-        return n1.compareTo(n2) > 0 ? n2 : n1;
-    }
-
-    private void merge(BinomialTreeNode<E> targetNode) {
         if (min == null) {
-            setRoot(targetNode);
+            setRoot(node);
             return;
         }
 
-        if (targetNode != null)
-            concatRootList(targetNode);
+        concatRootList(node);
 
-        consolidate(targetNode);
+        consolidate(node);
     }
 
-    // 以 parent 判斷節點是否位於 rootList
-    private void postOrderTraverse(BinomialTreeNode<E> node, BinomialTreeNodeHandler<E> handler) {
-        if (node == null) return;
+    // 將 greaterRoot 作為 smallerRoot 之子樹
+    private void mergeSameDegreeTree(BinomialTreeNode<E> smallerRoot, BinomialTreeNode<E> greaterRoot) {
+        if (greaterRoot.isRLinkCircular) {
+            first.lLink = greaterRoot.lLink;
+            greaterRoot.lLink.isRLinkCircular = true;
+        } else
+            greaterRoot.rLink.lLink = greaterRoot.lLink;
 
-        postOrderTraverse(node.child, handler);
+        greaterRoot.lLink.rLink = greaterRoot.rLink;
 
-        if (!handler.handle(node)) return;
+        greaterRoot.lLink = greaterRoot;
+        greaterRoot.rLink = greaterRoot;
+        greaterRoot.parent = smallerRoot;
+        greaterRoot.isLLinkCircular = true;
+        greaterRoot.isRLinkCircular = true;
 
-        postOrderTraverse(node.getRightSibling(), handler);
-    }
+        BinomialTreeNode<E> child = smallerRoot.child;
 
-    private void setFirstRoot(BinomialTreeNode<E> node) {
-        first = node;
-        first.isLLinkCircular = true;
-        first.lLink.isRLinkCircular = true;
-    }
+        if (child != null) {
+            greaterRoot.rLink = child;
+            greaterRoot.isRLinkCircular = false;
 
-    // low-level API -- Do not need to maintain circular state of link.
-    private void setSibling(BinomialTreeNode<E> n1, BinomialTreeNode<E> n2) {
-        n1.rLink = n2;
-        n2.lLink = n1;
+            BinomialTreeNode<E> rMostNodeOfChild = child.lLink;
+            greaterRoot.lLink = rMostNodeOfChild;
+            rMostNodeOfChild.rLink = greaterRoot;
+
+            child.lLink = greaterRoot;
+            child.isLLinkCircular = false;
+        }
+
+        smallerRoot.child = greaterRoot;
+
+        smallerRoot.degree++;
     }
 
     private void sortRootList(List<BinomialTreeNode<E>> roots) {
@@ -481,36 +279,5 @@ public class BinomialHeap<E extends Comparable<? super E>>
 
         first.lLink = rMostRoot;
         first.isLLinkCircular = true;
-    }
-
-
-    private class DefaultNodeHandler implements BinomialTreeNodeHandler<E> {
-
-        @Override
-        public boolean handle(BinomialTreeNode<E> node) {
-            // 已走訪完子節點，直接印 data
-            System.out.printf("%s ", node.data);
-
-            return true;
-        }
-    }
-
-    private class SearchNodeHandler implements BinomialTreeNodeHandler<E> {
-
-        BinomialTreeNode<E> result;
-        private E target;
-
-        SearchNodeHandler(E target) {
-            this.target = target;
-        }
-
-        @Override
-        public boolean handle(BinomialTreeNode<E> node) {
-            if (node.data.equals(target)) { // use equals rather than == operator
-                result = node;
-                return false;
-            }
-            return true;
-        }
     }
 }

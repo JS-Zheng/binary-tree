@@ -1,7 +1,6 @@
 package com.jszheng.base;
 
 import com.jszheng.node.BinTreeNode;
-import com.jszheng.node.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -238,8 +237,8 @@ class LinkedTreeNode<E> implements BinTreeNode<E> {
     }
 
     @Override
-    public List<TreeNode<E>> getChildren() {
-        List<TreeNode<E>> children = new ArrayList<>();
+    public List<BinTreeNode<E>> getChildren() {
+        List<BinTreeNode<E>> children = new ArrayList<>();
         if (lChild != null) children.add(lChild);
         if (rChild != null) children.add(rChild);
         return children;

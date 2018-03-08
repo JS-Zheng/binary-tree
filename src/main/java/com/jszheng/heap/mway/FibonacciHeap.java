@@ -2,7 +2,8 @@ package com.jszheng.heap.mway;
 
 import com.jszheng.Env;
 
-public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap<E> {
+public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap<E>
+        implements MinReducibleHeap<E, BinomialTreeNode<E>> {
 
     public FibonacciHeap() {
     }
@@ -11,7 +12,12 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
         super(mergeWithSort);
     }
 
+    @Override
     public void decreaseKey(BinomialTreeNode<E> node, E newKey) {
+        if (node == null) return;
+        if (Env.debug)
+            System.out.println("[decrease key] make key of node: " + node.getData() + " to " + newKey);
+
         if (newKey.compareTo(node.data) > 0) {
             System.out.println("[decrease key] new key is greater than current key.\n");
             return;
@@ -31,6 +37,7 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
         if (Env.debug) System.out.println();
     }
 
+    @Override
     public E delete(E value) {
         BinomialTreeNode<E> node = search(value);
         if (node != null) return delete(node);
@@ -47,18 +54,29 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
     }
 
     @Override
-    protected void insertData(E value) {
-        BinomialTreeNode<E> node = newNode();
-        node.data = value;
+    public AbstractMWayHeap<E, BinomialTreeNode<E>> newTree() {
+        return new FibonacciHeap<>();
+    }
 
-        if (isEmpty())
-            setRoot(node);
-        else {
-            concatRootList(node);
-            E rootData = min.data;
-            if (value.compareTo(rootData) < 0)
-                min = node;
-        }
+    @Override
+    protected void insertNode(BinomialTreeNode<E> node) {
+        concatRootList(node);
+        E rootData = min.data;
+        if (node.data.compareTo(rootData) < 0)
+            min = node;
+    }
+
+    // 移除 parent 的 子節點 -- child，並將其新增至 min list
+    @Override
+    void cut(BinomialTreeNode<E> child, BinomialTreeNode<E> parent) {
+        super.cut(child, parent);
+        concatRootList(child);
+    }
+
+    @Override
+    void isolateNodeFromSibling(BinomialTreeNode<E> node) {
+        super.isolateNodeFromSibling(node);
+        node.childCut = false;
     }
 
     private void cascadingCut(BinomialTreeNode<E> parent) {
@@ -73,33 +91,6 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
             cut(parent, grandParent);
             cascadingCut(grandParent);
         }
-    }
-
-    // 移除 parent 的 子節點 -- child，將其新增至 min list
-    private void cut(BinomialTreeNode<E> child, BinomialTreeNode<E> parent) {
-        if (Env.debug) System.out.println("[cut] cut child: " + child.data);
-        BinomialTreeNode<E> lSibling = child.getLeftSibling();
-        BinomialTreeNode<E> rSibling = child.getRightSibling();
-        if (lSibling != null && rSibling != null) {
-            lSibling.rLink = rSibling;
-            rSibling.lLink = lSibling;
-        } else if (lSibling != null) {
-            lSibling.rLink = child.rLink;
-            lSibling.isRLinkCircular = true;
-            lSibling.rLink.lLink = lSibling;
-        } else if (rSibling != null) {
-            parent.child = rSibling; // set new child
-            rSibling.lLink = child.lLink;
-            rSibling.isLLinkCircular = true;
-            rSibling.lLink.rLink = rSibling;
-        } else {
-            parent.child = null;
-        }
-
-        parent.degree--;
-
-        isolateNodeFromSibling(child);
-        concatRootList(child);
     }
 
     private void decreaseKeyToMin(BinomialTreeNode<E> node) {

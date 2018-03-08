@@ -27,8 +27,8 @@ public class AbstractMWayTreeNode<E, Self extends AbstractMWayTreeNode<E, Self>>
     }
 
     @Override
-    public List<TreeNode<E>> getChildren() {
-        List<TreeNode<E>> children = new ArrayList<>();
+    public List<Self> getChildren() {
+        List<Self> children = new ArrayList<>();
         Self tmp = child;
 
         if (tmp == null) return children;
