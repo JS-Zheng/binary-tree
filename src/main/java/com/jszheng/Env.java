@@ -24,4 +24,5 @@ public class Env {
     public final static String INTERVAL_HEAP = "區間堆積";
     public final static String DEAP = "DEAP";
     public final static String SMMH = "SMMH";
+    public static final String HUFFMAN_TREE = "霍夫曼樹";
 }
