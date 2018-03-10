@@ -37,12 +37,18 @@ abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<
         merge(otherRoot);
     }
 
-    // O(log n)
+    /*
+     * O(log n)
+     *
+     * 1. 比較 node，以 較小(大) 者作為合併樹的根節點
+     * 2. 保持合併樹根左子樹不變
+     * 3. 以合併樹根之右子樹 與 step 1. 之失敗者 進行合併，並將結果作為合併樹根的右子樹
+     * 4. 若於 step 3. 無右子樹可供比較，直接將 失敗者 作為其右子樹
+     * 5. 延著最後的新樹根往回驗證 左傾樹性質: shortest(lChild) >= shortest(rChild)，若不成立則左右進行 swap
+     */
     public void merge(BinTreeNode<E> node) {
         if (node == null) return;
-        if (Env.debug) {
-            System.out.println("[merge] target: " + getNodeString(node));
-        }
+
         BinTreeNode<E> root = getRoot();
         BinTreeNode<E> otherRoot = node;
         BinTreeNode<E> lastParent = null;
@@ -53,20 +59,30 @@ abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<
 
             if (parent != root) {
                 if (i == 0) {
-                    if (Env.debug) System.out.println("[merge] set new min: " + parent.getData());
-                    setRoot(parent);
-                } else
-                    lastParent.setRightChildWithIndex(parent);
+                    if (Env.debug)
+                        System.out.println("[merge] use " + parent.getData() + " as new root of merge-tree");
 
+                    setRoot(parent);
+                } else {
+                    if (Env.debug)
+                        System.out.println("[merge] " + lastParent.getData() + " set " + parent.getData() + " as right child");
+
+                    lastParent.setRightChildWithIndex(parent);
+                }
                 otherRoot = root;
             }
+
 
             lastParent = parent;
             root = lastParent.getRightChild();
         }
 
-        if (lastParent != null)
+        if (lastParent != null) {
+            if (Env.debug)
+                System.out.println("[merge] " + lastParent.getData() + " set " + otherRoot.getData() + " as right child");
+
             lastParent.setRightChildWithIndex(otherRoot);
+        }
 
         while (lastParent != null) {
             BinTreeNode<E> lChild = lastParent.getLeftChild();
@@ -75,9 +91,11 @@ abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<
             int rPath = shortest(rChild);
             if (lPath < rPath) {
                 if (Env.debug) {
+                    System.out.println("[merge] lChild path is smaller than rChild path:");
                     System.out.printf("[merge] %s swap its lChild:%s & rChild:%s\n"
                             , getNodeString(lastParent), getNodeString(lChild), getNodeString(rChild));
                 }
+
                 lastParent.setLeftChildWithIndex(rChild);
                 lastParent.setRightChildWithIndex(lChild);
             }
@@ -103,8 +121,12 @@ abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<
 
     // O(log n)
     E deleteExtrema() {
+        String deleteTarget = maxHeap ? "max" : "min";
         BinTreeNode<E> root = getRoot();
         if (root == null) return null;
+        if (Env.debug)
+            System.out.println("[delete " + deleteTarget + "] clear root");
+
         clearRoot();
 
         E min = root.getData();
@@ -117,11 +139,23 @@ abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<
             rChild.deleteParentAndCheckItsChild();
 
         if (lChild != null) {
+            if (Env.debug) {
+
+                System.out.println("[delete " + deleteTarget + "] set original lChild: " + lChild.getData() + " as new root");
+                if (rChild != null)
+                    System.out.println("[delete " + deleteTarget + "] merge original rChild: " + rChild.getData());
+            }
             setRoot(lChild);
             merge(rChild);
         } else if (rChild != null) {
+            if (Env.debug) {
+                System.out.println("[delete " + deleteTarget + "] set original rChild: " + rChild.getData() + " as new root");
+            }
             setRoot(rChild);
         }
+
+        if (Env.debug)
+            System.out.println();
 
         return min;
     }

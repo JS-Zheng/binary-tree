@@ -18,9 +18,10 @@ public class Env {
     public final static String BINOMIAL_HEAP = "二項式堆積";
     public final static String FIBONACCI_HEAP = "費氏堆積";
     public final static String PAIRING_HEAP = "成對堆積";
-    public final static String MIN_MAX_HEAP = "Min-Max Heap";
-    public final static String DEAP = "DEAP";
-    public final static String SMMH = "SMMH";
     public final static String MIN_LEFTIST_TREE = "最小左傾樹";
     public final static String MAX_LEFTIST_TREE = "最大左傾樹";
+    public final static String MIN_MAX_HEAP = "Min-Max Heap";
+    public final static String INTERVAL_HEAP = "區間堆積";
+    public final static String DEAP = "DEAP";
+    public final static String SMMH = "SMMH";
 }
