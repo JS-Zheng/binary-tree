@@ -13,6 +13,7 @@ import com.jszheng.heap.mway.BinomialHeapManipulator;
 import com.jszheng.heap.mway.FibonacciHeapManipulator;
 import com.jszheng.heap.mway.PairingHeapManipulator;
 import com.jszheng.heap.smmh.SmmhManipulator;
+import com.jszheng.huffman.HuffmanTreeManipulator;
 import com.jszheng.manipulator.DataTypeManipulator;
 import com.jszheng.manipulator.Manipulator;
 import com.jszheng.manipulator.TreeManipulatorFactory;
@@ -54,6 +55,7 @@ public class Main {
         factory.register(INTERVAL_HEAP, IntervalHeapManipulator.class);
         factory.register(DEAP, DeapManipulator.class);
         factory.register(SMMH, SmmhManipulator.class);
+        factory.register(HUFFMAN_TREE, HuffmanTreeManipulator.class);
         return factory;
     }
 }

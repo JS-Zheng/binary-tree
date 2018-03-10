@@ -46,31 +46,7 @@ public abstract class TreeManipulator<TreeType extends Tree> extends Manipulator
         // default do nothing
     }
 
-    protected void addOtherOp() {
-        // default do nothing
-    }
-
-    protected void addSearchOp() {
-        // default do nothing
-    }
-
-    protected void comment() {
-        // default do nothing
-    }
-
-    protected abstract TreeType createTree();
-
-    protected Object getInput(String prompt) {
-        if (dataType == Integer.class) {
-            return getInteger(prompt);
-        } else {
-            return getString(prompt);
-        }
-    }
-
-    protected abstract void printTree();
-
-    private void addInsertOp() {
+    protected void addInsertOp() {
         addOperation("insert", bt -> {
             String str = getLine("Insert Data (多筆資料以空白間隔):");
             str = str.trim();
@@ -99,5 +75,27 @@ public abstract class TreeManipulator<TreeType extends Tree> extends Manipulator
         });
     }
 
+    protected void addOtherOp() {
+        // default do nothing
+    }
 
+    protected void addSearchOp() {
+        // default do nothing
+    }
+
+    protected void comment() {
+        // default do nothing
+    }
+
+    protected abstract TreeType createTree();
+
+    protected Object getInput(String prompt) {
+        if (dataType == Integer.class) {
+            return getInteger(prompt);
+        } else {
+            return getString(prompt);
+        }
+    }
+
+    protected abstract void printTree();
 }

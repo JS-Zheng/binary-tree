@@ -8,13 +8,13 @@ import java.util.List;
 /**
  * Created by zhengzhongsheng on 2017/10/7.
  */
-class LinkedTreeNode<E> implements BinTreeNode<E> {
+public class LinkedTreeNode<E> implements BinTreeNode<E> {
 
     private E data;
     private BinTreeNode<E> lChild = null, rChild = null, parent = null;
     private int index;
 
-    LinkedTreeNode() {
+    protected LinkedTreeNode() {
     }
 
     @SafeVarargs
