@@ -1,5 +1,6 @@
 package com.jszheng.heap.interval;
 
+import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.complete.CompleteBinaryTree;
 import com.jszheng.heap.AbsBinDoubleEndedHeap;
@@ -139,6 +140,9 @@ public class IntervalHeap<E extends Comparable<? super E>> extends AbsBinDoubleE
             boolean swapCondition = maxHeap ? compare < 0 : compare > 0;
 
             if (swapCondition) {
+                if (Env.debug) {
+                    System.out.println("[down heap] swap node: " + data + "  &  child: " + childData);
+                }
                 swap(node, data, targetChild, childData, maxHeap);
             } else
                 break;
@@ -161,6 +165,9 @@ public class IntervalHeap<E extends Comparable<? super E>> extends AbsBinDoubleE
 
             boolean swapCondition = maxHeap ? compare > 0 : compare < 0;
             if (swapCondition) {
+                if (Env.debug) {
+                    System.out.println("[up heap] swap node: " + data + "  &  parent: " + parentData);
+                }
                 swap(node, data, parent, parentData, maxHeap);
             } else
                 break;
@@ -332,6 +339,8 @@ public class IntervalHeap<E extends Comparable<? super E>> extends AbsBinDoubleE
         if (lData == null || rData == null) return;
         if (lData.compareTo(rData) < 0) return;
 
+        if (Env.debug)
+            System.out.println("[swap] lInterval: " + lData + " is greater than rInterval: " + rData + " => swap!");
         // swap
         swapNodeData(node);
     }

@@ -1,5 +1,6 @@
 package com.jszheng.heap.interval;
 
+import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
@@ -25,15 +26,27 @@ public class IntervalInsertion<E extends Comparable<? super E>> implements Inser
         BinTreeNode<E> target;
 
         if (lastNodeSize < 2) {
+            if (Env.debug)
+                System.out.println("[insert] insert data to last node.");
+
             target = lastNode;
             heap.putData(target, data);
         } else if (lastNodeSize == 2 && heap.dataOf(lastNode, false) == null) {
+            if (Env.debug)
+                System.out.println("[insert] insert data to last node.");
+
             target = lastNode;
             heap.putLDataWithValidate(target, data);
         } else if (lastNodeSize == 2 && heap.dataOf(lastNode, true) == null) {
+            if (Env.debug)
+                System.out.println("[insert] insert data to last node.");
+
             target = lastNode;
             heap.putRDataWithValidate(target, data);
         } else {
+            if (Env.debug)
+                System.out.println("[insert] create new node: " + data);
+
             target = heap.newNode();
             BinTreeNode<E> parent = handler.candidate;
             if (handler.isLeft) {
