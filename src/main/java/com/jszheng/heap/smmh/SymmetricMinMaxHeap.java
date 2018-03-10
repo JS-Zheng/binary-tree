@@ -2,11 +2,11 @@ package com.jszheng.heap.smmh;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.complete.CompleteBinaryTree;
-import com.jszheng.heap.DoubleEndedHeap;
+import com.jszheng.heap.AbsBinDoubleEndedHeap;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 
-public class SymmetricMinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> implements CompleteBinaryTree<E> {
+public class SymmetricMinMaxHeap<E extends Comparable<? super E>> extends AbsBinDoubleEndedHeap<E> implements CompleteBinaryTree<E> {
 
     public SymmetricMinMaxHeap(BinaryTree<E> component) {
         super(component);

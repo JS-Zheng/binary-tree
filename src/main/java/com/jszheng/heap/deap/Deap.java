@@ -3,12 +3,12 @@ package com.jszheng.heap.deap;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BinaryTreeLemma;
 import com.jszheng.base.complete.CompleteBinaryTree;
-import com.jszheng.heap.DoubleEndedHeap;
+import com.jszheng.heap.AbsBinDoubleEndedHeap;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 
 // Source -- https://pdfs.semanticscholar.org/e1e5/eafb44abc04834caf752b147256335a73bb3.pdf
-public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> implements CompleteBinaryTree<E> {
+public class Deap<E extends Comparable<? super E>> extends AbsBinDoubleEndedHeap<E> implements CompleteBinaryTree<E> {
 
     public Deap(BinaryTree<E> component) {
         super(component);

@@ -8,8 +8,11 @@ public interface Tree<E, Node extends TreeNode<E>> {
 
     // util generic method, no need follow generic type of class<E, Node>
     default <El extends Comparable<? super El>, Nd extends TreeNode<El>> Nd compareNode(Nd t1, Nd t2, boolean findGreater) {
-        El t1Data = t1 != null ? t1.getData() : null;
-        El t2Data = t2 != null ? t2.getData() : null;
+        if (t2 == null) return t1;
+        else if (t1 == null) return t2;
+
+        El t1Data = t1.getData();
+        El t2Data = t2.getData();
 
         if (t1Data == null && t2Data == null) return null;
         else if (t1Data == null) return t2;

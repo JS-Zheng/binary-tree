@@ -2,11 +2,11 @@ package com.jszheng.heap.minmax;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.complete.CompleteBinaryTree;
-import com.jszheng.heap.DoubleEndedHeap;
+import com.jszheng.heap.AbsBinDoubleEndedHeap;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 
-public class MinMaxHeap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> implements CompleteBinaryTree<E> {
+public class MinMaxHeap<E extends Comparable<? super E>> extends AbsBinDoubleEndedHeap<E> implements CompleteBinaryTree<E> {
 
     public MinMaxHeap(BinaryTree<E> component) {
         super(component);

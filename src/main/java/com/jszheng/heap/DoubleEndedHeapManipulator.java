@@ -2,7 +2,7 @@ package com.jszheng.heap;
 
 import com.jszheng.manipulator.BinTreeManipulator;
 
-public abstract class DoubleEndedHeapManipulator<E extends DoubleEndedHeap> extends BinTreeManipulator<E> {
+public abstract class DoubleEndedHeapManipulator<E extends AbsBinDoubleEndedHeap> extends BinTreeManipulator<E> {
 
     public DoubleEndedHeapManipulator(Class dataType) {
         super(dataType);
