@@ -34,26 +34,7 @@ public class HuffmanInsertion implements InsertionAlgo<String> {
             HuffmanTreeNode node = leaves.get(0);
             huffman.setRoot(node);
         } else {
-            // Huffman Algo
-            for (int i = 0; i < count; i++) {
-                HuffmanTreeNode newNode = huffman.newNode();
-                HuffmanTreeNode lChild = pq.poll();
-                HuffmanTreeNode rChild = pq.poll();
-
-                int weight = lChild.getWeight() + rChild.getWeight();
-                newNode.setWeight(weight);
-
-                if (i == count - 1) {
-                    newNode.setLeftChildWithIndex(lChild);
-                    newNode.setRightChildWithIndex(rChild);
-                    huffman.setRoot(newNode);
-                } else {
-                    newNode.setLeftChild(lChild);
-                    newNode.setRightChild(rChild);
-                }
-
-                pq.add(newNode);
-            }
+            huffman.huffmanAlgo(pq, count);
         }
 
         for (HuffmanTreeNode node : leaves) {
@@ -73,6 +54,7 @@ public class HuffmanInsertion implements InsertionAlgo<String> {
 
         return true;
     }
+
 
     private CharFreq tabulateCharFrequency(char[] chars) {
         // tabulate frequency counts

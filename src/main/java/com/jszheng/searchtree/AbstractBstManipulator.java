@@ -21,12 +21,6 @@ public abstract class AbstractBstManipulator<T extends BinarySearchTree> extends
         });
     }
 
-    @Override
-    protected void comment() {
-        System.out.println("[註]: 二元搜尋樹");
-        System.out.println("Delete 操作，預設採用中序前驅節點\n");
-    }
-
     protected void addSearchOp() {
         super.addSearchOp();
         addOperation("search max", bt -> searchExtrema(bt, true));

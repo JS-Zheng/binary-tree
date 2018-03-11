@@ -47,32 +47,7 @@ public abstract class TreeManipulator<TreeType extends Tree> extends Manipulator
     }
 
     protected void addInsertOp() {
-        addOperation("insert", bt -> {
-            String str = getLine("Insert Data (多筆資料以空白間隔):");
-            str = str.trim();
-            String[] data = str.split("\\s+");
-
-            if (data[0].equals("")) {
-                System.out.println(errorPrompt);
-                return;
-            }
-
-            if (dataType == Integer.class) {
-                Integer[] intData = new Integer[data.length];
-                try {
-                    for (int i = 0, l = data.length; i < l; i++) {
-                        intData[i] = Integer.valueOf(data[i]);
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println(errorPrompt);
-                    return;
-                }
-                bt.insert(intData);
-            } else
-                bt.insert(data);
-
-            printTree();
-        });
+        addOperation("insert", new InsertOperation());
     }
 
     protected void addOtherOp() {
@@ -98,4 +73,39 @@ public abstract class TreeManipulator<TreeType extends Tree> extends Manipulator
     }
 
     protected abstract void printTree();
+
+    protected class InsertOperation implements TreeOperation<TreeType> {
+
+        @Override
+        public void execute(TreeType tree) {
+            String str = getLine("Insert Data (多筆資料以空白間隔):");
+            str = str.trim();
+            String[] data = str.split("\\s+");
+
+            if (data[0].equals("")) {
+                System.out.println(errorPrompt);
+                return;
+            }
+
+            if (dataType == Integer.class) {
+                Integer[] intData = new Integer[data.length];
+                try {
+                    for (int i = 0, l = data.length; i < l; i++) {
+                        intData[i] = Integer.valueOf(data[i]);
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println(errorPrompt);
+                    return;
+                }
+                executeInsert(intData);
+            } else
+                executeInsert(data);
+
+            printTree();
+        }
+
+        protected void executeInsert(Comparable[] data) {
+            tree.insert(data);
+        }
+    }
 }

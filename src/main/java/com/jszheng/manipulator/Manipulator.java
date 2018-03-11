@@ -1,5 +1,6 @@
 package com.jszheng.manipulator;
 
+import com.jszheng.Env;
 import com.jszheng.util.ScannerUtil;
 
 import java.util.ArrayList;
@@ -16,12 +17,16 @@ public abstract class Manipulator<Operation> {
 
     public void executeWithPrompt() {
         while (true) {
-            int typeId = ScannerUtil.getInteger(getPrompt());
-            boolean validateId = validateInput(typeId);
-            if (!validateId) continue;
-            boolean result = handleOperation(typeId);
-            if (!result) break;
-            afterExecute(typeId);
+            try {
+                int typeId = ScannerUtil.getInteger(getPrompt());
+                boolean validateId = validateInput(typeId);
+                if (!validateId) continue;
+                boolean result = handleOperation(typeId);
+                if (!result) break;
+                afterExecute(typeId);
+            } catch (Exception ex) {
+                if (Env.dev) ex.printStackTrace();
+            }
         }
     }
 

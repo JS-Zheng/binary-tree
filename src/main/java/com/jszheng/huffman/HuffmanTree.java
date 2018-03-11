@@ -9,6 +9,7 @@ import com.jszheng.search.SearchAlgo;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 public class HuffmanTree extends BtDecorator<String> {
 
@@ -118,6 +119,57 @@ public class HuffmanTree extends BtDecorator<String> {
 
     void clearCodewordMap() {
         codewordMap.clear();
+    }
+
+    /**
+     * @param pq    最小加權優先佇列
+     * @param count 執行次數：字元數 - 1
+     */
+    void huffmanAlgo(PriorityQueue<HuffmanTreeNode> pq, int count) {
+        for (int i = 0; i < count; i++) {
+            HuffmanTreeNode newNode = newNode();
+            HuffmanTreeNode lChild = pq.poll();
+            HuffmanTreeNode rChild = pq.poll();
+
+            if (Env.debug) {
+                String lNodeType = "內部";
+                String rNodeType = "內部";
+                String lData = lChild.getData();
+                String rData = rChild.getData();
+                if (lData != null) lNodeType = "外部";
+                else lData = "";
+                if (rData != null) rNodeType = "外部";
+                else rData = "";
+                System.out.println("[huffman] 取出最小加權" + lNodeType + "節點 " + lData + " 加權: " + lChild.getWeight());
+                System.out.println("[huffman] 取出次小加權" + rNodeType + "節點 " + rData + " 加權: " + rChild.getWeight());
+            }
+
+            int weight = lChild.getWeight() + rChild.getWeight();
+            newNode.setWeight(weight);
+            if (Env.debug) {
+                System.out.println("[huffman] 建立父節點，並設置加權值: " + weight);
+            }
+
+            if (i == count - 1) {
+                newNode.setLeftChildWithIndex(lChild);
+                newNode.setRightChildWithIndex(rChild);
+                setRoot(newNode);
+                if (Env.debug) {
+                    System.out.println("[huffman] 將此父節點作為樹根");
+                }
+
+            } else {
+                newNode.setLeftChild(lChild);
+                newNode.setRightChild(rChild);
+                pq.add(newNode);
+
+                if (Env.debug) {
+                    System.out.println("[huffman] 將此父節點加入最小加權優先佇列");
+                }
+            }
+            if (Env.debug)
+                System.out.println();
+        }
     }
 
     void putCodeword(char c, String s) {

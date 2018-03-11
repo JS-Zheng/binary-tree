@@ -98,7 +98,10 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
 
         // Default Algo
         InsertionAlgo<E> algo = createInsertionAlgo();
+        insertDataArr(algo, data);
+    }
 
+    protected void insertDataArr(InsertionAlgo<E> algo, E[] data) {
         for (E d : data) {
             if (Env.debug) System.out.println("[insert] data: " + d);
             algo.insert(this, d);

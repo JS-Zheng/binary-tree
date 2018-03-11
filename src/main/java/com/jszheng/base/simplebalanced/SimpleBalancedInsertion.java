@@ -25,34 +25,15 @@ class SimpleBalancedInsertion<E> extends AbstractInsertionAlgo<E> {
             BinTreeNode<E> lChild = currentNode.getLeftChild();
             BinTreeNode<E> rChild = currentNode.getRightChild();
 
-            if (lChild == null) {
-                currentNode = null;
+            int sL = bt.size(lChild);
+            int sR = bt.size(rChild);
+
+            if (sL <= sR) {
+                currentNode = lChild;
                 isLeft = true;
-            } else if (rChild == null) {
-                currentNode = null;
+            } else {
+                currentNode = rChild;
                 isLeft = false;
-            } else { // lChild != null && rChild != null
-                int hL = bt.height(lChild);
-                int hR = bt.height(rChild);
-
-                if (hL < hR) {
-                    currentNode = lChild;
-                    isLeft = true;
-                } else if (hL == hR) {
-                    int cL = bt.size(lChild);
-                    int cR = bt.size(rChild);
-
-                    if (cL <= cR) {
-                        currentNode = lChild;
-                        isLeft = true;
-                    } else {
-                        currentNode = rChild;
-                        isLeft = false;
-                    }
-                } else {
-                    currentNode = rChild;
-                    isLeft = false;
-                }
             }
         }
 

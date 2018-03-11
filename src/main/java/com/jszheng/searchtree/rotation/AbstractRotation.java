@@ -1,5 +1,6 @@
 package com.jszheng.searchtree.rotation;
 
+import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.node.BinTreeNode;
 
@@ -21,31 +22,32 @@ abstract class AbstractRotation implements RotationState {
     }
 
     /*
-     * Tri-node restructuring
-     *
-     * Original:
-     *
-     *      A (Parent)
-     *     / \
-     *    /   \
-     *   /     \
-     *  B       C (Pivot)
-     *         / \
-     *        D   E
-     *
-     *
-     * Result:
-     *
-     *       C
-     *      / \
-     *     /   \
-     *    /     \
-     *   A       E
-     *  / \
-     * B   D
-     *
-     */
+         * Tri-node restructuring
+         *
+         * Original:
+         *
+         *      A (Parent)
+         *     / \
+         *    /   \
+         *   /     \
+         *  B       C (Pivot)
+         *         / \
+         *        D   E
+         *
+         *
+         * Result:
+         *
+         *       C
+         *      / \
+         *     /   \
+         *    /     \
+         *   A       E
+         *  / \
+         * B   D
+         *
+         */
     <E> void rotateLeft(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> lChild) {
+        if (Env.debug) Env.rotateLeftCount++;
         parent.setRightChild(lChild);
         pivot.setLeftChildWithIndex(parent);
     }
@@ -76,6 +78,7 @@ abstract class AbstractRotation implements RotationState {
      *
      */
     <E> void rotateRight(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> rChild) {
+        if (Env.debug) Env.rotateRightCount++;
         parent.setLeftChild(rChild);
         pivot.setRightChildWithIndex(parent);
     }

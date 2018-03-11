@@ -56,8 +56,13 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
     @Override
     protected InsertionAlgo<E> createInsertionAlgo() {
         if (insertionAlgo == null)
-            insertionAlgo = new RedBlackInsertion<>();
+            insertionAlgo = new RedBlackBottomUpInsertion<>();
         return insertionAlgo;
+    }
+
+    public void insertByTopDown(E... data) {
+        InsertionAlgo<E> algo = new RedBlackTopDownInsertion<>();
+        insertDataArr(algo, data);
     }
 
     @Override

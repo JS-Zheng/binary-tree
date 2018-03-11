@@ -2,9 +2,8 @@ package com.jszheng;
 
 public class Env {
 
-    public final static boolean debug = true;
+    public static final boolean dev = true;
     public final static String osName = System.getProperty("os.name");
-
     public final static String COMPLETE_BINARY_TREE = "完整二元樹";
     public final static String SIMPLE_BALANCED_TREE = "簡單平衡樹";
     public final static String BINARY_SEARCH_TREE = "二元搜尋樹";
@@ -25,4 +24,12 @@ public class Env {
     public final static String DEAP = "DEAP";
     public final static String SMMH = "SMMH";
     public static final String HUFFMAN_TREE = "霍夫曼樹";
+    public static boolean debug = true;
+    public static int rotateLeftCount = 0;
+    public static int rotateRightCount = 0;
+
+    public static void clearRotateStatist() {
+        rotateLeftCount = 0;
+        rotateRightCount = 0;
+    }
 }
