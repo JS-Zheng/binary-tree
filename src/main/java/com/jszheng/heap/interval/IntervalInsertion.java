@@ -50,9 +50,9 @@ public class IntervalInsertion<E extends Comparable<? super E>> implements Inser
             target = heap.newNode();
             BinTreeNode<E> parent = handler.candidate;
             if (handler.isLeft) {
-                parent.setLeftChildWithIndex(target);
+                parent.setLeftChild(target);
             } else {
-                parent.setRightChildWithIndex(target);
+                parent.setRightChild(target);
             }
 
             heap.putData(target, data);

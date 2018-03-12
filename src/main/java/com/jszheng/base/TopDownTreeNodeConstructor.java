@@ -10,7 +10,7 @@ import java.util.Queue;
  *
  * O(n)
  */
-class TopDownTreeNodeConstructor<E> implements TreeNodeConstructor<E>, BFSAlgo<BinTreeNode<E>, BinTreeNode<E>, Void> {
+class TopDownTreeNodeConstructor<E> implements TreeNodeConstructor<E>, BFSAlgo<BinTreeNode<E>, TopDownTreeNodeConstructor<E>.NodeInfo, Void> {
 
     private final BinTreeNode<E> node;
     private E[] data;
@@ -20,14 +20,16 @@ class TopDownTreeNodeConstructor<E> implements TreeNodeConstructor<E>, BFSAlgo<B
     }
 
     @Override
-    public BinTreeNode<E> firstItem(BinTreeNode<E> node) {
-        return node;
+    public NodeInfo firstItem(BinTreeNode<E> node) {
+        NodeInfo info = new NodeInfo();
+        info.index = 0;
+        info.node = node;
+        return info;
     }
 
     @Override
     public boolean init(BinTreeNode<E> node) {
         if (data != null && data.length > 0) {
-            node.setIndex(0);
             node.setData(data[0]);
             return true;
         }
@@ -36,19 +38,22 @@ class TopDownTreeNodeConstructor<E> implements TreeNodeConstructor<E>, BFSAlgo<B
     }
 
     @Override
-    public boolean onDataPolled(Queue<BinTreeNode<E>> queue, BinTreeNode<E> currentNode) {
-        int index = currentNode.getIndex();
-        BinTreeNode<E> lChild = setChild(currentNode, index, true);
-        BinTreeNode<E> rChild = setChild(currentNode, index, false);
+    public boolean onDataPolled(Queue<TopDownTreeNodeConstructor<E>.NodeInfo> queue,
+                                TopDownTreeNodeConstructor<E>.NodeInfo info) {
+        int index = info.index;
+        BinTreeNode<E> node = info.node;
+        NodeInfo lChildInfo = getChildInfo(node, index, true);
+        NodeInfo rChildInfo = getChildInfo(node, index, false);
 
-        if (lChild != null)
-            queue.offer(lChild);
+        if (lChildInfo != null && lChildInfo.node != null)
+            queue.offer(lChildInfo);
 
-        if (rChild != null)
-            queue.offer(rChild);
+        if (rChildInfo != null && rChildInfo.node != null)
+            queue.offer(rChildInfo);
 
         return true;
     }
+
 
     @Override
     public void setDataByArr(E[] data) {
@@ -56,7 +61,7 @@ class TopDownTreeNodeConstructor<E> implements TreeNodeConstructor<E>, BFSAlgo<B
         execute(node);
     }
 
-    private BinTreeNode<E> setChild(BinTreeNode<E> currentNode, int index, boolean isLeft) {
+    private NodeInfo getChildInfo(BinTreeNode<E> node, int index, boolean isLeft) {
         int childIndex = isLeft ? BinaryTreeLemma.lChildIndex(index) : BinaryTreeLemma.rChildIndex(index);
 
         if (childIndex < data.length) {
@@ -64,18 +69,27 @@ class TopDownTreeNodeConstructor<E> implements TreeNodeConstructor<E>, BFSAlgo<B
             E childData = data[childIndex];
 
             if (childData != null) {
-                child = node.newNode();
+                child = this.node.newNode();
                 child.setData(childData);
             }
 
             if (isLeft)
-                currentNode.setLeftChildWithIndex(child);
+                node.setLeftChild(child);
             else
-                currentNode.setRightChildWithIndex(child);
+                node.setRightChild(child);
 
-            return child;
+            NodeInfo info = new NodeInfo();
+            info.node = child;
+            info.index = childIndex;
+
+            return info;
         }
 
         return null;
+    }
+
+    class NodeInfo {
+        BinTreeNode<E> node;
+        int index;
     }
 }

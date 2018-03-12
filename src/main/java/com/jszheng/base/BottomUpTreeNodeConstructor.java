@@ -41,9 +41,9 @@ class BottomUpTreeNodeConstructor<E> implements TreeNodeConstructor<E> {
             child.setDataByArr(subItems);
 
             if (isLeft)
-                node.setLeftChildWithIndex(child);
+                node.setLeftChild(child);
             else
-                node.setRightChildWithIndex(child);
+                node.setRightChild(child);
         }
     }
 }

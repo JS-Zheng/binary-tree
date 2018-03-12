@@ -12,7 +12,6 @@ public class LinkedTreeNode<E> implements BinTreeNode<E> {
 
     private E data;
     private BinTreeNode<E> lChild = null, rChild = null, parent = null;
-    private int index;
 
     protected LinkedTreeNode() {
     }
@@ -35,19 +34,18 @@ public class LinkedTreeNode<E> implements BinTreeNode<E> {
     }
 
     @Override
-    public void deleteParentAndCheckItsChild() {
+    public void deleteParent() {
         if (parent == null) return;
 
         BinTreeNode<E> formerParent = parent;
         boolean isOriginalLChild = isLeftChild();
 
         this.parent = null;
-        this.setIndex(0, true);
 
         BinTreeNode<E> pChild = isOriginalLChild ? formerParent.getLeftChild() : formerParent.getRightChild();
         if (pChild != null) {
-            if (isOriginalLChild) formerParent.setLeftChildWithIndex(null);
-            else formerParent.setRightChildWithIndex(null);
+            if (isOriginalLChild) formerParent.setLeftChild(null);
+            else formerParent.setRightChild(null);
         }
     }
 
@@ -73,96 +71,51 @@ public class LinkedTreeNode<E> implements BinTreeNode<E> {
         constructor.setDataByArr(data);
     }
 
-    @Override
-    public void setIndex(int index, boolean withDescendant) {
-        this.index = index;
-
-        if (!withDescendant) return;
-
-        BinTreeNode<E> lChild = getLeftChild();
-        BinTreeNode<E> rChild = getRightChild();
-
-        if (lChild != null)
-            lChild.setIndex(lChildIndex(), true);
-
-        if (rChild != null)
-            rChild.setIndex(rChildIndex(), true);
-    }
-
-    @Override
-    public void setLeftChildWithIndex(BinTreeNode<E> node) {
-        setChild(node, true, true);
-    }
 
     @Override
     public void setParent(BinTreeNode<E> node, boolean isLeft) {
-        setParent(node, isLeft, true);
-    }
-
-    @Override
-    public void setParent(BinTreeNode<E> newParent, boolean isLeft, boolean validateChildIndex) {
         BinTreeNode<E> formerParent = this.parent;
         boolean isOriginalLChild = isLeftChild();
 
-        if (formerParent == newParent && isLeft == isOriginalLChild)
+        if (formerParent == node && isLeft == isOriginalLChild)
             return;
 
+        // 1. delete child of former parent
         if (formerParent != null)
-            deleteParentAndCheckItsChild();
+            deleteParent();
 
-        this.parent = newParent;
+        if (node != null) {
+            // 2. Make sure this is the parent's child
+            BinTreeNode<E> validateChild;
 
-        if (parent == null) {
-            setIndex(0, true);
-            return;
+            if (isLeft)
+                validateChild = node.getLeftChild();
+            else
+                validateChild = node.getRightChild();
+
+            if (validateChild != this) {
+                if (isLeft) {
+                    node.setLeftChild(this);
+                } else {
+                    node.setRightChild(this);
+                }
+            }
         }
 
-        int index;
-        BinTreeNode<E> validateChild;
-
-        if (isLeft) {
-            index = parent.lChildIndex();
-            validateChild = parent.getLeftChild();
-        } else {
-            index = parent.rChildIndex();
-            validateChild = parent.getRightChild();
-        }
-
-        if (!validateChildIndex) return;
-
-        // e.g., already call setChild()
-        if (validateChild == this) {
-
-            if (validateChild.getIndex() != index)
-                throw new RuntimeException("Index is not correct.");
-
-            return;
-        }
-
-        // Don't setIndex() directly, otherwise it will waste time.
-        // Delegate to parent and just set one index,
-        // In this way, parent can easily decide whether need to deleteParentAndCheckItsChild when it setChild().
-        this.index = index;
-
-        if (isLeft)
-            newParent.setLeftChildWithIndex(this);
-        else
-            newParent.setRightChildWithIndex(this);
-    }
-
-    @Override
-    public void setRightChildWithIndex(BinTreeNode<E> node) {
-        setChild(node, false, true);
+        // 3. set parent
+        this.parent = node;
     }
 
     @Override
     public int getIndex() {
-        return index;
-    }
+        if (getParent() == null) return 0;
 
-    @Override
-    public void setIndex(int index) {
-        setIndex(index, false);
+        // Recursive
+        BinTreeNode<E> parent = getParent();
+        int parentIndex = parent.getIndex();
+
+        return isLeftChild() ? BinaryTreeLemma.lChildIndex(parentIndex)
+                : BinaryTreeLemma.rChildIndex(parentIndex);
     }
 
     @Override
@@ -172,14 +125,14 @@ public class LinkedTreeNode<E> implements BinTreeNode<E> {
 
     @Override
     public int getLevel() {
-        int index = getIndex();
-        if (index == 0)
-            return 1;
+        int level = 0;
 
-        int level = 1;
-        while (index >= BinaryTreeLemma.maxCount(level)) {
+        BinTreeNode<E> current = this;
+        while (current != null) {
             level++;
+            current = current.getParent();
         }
+
         return level;
     }
 
@@ -195,7 +148,7 @@ public class LinkedTreeNode<E> implements BinTreeNode<E> {
 
     @Override
     public void setRightChild(BinTreeNode<E> node) {
-        setChild(node, false, false);
+        setChild(node, false);
     }
 
     @Override
@@ -208,17 +161,18 @@ public class LinkedTreeNode<E> implements BinTreeNode<E> {
 
     @Override
     public boolean isLeftChild() {
-        return index == 0 || index % 2 == 1;
+        BinTreeNode<E> parent = getParent();
+        return parent == null || parent.getLeftChild() == this;
     }
 
     @Override
     public void setLeftChild(BinTreeNode<E> node) {
-        setChild(node, true, false);
+        setChild(node, true);
     }
 
     @Override
     public boolean isRoot() {
-        return getIndex() == 0 && parent == null;
+        return parent == null;
     }
 
     @Override
@@ -229,11 +183,6 @@ public class LinkedTreeNode<E> implements BinTreeNode<E> {
             return 0;
         else
             return 1;
-    }
-
-    @Override
-    public void deleteParent() {
-        parent = null;
     }
 
     @Override
@@ -312,36 +261,36 @@ public class LinkedTreeNode<E> implements BinTreeNode<E> {
         return result;
     }
 
-    private void setChild(BinTreeNode<E> child, boolean isLeft, boolean adjustIndex) {
+    private void setChild(BinTreeNode<E> child, boolean isLeft) {
         if (child == this)
             throw new RuntimeException("Can't set self as subTree.");
 
-        // Check Former Child.
         BinTreeNode<E> formerChild = isLeft ? lChild : rChild;
 
         if (formerChild == child) return;
 
+        // 1. delete parent of former child
         if (formerChild != null)
-            formerChild.deleteParentAndCheckItsChild();
+            formerChild.deleteParent();
 
-        int childIndex = isLeft ? lChildIndex() : rChildIndex();
+        // 2. delete old parent of new child (有需要才做)
+        // check isLeftChild to prevent situation like set rightChild to left
+        BinTreeNode<E> parentOfNewChild;
+        if (child != null && (parentOfNewChild = child.getParent()) != null &&
+                (parentOfNewChild != this || child.isLeftChild() != isLeft))
+            child.deleteParent();
 
-        if (child != null &&
-                (child.getParent() != this || child.getIndex() != childIndex))
-            child.deleteParentAndCheckItsChild();
-
+        // 3. set child
         if (isLeft)
             lChild = child;
         else
             rChild = child;
 
-        if (child != null && adjustIndex)
-            child.setIndex(childIndex, true);
-
         if (child == null) return;
 
+        // 4. validate parent of new child
         BinTreeNode<E> validateParent = child.getParent();
         if (validateParent != this)
-            child.setParent(this, isLeft, adjustIndex);
+            child.setParent(this, isLeft);
     }
 }

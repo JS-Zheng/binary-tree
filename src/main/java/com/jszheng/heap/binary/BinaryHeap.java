@@ -64,7 +64,7 @@ abstract class BinaryHeap<E extends Comparable<? super E>> extends AbstractHeap<
         E extrema = root.getData();
         E lastNodeData = lastNode.getData();
 
-        lastNode.deleteParentAndCheckItsChild();
+        lastNode.deleteParent();
         root.setData(lastNodeData);
 
         downHeap(root, maxHeap);

@@ -239,7 +239,7 @@ public class IntervalHeap<E extends Comparable<? super E>> extends AbsBinDoubleE
         }
 
         if (allNull)
-            node.deleteParentAndCheckItsChild();
+            node.deleteParent();
     }
 
     // O(log n)

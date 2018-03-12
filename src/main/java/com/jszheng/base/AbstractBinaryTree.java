@@ -86,8 +86,8 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
             BinTreeNode<E> tmpRight = node.getRightChild();
             if (tmpLeft == null && tmpRight == null) return;
 
-            node.setLeftChildWithIndex(tmpRight);
-            node.setRightChildWithIndex(tmpLeft);
+            node.setLeftChild(tmpRight);
+            node.setRightChild(tmpLeft);
             node.isRoot();
         }
     }
@@ -99,14 +99,6 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
         // Default Algo
         InsertionAlgo<E> algo = createInsertionAlgo();
         insertDataArr(algo, data);
-    }
-
-    protected void insertDataArr(InsertionAlgo<E> algo, E[] data) {
-        for (E d : data) {
-            if (Env.debug) System.out.println("[insert] data: " + d);
-            algo.insert(this, d);
-            if (Env.debug) System.out.println();
-        }
     }
 
     @Override
@@ -123,6 +115,14 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
 
     protected abstract SearchAlgo<E> createSearchAlgo();
 
+    protected void insertDataArr(InsertionAlgo<E> algo, E[] data) {
+        for (E d : data) {
+            if (Env.debug) System.out.println("[insert] data: " + d);
+            algo.insert(this, d);
+            if (Env.debug) System.out.println();
+        }
+    }
+
     BinTreeNode<E> copyNodes(BinTreeNode<E> node, boolean deep) {
         if (node == null)
             return null;
@@ -135,8 +135,8 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
             copyNode = node.newNode();
 
             copyNode.setData(node.getData());
-            copyNode.setLeftChildWithIndex(copyNodes(node.getLeftChild(), true));
-            copyNode.setRightChildWithIndex(copyNodes(node.getRightChild(), true));
+            copyNode.setLeftChild(copyNodes(node.getLeftChild(), true));
+            copyNode.setRightChild(copyNodes(node.getRightChild(), true));
         }
         return copyNode;
     }

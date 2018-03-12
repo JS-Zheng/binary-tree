@@ -18,7 +18,7 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 
     private BinTreeNode<E> root;
 
-    // Prevent execute empty-varargs constructor
+    // prevent execute empty-varargs constructor
     public LinkedBinaryTree() {
     }
 
@@ -55,7 +55,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
         int parentIndex = parentIndex(index);
         BinTreeNode<E> parent = getNodeByIndex(parentIndex);
         if (parent == null) return null;
-
 
         return index % 2 == 1 ? parent.getLeftChild() : parent.getRightChild();
     }

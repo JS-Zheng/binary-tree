@@ -151,8 +151,8 @@ public class HuffmanTree extends BtDecorator<String> {
             }
 
             if (i == count - 1) {
-                newNode.setLeftChildWithIndex(lChild);
-                newNode.setRightChildWithIndex(rChild);
+                newNode.setLeftChild(lChild);
+                newNode.setRightChild(rChild);
                 setRoot(newNode);
                 if (Env.debug) {
                     System.out.println("[huffman] 將此父節點作為樹根");

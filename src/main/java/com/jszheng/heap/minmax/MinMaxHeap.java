@@ -94,7 +94,7 @@ public class MinMaxHeap<E extends Comparable<? super E>> extends AbsBinDoubleEnd
 
         BinTreeNode<E> lastNode = getLastNode();
         E lastNodeData = lastNode.getData();
-        lastNode.deleteParentAndCheckItsChild();
+        lastNode.deleteParent();
 
         // If the target is lastNode, simply delete it.
         if (lastNode == target) {

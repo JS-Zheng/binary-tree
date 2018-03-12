@@ -34,10 +34,10 @@ public abstract class AbstractInsertionAlgo<E> implements InsertionAlgo<E> {
 
         if (isLeft) {
             newNode.setLeftChild(targetParentNode.getLeftChild());
-            targetParentNode.setLeftChildWithIndex(newNode);
+            targetParentNode.setLeftChild(newNode);
         } else {
             newNode.setRightChild(targetParentNode.getRightChild());
-            targetParentNode.setRightChildWithIndex(newNode);
+            targetParentNode.setRightChild(newNode);
         }
 
         // Some Adjust

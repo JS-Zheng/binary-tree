@@ -67,7 +67,7 @@ abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<
                     if (Env.debug)
                         System.out.println("[merge] " + lastParent.getData() + " set " + parent.getData() + " as right child");
 
-                    lastParent.setRightChildWithIndex(parent);
+                    lastParent.setRightChild(parent);
                 }
                 otherRoot = root;
             }
@@ -81,7 +81,7 @@ abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<
             if (Env.debug)
                 System.out.println("[merge] " + lastParent.getData() + " set " + otherRoot.getData() + " as right child");
 
-            lastParent.setRightChildWithIndex(otherRoot);
+            lastParent.setRightChild(otherRoot);
         }
 
         while (lastParent != null) {
@@ -96,8 +96,8 @@ abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<
                             , getNodeString(lastParent), getNodeString(lChild), getNodeString(rChild));
                 }
 
-                lastParent.setLeftChildWithIndex(rChild);
-                lastParent.setRightChildWithIndex(lChild);
+                lastParent.setLeftChild(rChild);
+                lastParent.setRightChild(lChild);
             }
 
             lastParent = lastParent.getParent();
@@ -134,9 +134,9 @@ abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<
         BinTreeNode<E> rChild = root.getRightChild();
 
         if (lChild != null)
-            lChild.deleteParentAndCheckItsChild();
+            lChild.deleteParent();
         if (rChild != null)
-            rChild.deleteParentAndCheckItsChild();
+            rChild.deleteParent();
 
         if (lChild != null) {
             if (Env.debug) {

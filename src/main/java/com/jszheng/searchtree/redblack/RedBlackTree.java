@@ -5,6 +5,7 @@ import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstDeletion;
 import com.jszheng.searchtree.SelfBalancingBst;
+import com.jszheng.searchtree.rotation.RotateListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,8 +23,12 @@ import static com.jszheng.searchtree.redblack.RedBlackTree.Color.BLACK;
  * <p>
  * Created by zhengzhongsheng on 2017/10/24.
  */
-public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancingBst<E> {
+public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancingBst<E> implements RotateListener {
 
+    // for dev
+    public int rotateLeftCount = 0;
+    public int rotateRightCount = 0;
+    public int colorChangeCount = 0;
     private Map<BinTreeNode<E>, Color> colors = new HashMap<>();
 
     public RedBlackTree(BinaryTree<E> component) {
@@ -60,11 +65,6 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
         return insertionAlgo;
     }
 
-    public void insertByTopDown(E... data) {
-        InsertionAlgo<E> algo = new RedBlackTopDownInsertion<>();
-        insertDataArr(algo, data);
-    }
-
     @Override
     public String getNodeString(BinTreeNode<E> node) {
         E data = node != null ? node.getData() : null;
@@ -74,6 +74,22 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
         else
             return data != null ? data.toString() +
                     "(" + (colorOf(node) == BLACK ? "⚫" : "🔴") + ")" : " "; // Keep one space to mock null.
+    }
+
+    @SafeVarargs
+    public final void insertByTopDown(E... data) {
+        InsertionAlgo<E> algo = new RedBlackTopDownInsertion<>();
+        insertDataArr(algo, data);
+    }
+
+    @Override
+    public void onRotateLeft() {
+        rotateLeftCount++;
+    }
+
+    @Override
+    public void onRotateRight() {
+        rotateRightCount++;
     }
 
     @Override

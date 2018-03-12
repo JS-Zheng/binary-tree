@@ -26,6 +26,8 @@ abstract class AbsRedBlackInsertion<E extends Comparable<? super E>> extends Bst
     void changeColor(BinTreeNode<E> parent, BinTreeNode<E> lChild, BinTreeNode<E> rChild) {
         RedBlackTree<E> rbt = getBt();
 
+        rbt.colorChangeCount++;
+
         if (Env.debug)
             System.out.printf("[insert] change color -- make node %s & %s BLACK\n"
                     , lChild.getData(), rChild.getData());

@@ -1,13 +1,17 @@
 package com.jszheng.searchtree.rotation;
 
-import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.node.BinTreeNode;
 
 abstract class AbstractRotation implements RotationState {
 
+    RotateListener listener;
+
     @Override
     public <E> void rotate(BinaryTree<E> bt, BinTreeNode<E> parent) {
+        if (bt instanceof RotateListener)
+            listener = (RotateListener) bt;
+
         BinTreeNode<E> grandParent = parent.getParent();
         boolean orinLeft = parent.isLeftChild();
 
@@ -47,9 +51,9 @@ abstract class AbstractRotation implements RotationState {
          *
          */
     <E> void rotateLeft(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> lChild) {
-        if (Env.debug) Env.rotateLeftCount++;
+        if (listener != null) listener.onRotateLeft();
         parent.setRightChild(lChild);
-        pivot.setLeftChildWithIndex(parent);
+        pivot.setLeftChild(parent);
     }
 
     /*
@@ -78,9 +82,9 @@ abstract class AbstractRotation implements RotationState {
      *
      */
     <E> void rotateRight(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> rChild) {
-        if (Env.debug) Env.rotateRightCount++;
+        if (listener != null) listener.onRotateRight();
         parent.setLeftChild(rChild);
-        pivot.setRightChildWithIndex(parent);
+        pivot.setRightChild(parent);
     }
 
     abstract <E> BinTreeNode<E> rotateTree(BinaryTree<E> bt, BinTreeNode<E> parent);
@@ -88,11 +92,11 @@ abstract class AbstractRotation implements RotationState {
     private <E> void setGrandParent(BinTreeNode<E> grandParent, boolean orinLeft, BinTreeNode<E> newParent) {
         if (grandParent != null) {
             if (orinLeft)
-                grandParent.setLeftChildWithIndex(newParent);
+                grandParent.setLeftChild(newParent);
             else
-                grandParent.setRightChildWithIndex(newParent);
+                grandParent.setRightChild(newParent);
         } else {
-            newParent.deleteParentAndCheckItsChild();
+            newParent.deleteParent();
         }
     }
 }
