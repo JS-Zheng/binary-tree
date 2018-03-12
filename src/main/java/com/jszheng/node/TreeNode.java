@@ -8,7 +8,8 @@ public interface TreeNode<E> extends Cloneable {
 
     void deleteParent();
 
-    List<TreeNode<E>> getChildren();
+    // prevent redundant type cast
+    List<? extends TreeNode<E>> getChildren();
 
     E getData();
 

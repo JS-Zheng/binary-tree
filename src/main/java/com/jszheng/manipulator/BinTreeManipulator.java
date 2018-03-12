@@ -4,12 +4,13 @@ import com.jszheng.base.BinaryTree;
 import com.jszheng.base.LinkedBinaryTree;
 import com.jszheng.node.BinTreeNode;
 import com.jszheng.printer.BtPrinter;
+import com.jszheng.printer.HorizontalTreePrinter;
 import com.jszheng.printer.MyBtPrinter;
 import com.jszheng.util.ScannerUtil;
 
 import static com.jszheng.Env.osName;
 
-public abstract class BinTreeManipulator extends TreeManipulator<BinaryTree> {
+public abstract class BinTreeManipulator<T extends BinaryTree> extends TreeManipulator<T> {
 
     private BtPrinter printer = new MyBtPrinter(1, 1, 1);
 
@@ -47,10 +48,13 @@ public abstract class BinTreeManipulator extends TreeManipulator<BinaryTree> {
 
     @Override
     protected void printTree() {
-        printer.print(tree);
+        if (tree.height() < 6)
+            printer.print(tree);
+        else
+            new HorizontalTreePrinter().print(tree);
     }
 
     protected BinaryTree baseBt() {
-        return new LinkedBinaryTree();
+        return new LinkedBinaryTree<>();
     }
 }

@@ -49,7 +49,7 @@ public class SplayTree<E extends Comparable<? super E>> extends SelfBalancingBst
             BinTreeNode<E> grandParent = parent.getParent();
             BinTreeNode<E> rotateTarget;
 
-            if (grandParent == null) { // targetNode is child of root
+            if (grandParent == null) { // targetNode is child of min
                 boolean isTargetNodeLChild = targetNode.isLeftChild();
                 rotateTarget = parent;
                 state = isTargetNodeLChild ? new LlRotation() : new RrRotation();

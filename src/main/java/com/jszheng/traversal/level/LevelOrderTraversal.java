@@ -2,7 +2,6 @@ package com.jszheng.traversal.level;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.node.BinTreeNode;
-import com.jszheng.node.LinkedTreeNode;
 import com.jszheng.traversal.AbstractIterativeTraversal;
 import com.jszheng.util.BFSAlgo;
 
@@ -20,6 +19,7 @@ public class LevelOrderTraversal<E> extends AbstractIterativeTraversal<E>
     private Map<BinTreeNode<E>, Boolean> pseudoNode = new HashMap<>();
     private int maxCount;
     private boolean fullBtMode = false;
+    private BinaryTree<E> bt;
 
     @Override
     public boolean execute(Queue<BinTreeNode<E>> queue, BinTreeNode<E> node, List<BinTreeNode<E>> dataList) {
@@ -54,6 +54,7 @@ public class LevelOrderTraversal<E> extends AbstractIterativeTraversal<E>
     @Override
     public boolean init(BinaryTree<E> bt) {
         if (bt != null) {
+            this.bt = bt;
             this.maxCount = bt.maxCount();
             return true;
         }
@@ -104,7 +105,7 @@ public class LevelOrderTraversal<E> extends AbstractIterativeTraversal<E>
 
         if (child == null && fullBtMode &&
                 maxChildIndex < this.maxCount) {
-            child = new LinkedTreeNode<>(); // mock null Node.
+            child = bt.newNode(); // mock null Node.
             pseudoNode.put(child, true);
         }
 

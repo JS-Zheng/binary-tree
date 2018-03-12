@@ -1,5 +1,6 @@
-package com.jszheng.node;
+package com.jszheng.base;
 
+import com.jszheng.node.BinTreeNode;
 import com.jszheng.util.BFSAlgo;
 
 /*
@@ -40,9 +41,9 @@ class BottomUpTreeNodeConstructor<E> implements TreeNodeConstructor<E> {
             child.setDataByArr(subItems);
 
             if (isLeft)
-                node.setLeftChildWithIndex(child);
+                node.setLeftChild(child);
             else
-                node.setRightChildWithIndex(child);
+                node.setRightChild(child);
         }
     }
 }

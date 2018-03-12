@@ -1,6 +1,5 @@
-package com.jszheng.node;
+package com.jszheng.base;
 
-import com.jszheng.base.BinaryTreeLemma;
 import com.jszheng.util.BFSAlgo;
 
 import java.util.ArrayList;

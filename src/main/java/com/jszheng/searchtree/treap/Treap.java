@@ -85,7 +85,7 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E> 
     }
 
     void putRandomPriority(BinTreeNode<E> node) {
-        putRandomPriority(node, 1000);
+        putRandomPriority(node, 65535);
     }
 
     void removePriority(BinTreeNode<E> node) {

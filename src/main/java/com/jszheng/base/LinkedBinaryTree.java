@@ -5,7 +5,6 @@ import com.jszheng.base.complete.CompleteBtInsertion;
 import com.jszheng.base.complete.LinearSearch;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
-import com.jszheng.node.LinkedTreeNode;
 import com.jszheng.search.SearchAlgo;
 import com.jszheng.traversal.TraversalAlgo;
 import com.jszheng.traversal.TraversalAlgoFactory;
@@ -19,7 +18,7 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 
     private BinTreeNode<E> root;
 
-    // Prevent execute empty-varargs constructor
+    // prevent execute empty-varargs constructor
     public LinkedBinaryTree() {
     }
 
@@ -57,7 +56,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
         BinTreeNode<E> parent = getNodeByIndex(parentIndex);
         if (parent == null) return null;
 
-
         return index % 2 == 1 ? parent.getLeftChild() : parent.getRightChild();
     }
 
@@ -86,15 +84,25 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     }
 
     @Override
+    public BinTreeNode<E> getLastNode() {
+        List<BinTreeNode<E>> list = traverse("Level", false, false, node -> true);
+        int i = list.size() - 1;
+        return list.get(i);
+    }
+
+    @Override
     public void setRoot(BinTreeNode<E> node) {
         this.root = node;
     }
 
     @Override
-    public BinTreeNode<E> getLastNode() {
-        List<BinTreeNode<E>> list = traverse("Level", false, false, node -> true);
-        int i = list.size() - 1;
-        return list.get(i);
+    public boolean isEmpty() {
+        return root == null;
+    }
+
+    @Override
+    public BinTreeNode<E> newNode() {
+        return new LinkedTreeNode<>();
     }
 
     @Override
@@ -108,11 +116,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
                                          boolean isFullMode, TraversalNodeHandler<E> handler) {
         TraversalAlgo algo = TraversalAlgoFactory.create(order, recursive, isFullMode, handler);
         return traverse(algo);
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return root == null;
     }
 
     @Override

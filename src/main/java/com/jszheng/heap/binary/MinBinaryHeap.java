@@ -5,7 +5,7 @@ import com.jszheng.heap.MinHeap;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 
-public class MinBinaryHeap<E extends Comparable<? super E>> extends BinaryHeap<E> implements MinHeap<E> {
+public class MinBinaryHeap<E extends Comparable<? super E>> extends BinaryHeap<E> implements MinHeap<E, BinTreeNode<E>> {
 
     public MinBinaryHeap(BinaryTree<E> component) {
         super(component);

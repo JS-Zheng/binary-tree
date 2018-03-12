@@ -1,6 +1,8 @@
 package com.jszheng.heap;
 
-public interface MeldableHeap<HEAP, E> extends Heap<E> {
+import com.jszheng.node.TreeNode;
 
-    void merge(HEAP node);
+public interface MeldableHeap<MergedHeap, E, Node extends TreeNode<E>> extends com.jszheng.heap.Heap<E, Node> {
+
+    void merge(MergedHeap node);
 }

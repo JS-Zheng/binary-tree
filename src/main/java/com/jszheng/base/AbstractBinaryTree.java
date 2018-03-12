@@ -14,21 +14,6 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
     protected SearchAlgo<E> searchAlgo;
 
     @Override
-    public int count() {
-        return count(getRoot());
-    }
-
-    @Override
-    public int count(BinTreeNode<E> node) {
-        if (node == null)
-            return 0;
-
-        int nL = count(node.getLeftChild());
-        int nR = count(node.getRightChild());
-        return nL + nR + 1;
-    }
-
-    @Override
     public int height() {
         return height(getRoot());
     }
@@ -101,8 +86,8 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
             BinTreeNode<E> tmpRight = node.getRightChild();
             if (tmpLeft == null && tmpRight == null) return;
 
-            node.setLeftChildWithIndex(tmpRight);
-            node.setRightChildWithIndex(tmpLeft);
+            node.setLeftChild(tmpRight);
+            node.setRightChild(tmpLeft);
             node.isRoot();
         }
     }
@@ -113,36 +98,30 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
 
         // Default Algo
         InsertionAlgo<E> algo = createInsertionAlgo();
-
-        for (E d : data) {
-            if (Env.debug)
-                System.out.println("[insert] data: " + d);
-            algo.insert(this, d);
-            if (Env.debug)
-                System.out.println();
-        }
+        insertDataArr(algo, data);
     }
 
-    protected <T extends Comparable<? super T>> BinTreeNode<T> compareNode(BinTreeNode<T> t1, BinTreeNode<T> t2, boolean findGreater) {
-        T t1Data = t1 != null ? t1.getData() : null;
-        T t2Data = t2 != null ? t2.getData() : null;
+    @Override
+    public int size(BinTreeNode<E> node) {
+        if (node == null)
+            return 0;
 
-        if (t1Data == null && t2Data == null) return null;
-        else if (t1Data == null) return t2;
-        else if (t2Data == null) return t1;
-
-        int compareResult = t1Data.compareTo(t2Data);
-        boolean t1GreaterThanT2 = compareResult > 0;
-
-        if (findGreater)
-            return t1GreaterThanT2 ? t1 : t2;
-        else
-            return t1GreaterThanT2 ? t2 : t1;
+        int nL = size(node.getLeftChild());
+        int nR = size(node.getRightChild());
+        return nL + nR + 1;
     }
 
     protected abstract InsertionAlgo<E> createInsertionAlgo();
 
     protected abstract SearchAlgo<E> createSearchAlgo();
+
+    protected void insertDataArr(InsertionAlgo<E> algo, E[] data) {
+        for (E d : data) {
+            if (Env.debug) System.out.println("[insert] data: " + d);
+            algo.insert(this, d);
+            if (Env.debug) System.out.println();
+        }
+    }
 
     BinTreeNode<E> copyNodes(BinTreeNode<E> node, boolean deep) {
         if (node == null)
@@ -156,8 +135,8 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
             copyNode = node.newNode();
 
             copyNode.setData(node.getData());
-            copyNode.setLeftChildWithIndex(copyNodes(node.getLeftChild(), true));
-            copyNode.setRightChildWithIndex(copyNodes(node.getRightChild(), true));
+            copyNode.setLeftChild(copyNodes(node.getLeftChild(), true));
+            copyNode.setRightChild(copyNodes(node.getRightChild(), true));
         }
         return copyNode;
     }
@@ -181,11 +160,11 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
                 return NORMAL; // 非歪斜
 
             if (checkLeft && hasRChild
-                    && currentNode != root) // Must check root.
+                    && currentNode != root) // Must check min.
                 return NORMAL;
 
             if (!checkLeft && hasLChild
-                    && currentNode != root) // Must check root.
+                    && currentNode != root) // Must check min.
                 return NORMAL;
 
             lastNode = currentNode;

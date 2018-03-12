@@ -46,6 +46,10 @@ public abstract class TreeManipulator<TreeType extends Tree> extends Manipulator
         // default do nothing
     }
 
+    protected void addInsertOp() {
+        addOperation("insert", new InsertOperation());
+    }
+
     protected void addOtherOp() {
         // default do nothing
     }
@@ -70,8 +74,10 @@ public abstract class TreeManipulator<TreeType extends Tree> extends Manipulator
 
     protected abstract void printTree();
 
-    private void addInsertOp() {
-        addOperation("insert", bt -> {
+    protected class InsertOperation implements TreeOperation<TreeType> {
+
+        @Override
+        public void execute(TreeType tree) {
             String str = getLine("Insert Data (多筆資料以空白間隔):");
             str = str.trim();
             String[] data = str.split("\\s+");
@@ -91,13 +97,15 @@ public abstract class TreeManipulator<TreeType extends Tree> extends Manipulator
                     System.out.println(errorPrompt);
                     return;
                 }
-                bt.insert(intData);
+                executeInsert(intData);
             } else
-                bt.insert(data);
+                executeInsert(data);
 
             printTree();
-        });
+        }
+
+        protected void executeInsert(Comparable[] data) {
+            tree.insert(data);
+        }
     }
-
-
 }

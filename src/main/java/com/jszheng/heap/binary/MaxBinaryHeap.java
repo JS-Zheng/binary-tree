@@ -5,7 +5,7 @@ import com.jszheng.heap.MaxHeap;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 
-public class MaxBinaryHeap<E extends Comparable<? super E>> extends BinaryHeap<E> implements MaxHeap<E> {
+public class MaxBinaryHeap<E extends Comparable<? super E>> extends BinaryHeap<E> implements MaxHeap<E, BinTreeNode<E>> {
 
     public MaxBinaryHeap(BinaryTree<E> component) {
         super(component);

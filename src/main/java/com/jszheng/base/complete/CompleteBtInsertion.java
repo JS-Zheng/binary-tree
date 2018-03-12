@@ -8,7 +8,7 @@ import com.jszheng.insertion.InsertionLocator;
  */
 public class CompleteBtInsertion<E> extends AbstractInsertionAlgo<E> {
 
-    private InsertionLocator<E> locator;
+    protected InsertionLocator<E> locator;
 
     @Override
     public InsertionLocator<E> insertData(E data) {

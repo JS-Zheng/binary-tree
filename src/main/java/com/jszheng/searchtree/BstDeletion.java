@@ -95,8 +95,8 @@ public class BstDeletion<E extends Comparable<? super E>> implements DeletionAlg
         boolean isTargetLeft = targetNode.isLeftChild();
 
         if (parent != null) {
-            if (isTargetLeft) parent.setLeftChildWithIndex(null);
-            else parent.setRightChildWithIndex(null);
+            if (isTargetLeft) parent.setLeftChild(null);
+            else parent.setRightChild(null);
         }
         if (parent == null || bst.getRoot() == targetNode) {
             bst.clearRoot();

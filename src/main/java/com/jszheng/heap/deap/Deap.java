@@ -3,12 +3,12 @@ package com.jszheng.heap.deap;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BinaryTreeLemma;
 import com.jszheng.base.complete.CompleteBinaryTree;
-import com.jszheng.heap.DoubleEndedHeap;
+import com.jszheng.heap.AbsBinDoubleEndedHeap;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 
 // Source -- https://pdfs.semanticscholar.org/e1e5/eafb44abc04834caf752b147256335a73bb3.pdf
-public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> implements CompleteBinaryTree<E> {
+public class Deap<E extends Comparable<? super E>> extends AbsBinDoubleEndedHeap<E> implements CompleteBinaryTree<E> {
 
     public Deap(BinaryTree<E> component) {
         super(component);
@@ -61,7 +61,7 @@ public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> im
      *
      *   if (X is the larger){
      *     move the element in position I to the freed position
-     *     perform a binary search in the path from I to the root of the heap we are working on [3]
+     *     perform a binary search in the path from I to the min of the heap we are working on [3]
      *     move all elements smaller than X one level down in the maxheap
      *     store X in the freed position
      *   } else {
@@ -104,7 +104,7 @@ public class Deap<E extends Comparable<? super E>> extends DoubleEndedHeap<E> im
 
         BinTreeNode<E> lastNode = getLastNode();
         E lastNodeData = lastNode.getData();
-        lastNode.deleteParentAndCheckItsChild();
+        lastNode.deleteParent();
 
         // If the target is lastNode, simply delete it.
         if (lastNode == target)

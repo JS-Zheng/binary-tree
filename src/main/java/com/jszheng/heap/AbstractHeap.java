@@ -1,10 +1,11 @@
 package com.jszheng.heap;
 
+import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BtDecorator;
 import com.jszheng.node.BinTreeNode;
 
-public abstract class AbstractHeap<E extends Comparable<? super E>> extends BtDecorator<E> implements Heap<E> {
+public abstract class AbstractHeap<E extends Comparable<? super E>> extends BtDecorator<E> implements Heap<E, BinTreeNode<E>> {
 
     protected AbstractHeap(BinaryTree<E> component) {
         super(component);
@@ -26,6 +27,9 @@ public abstract class AbstractHeap<E extends Comparable<? super E>> extends BtDe
             boolean swapCondition = maxHeap ? compare < 0 : compare > 0;
 
             if (swapCondition) {
+                if (Env.debug) {
+                    System.out.println("[down heap] swap node: " + data + "  &  child: " + childData);
+                }
                 node.setData(childData);
                 targetChild.setData(data);
             } else
@@ -54,6 +58,9 @@ public abstract class AbstractHeap<E extends Comparable<? super E>> extends BtDe
 
             boolean swapCondition = maxHeap ? compare > 0 : compare < 0;
             if (swapCondition) {
+                if (Env.debug) {
+                    System.out.println("[up heap] swap node: " + data + "  &  parent: " + parentData);
+                }
                 node.setData(parentData);
                 parent.setData(data);
             } else
