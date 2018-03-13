@@ -2,14 +2,11 @@ package com.jszheng.searchtree.redblack;
 
 import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
-import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstInsertion;
-import com.jszheng.searchtree.rotation.LlRotation;
 import com.jszheng.searchtree.rotation.RotationState;
-import com.jszheng.searchtree.rotation.RrRotation;
 
-import static com.jszheng.searchtree.redblack.RedBlackTree.Color.BLACK;
-import static com.jszheng.searchtree.redblack.RedBlackTree.Color.RED;
+import static com.jszheng.searchtree.redblack.RedBlackTree.BLACK;
+import static com.jszheng.searchtree.redblack.RedBlackTree.RED;
 
 /*
  * O(Log n)
@@ -23,7 +20,7 @@ abstract class AbsRedBlackInsertion<E extends Comparable<? super E>> extends Bst
     }
 
     // 三點變黑，父點變紅 (if not root)
-    void changeColor(BinTreeNode<E> parent, BinTreeNode<E> lChild, BinTreeNode<E> rChild) {
+    void changeColor(RedBlackTreeNode<E> parent, RedBlackTreeNode<E> lChild, RedBlackTreeNode<E> rChild) {
         RedBlackTree<E> rbt = getBt();
 
         rbt.colorChangeCount++;
@@ -32,11 +29,18 @@ abstract class AbsRedBlackInsertion<E extends Comparable<? super E>> extends Bst
             System.out.printf("[insert] change color -- make node %s & %s BLACK\n"
                     , lChild.getData(), rChild.getData());
 
-        rbt.putColor(lChild, BLACK);
-        rbt.putColor(rChild, BLACK);
+        rbt.setColor(lChild, BLACK);
+        rbt.setColor(rChild, BLACK);
+        rbt.setColor(parent, RED);
+    }
+
+    void changeColorWithRedNodeCheck(RedBlackTreeNode<E> parent, RedBlackTreeNode<E> lChild, RedBlackTreeNode<E> rChild) {
+        RedBlackTree<E> rbt = getBt();
+
+        changeColor(parent, lChild, rChild);
 
         if (!parent.isRoot()) {
-            rbt.putColor(parent, RED);
+            rbt.setColor(parent, RED);
 
             if (Env.debug)
                 System.out.println("[insert] make parentNode " + parent.getData() + " RED.");
@@ -48,35 +52,45 @@ abstract class AbsRedBlackInsertion<E extends Comparable<? super E>> extends Bst
     }
 
     // 檢查 child 與 parent 有無連續 RED，若有則需作 Rotation
-    void checkContinuousRedNode(BinTreeNode<E> child) {
+    void checkContinuousRedNode(RedBlackTreeNode<E> child) {
         RedBlackTree<E> rbt = getBt();
 
-        BinTreeNode<E> parent = child.getParent();
-        BinTreeNode<E> grandParent = parent != null ? parent.getParent() : null;
-        if (grandParent == null || rbt.colorOf(parent) != RED) return;
+        RedBlackTreeNode<E> parent = child.getParent();
+
+        if (rbt.colorOf(parent) != RED) return;
+
+        RedBlackTreeNode<E> grandParent = parent != null ? parent.getParent() : null;
+
+        if (grandParent == null) return;
 
         if (Env.debug)
             System.out.println("[insert] detected continuous red: "
                     + child.getData() + " & " + parent.getData());
 
+        rotateContinuousRedNode(rbt, child, parent, grandParent);
+    }
+
+    boolean isNeedColorChange(RedBlackTreeNode<E> lChild, RedBlackTreeNode<E> rChild) {
+        RedBlackTree<E> rbt = getBt();
+        boolean lColor = rbt.colorOf(lChild);
+        boolean rColor = rbt.colorOf(rChild);
+
+        return lColor == RED && rColor == RED;
+    }
+
+    boolean rotateContinuousRedNode(RedBlackTree<E> rbt, RedBlackTreeNode<E> child, RedBlackTreeNode<E> parent, RedBlackTreeNode<E> grandParent) {
+        boolean isDoubleRotate = child.isLeftChild() != parent.isLeftChild();
         RotationState state = rbt.getRotationState(parent, child);
         state.rotate(rbt, grandParent);
 
-        if (state instanceof RrRotation || state instanceof LlRotation) {
-            rbt.putColor(parent, BLACK);
-            rbt.putColor(grandParent, RED);
+        if (!isDoubleRotate) {
+            rbt.setColor(parent, BLACK);
+            rbt.setColor(grandParent, RED);
         } else {
-            rbt.putColor(child, BLACK);
-            rbt.putColor(grandParent, RED);
+            rbt.setColor(child, BLACK);
+            rbt.setColor(grandParent, RED);
         }
-    }
 
-    void checkNeedColorChange(BinTreeNode<E> parent, BinTreeNode<E> lChild, BinTreeNode<E> rChild) {
-        RedBlackTree<E> rbt = getBt();
-        RedBlackTree.Color lColor = rbt.colorOf(lChild);
-        RedBlackTree.Color rColor = rbt.colorOf(rChild);
-
-        if (lColor == RED && rColor == RED)
-            changeColor(parent, lChild, rChild);
+        return isDoubleRotate;
     }
 }

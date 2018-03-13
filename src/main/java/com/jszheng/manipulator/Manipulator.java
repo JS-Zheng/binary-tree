@@ -18,6 +18,7 @@ public abstract class Manipulator<Operation> {
     public void executeWithPrompt() {
         while (true) {
             try {
+                System.out.println();
                 int typeId = ScannerUtil.getInteger(getPrompt());
                 boolean validateId = validateInput(typeId);
                 if (!validateId) continue;

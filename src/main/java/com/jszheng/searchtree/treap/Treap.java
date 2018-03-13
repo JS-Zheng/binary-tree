@@ -3,6 +3,7 @@ package com.jszheng.searchtree.treap;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
+import com.jszheng.searchtree.BinarySearchTree;
 import com.jszheng.searchtree.BstDeletion;
 import com.jszheng.searchtree.SelfBalancingBst;
 import com.jszheng.searchtree.rotation.LlRotation;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E> {
+public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E, BinaryTree<E>> {
 
     private final boolean maxHeap;
     private TreapInsertion<E> insertionAlgo;
@@ -28,6 +29,11 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E> 
     public Treap(BinaryTree<E> component, boolean maxHeap) {
         super(component);
         this.maxHeap = maxHeap;
+    }
+
+    @Override
+    public BinaryTree<E> copy(boolean deep) {
+        return new Treap<>(component.copy(deep));
     }
 
     @Override
@@ -48,6 +54,11 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E> 
         insertionAlgo.setMaxHeap(maxHeap);
         insertionAlgo.specifiedPriority(p);
         insertionAlgo.insert(this, data);
+    }
+
+    @Override
+    public BinarySearchTree<E> newTree() {
+        return new Treap<>(component.newTree());
     }
 
     @Override

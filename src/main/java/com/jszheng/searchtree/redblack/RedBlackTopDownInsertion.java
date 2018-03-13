@@ -2,7 +2,9 @@ package com.jszheng.searchtree.redblack;
 
 import com.jszheng.node.BinTreeNode;
 
-import static com.jszheng.searchtree.redblack.RedBlackTree.Color.RED;
+import static com.jszheng.searchtree.redblack.RedBlackTree.BLACK;
+import static com.jszheng.searchtree.redblack.RedBlackTree.RED;
+
 
 /*
  * O(Log n)
@@ -12,21 +14,26 @@ class RedBlackTopDownInsertion<E extends Comparable<? super E>> extends AbsRedBl
     @Override
     protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         RedBlackTree<E> rbt = getBt();
+        RedBlackTreeNode<E> node = (RedBlackTreeNode<E>) newNode;
 
         // 新節點必為 RED
-        rbt.putColor(newNode, RED);
+        rbt.setColor(node, RED);
 
         // Second Continuous check.
-        checkContinuousRedNode(newNode);
+        checkContinuousRedNode(node);
+
+        rbt.setColor(rbt.getRoot(), BLACK);
     }
 
     @Override
     protected boolean handleNode(BinTreeNode<E> node) {
-        BinTreeNode<E> lChild = node.getLeftChild();
-        BinTreeNode<E> rChild = node.getRightChild();
+        // 搜尋路徑中，若遇兩子點是 RED 則先做 color change
+        RedBlackTreeNode<E> target = (RedBlackTreeNode<E>) node;
+        RedBlackTreeNode<E> lChild = target.getLeftChild();
+        RedBlackTreeNode<E> rChild = target.getRightChild();
 
-        // 搜尋過程中，若遇兩子點是 RED 則先做 color change
-        checkNeedColorChange(node, lChild, rChild);
+        if (isNeedColorChange(lChild, rChild))
+            changeColorWithRedNodeCheck(target, lChild, rChild);
 
         return true;
     }

@@ -6,7 +6,7 @@ import com.jszheng.base.complete.LinearSearch;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.search.SearchAlgo;
 
-public class SimpleBalancedTree<E> extends BtDecorator<E> {
+public class SimpleBalancedTree<E> extends BtDecorator<E, BinaryTree<E>> {
 
     public SimpleBalancedTree(BinaryTree<E> component) {
         super(component);

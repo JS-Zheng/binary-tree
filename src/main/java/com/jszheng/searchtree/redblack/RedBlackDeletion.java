@@ -8,8 +8,9 @@ import com.jszheng.searchtree.rotation.LlRotation;
 import com.jszheng.searchtree.rotation.RotationState;
 import com.jszheng.searchtree.rotation.RrRotation;
 
-import static com.jszheng.searchtree.redblack.RedBlackTree.Color.BLACK;
-import static com.jszheng.searchtree.redblack.RedBlackTree.Color.RED;
+import static com.jszheng.searchtree.redblack.RedBlackTree.BLACK;
+import static com.jszheng.searchtree.redblack.RedBlackTree.RED;
+
 
 class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
 
@@ -23,40 +24,38 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
     protected void fixAfterDeletion(BinTreeNode<E> parent, BinTreeNode<E> sibling, BinTreeNode<E> targetNode, boolean isTargetLeft, int degree) {
         RedBlackTree<E> rbt = getBt();
 
-        RedBlackTree.Color targetColor = rbt.colorOf(targetNode);
+        boolean targetColor = rbt.colorOf((RedBlackTreeNode<E>) targetNode);
 
         if (Env.debug)
             System.out.println("[delete] actually delete " + rbt.getNodeString(targetNode));
 
         if (targetColor == BLACK) {
             if (degree == 1)
-                handleDegreeOne(parent, isTargetLeft);
+                handleDegreeOne((RedBlackTreeNode<E>) parent, isTargetLeft);
             else
-                handleLeaf(sibling);
+                handleLeaf((RedBlackTreeNode<E>) sibling);
         }
-
-        rbt.removeColor(targetNode);
     }
 
-    private void handleDegreeOne(BinTreeNode<E> parent, boolean isTargetLeft) {
+    private void handleDegreeOne(RedBlackTreeNode<E> parent, boolean isTargetLeft) {
         RedBlackTree<E> rbt = getBt();
 
-        BinTreeNode<E> currentNode;
+        RedBlackTreeNode<E> currentNode;
         if (parent == null)
-            currentNode = rbt.getRoot();
+            currentNode = (RedBlackTreeNode<E>) rbt.getRoot();
         else
             currentNode = isTargetLeft ? parent.getLeftChild() : parent.getRightChild();
 
-        rbt.putColor(currentNode, BLACK);
+        rbt.setColor(currentNode, BLACK);
     }
 
-    private void handleLeaf(BinTreeNode<E> sibling) {
+    private void handleLeaf(RedBlackTreeNode<E> sibling) {
         if (sibling == null) return;
         RedBlackTree<E> rbt = getBt();
 
         while (true) {
-            RedBlackTree.Color siblingColor = rbt.colorOf(sibling);
-            BinTreeNode<E> parent = sibling.getParent();
+            boolean siblingColor = rbt.colorOf(sibling);
+            RedBlackTreeNode<E> parent = sibling.getParent();
             boolean isSiblingLeft = sibling.isLeftChild();
 
             // Case 1: x’s sibling w is red
@@ -68,8 +67,8 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
                             rbt.getNodeString(parent), rbt.getNodeString(sibling));
                 }
 
-                rbt.putColor(sibling, BLACK); // 兄弟變黑
-                rbt.putColor(parent, RED); // 父親變紅
+                rbt.setColor(sibling, BLACK); // 兄弟變黑
+                rbt.setColor(parent, RED); // 父親變紅
 
                 RotationState state = isSiblingLeft ? new LlRotation() : new RrRotation();
                 state.rotate(rbt, parent); // 父親旋轉 -> 提升 sibling
@@ -83,10 +82,10 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
                 continue;
             }
 
-            BinTreeNode<E> siblingLChild = sibling.getLeftChild();
-            BinTreeNode<E> siblingRChild = sibling.getRightChild();
-            RedBlackTree.Color siblingLColor = rbt.colorOf(siblingLChild);
-            RedBlackTree.Color siblingRColor = rbt.colorOf(siblingRChild);
+            RedBlackTreeNode<E> siblingLChild = sibling.getLeftChild();
+            RedBlackTreeNode<E> siblingRChild = sibling.getRightChild();
+            boolean siblingLColor = rbt.colorOf(siblingLChild);
+            boolean siblingRColor = rbt.colorOf(siblingRChild);
 
             // Case 2: x’s sibling w is black, and both of w’s children are black
             if (siblingLColor == BLACK && siblingRColor == BLACK) {
@@ -97,14 +96,14 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
                             rbt.getNodeString(sibling));
                 }
 
-                rbt.putColor(sibling, RED); // 兄弟變紅
+                rbt.setColor(sibling, RED); // 兄弟變紅
 
                 if (rbt.colorOf(parent) == RED || rbt.getRoot() == parent) {
                     if (Env.debug)
                         System.out.printf("[delete] make parent %s => BLACK and terminate while-loop\n",
                                 rbt.getNodeString(parent));
 
-                    rbt.putColor(parent, BLACK); // 父親變黑
+                    rbt.setColor(parent, BLACK); // 父親變黑
                     return;
                 } else {
                     // CLRS do this "x = x.p", rather than "w = x.p.p.right"
@@ -115,10 +114,10 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
                 }
             }
 
-            BinTreeNode<E> outsideChild = isSiblingLeft ? siblingLChild : siblingRChild;
-            BinTreeNode<E> interiorChild = isSiblingLeft ? siblingRChild : siblingLChild;
-            RedBlackTree.Color outsideChildColor = rbt.colorOf(outsideChild);
-            RedBlackTree.Color interiorChildColor = rbt.colorOf(interiorChild);
+            RedBlackTreeNode<E> outsideChild = isSiblingLeft ? siblingLChild : siblingRChild;
+            RedBlackTreeNode<E> interiorChild = isSiblingLeft ? siblingRChild : siblingLChild;
+            boolean outsideChildColor = rbt.colorOf(outsideChild);
+            boolean interiorChildColor = rbt.colorOf(interiorChild);
 
             // Case 3: x’s sibling w is black, w’s interior child is red, and w’s outside child is black
             if (outsideChildColor == BLACK && interiorChildColor == RED) {
@@ -128,8 +127,8 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
                     System.out.printf("[delete] make interiorChild %s => BLACK, sibling %s => RED\n",
                             rbt.getNodeString(interiorChild), rbt.getNodeString(sibling));
                 }
-                rbt.putColor(interiorChild, BLACK); // 內子變黑
-                rbt.putColor(sibling, RED); // 兄弟變紅
+                rbt.setColor(interiorChild, BLACK); // 內子變黑
+                rbt.setColor(sibling, RED); // 兄弟變紅
 
                 RotationState state = isSiblingLeft ? new RrRotation() : new LlRotation();
                 state.rotate(rbt, sibling); // 兄弟旋轉
@@ -150,9 +149,9 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
                     System.out.printf("[delete] make sibling color %s same as parent => %s, and outsideChild %s => BLACK\n",
                             rbt.getNodeString(sibling), rbt.getNodeString(parent), rbt.getNodeString(outsideChild));
                 }
-                rbt.putColor(sibling, rbt.colorOf(parent)); // 兄弟變為父親的顏色
-                rbt.putColor(parent, BLACK); // 父親變黑
-                rbt.putColor(outsideChild, BLACK); // 外子變黑
+                rbt.setColor(sibling, rbt.colorOf(parent)); // 兄弟變為父親的顏色
+                rbt.setColor(parent, BLACK); // 父親變黑
+                rbt.setColor(outsideChild, BLACK); // 外子變黑
 
                 RotationState state = isSiblingLeft ? new LlRotation() : new RrRotation();
                 state.rotate(rbt, parent); // 父親旋轉

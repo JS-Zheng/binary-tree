@@ -1,17 +1,12 @@
 package com.jszheng.searchtree.redblack;
 
-import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstDeletion;
 import com.jszheng.searchtree.SelfBalancingBst;
 import com.jszheng.searchtree.rotation.RotateListener;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static com.jszheng.Env.osName;
-import static com.jszheng.searchtree.redblack.RedBlackTree.Color.BLACK;
 
 /**
  * 1. Root always BLACK.
@@ -23,32 +18,74 @@ import static com.jszheng.searchtree.redblack.RedBlackTree.Color.BLACK;
  * <p>
  * Created by zhengzhongsheng on 2017/10/24.
  */
-public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancingBst<E> implements RotateListener {
+public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancingBst<E, RedBlackBase<E>> implements RotateListener {
+
+    public static final boolean RED = false;
+    public static final boolean BLACK = true;
 
     // for dev
     public int rotateLeftCount = 0;
     public int rotateRightCount = 0;
     public int colorChangeCount = 0;
-    private Map<BinTreeNode<E>, Color> colors = new HashMap<>();
 
-    public RedBlackTree(BinaryTree<E> component) {
+    public RedBlackTree(RedBlackBase<E> component) {
         super(component);
     }
 
     // use 'public access modifier' to facilitate testing
-    public Color colorOf(BinTreeNode<E> node) {
+    public boolean colorOf(RedBlackTreeNode<E> node) {
         // BLACK of default value is prepared for External Node.
-        return colors.getOrDefault(node, BLACK);
+        return node == null ? BLACK : node.color;
     }
 
     @Override
-    public BinaryTree<E> copy(boolean deep) {
-        return new RedBlackTree<>(component.copy(deep));
+    public RedBlackTree<E> copy(boolean deep) {
+        RedBlackBase<E> base = (RedBlackBase<E>) component.copy(deep);
+        return new RedBlackTree<>(base);
+    }
+
+    @Override
+    public String getNodeString(BinTreeNode<E> node) {
+        E data = node != null ? node.getData() : null;
+        if (osName.contains("Windows"))
+            return data != null ? data.toString() +
+                    "(" + (colorOf((RedBlackTreeNode<E>) node) == BLACK ? "黑" : "紅") + ")" : " ";
+        else
+            return data != null ? data.toString() +
+                    "(" + (colorOf((RedBlackTreeNode<E>) node) == BLACK ? "⚫" : "🔴") + ")" : " "; // Keep one space to mock null.
+    }
+
+    @SafeVarargs
+    public final void insertByTopDown(E... data) {
+        InsertionAlgo<E> algo = new RedBlackTopDownInsertion<>();
+        insertDataArr(algo, data);
     }
 
     @Override
     public RedBlackTree<E> newTree() {
-        return new RedBlackTree<>(component.newTree());
+        RedBlackBase<E> base = (RedBlackBase<E>) component.newTree();
+        return new RedBlackTree<>(base);
+    }
+
+    @Override
+    public void onRotateLeft() {
+        rotateLeftCount++;
+    }
+
+    @Override
+    public void onRotateRight() {
+        rotateRightCount++;
+    }
+
+    @Override
+    public RedBlackTreeNode<E> getRoot() {
+        return (RedBlackTreeNode<E>) super.getRoot();
+    }
+
+    @Override
+    public void setRoot(E data) {
+        super.setRoot(data);
+        setColor(getRoot(), BLACK);
     }
 
     @Override
@@ -65,48 +102,8 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
         return insertionAlgo;
     }
 
-    @Override
-    public String getNodeString(BinTreeNode<E> node) {
-        E data = node != null ? node.getData() : null;
-        if (osName.contains("Windows"))
-            return data != null ? data.toString() +
-                    "(" + (colorOf(node) == BLACK ? "黑" : "紅") + ")" : " ";
-        else
-            return data != null ? data.toString() +
-                    "(" + (colorOf(node) == BLACK ? "⚫" : "🔴") + ")" : " "; // Keep one space to mock null.
-    }
-
-    @SafeVarargs
-    public final void insertByTopDown(E... data) {
-        InsertionAlgo<E> algo = new RedBlackTopDownInsertion<>();
-        insertDataArr(algo, data);
-    }
-
-    @Override
-    public void onRotateLeft() {
-        rotateLeftCount++;
-    }
-
-    @Override
-    public void onRotateRight() {
-        rotateRightCount++;
-    }
-
-    @Override
-    public void setRoot(E data) {
-        super.setRoot(data);
-        colors.put(getRoot(), BLACK);
-    }
-
-    void putColor(BinTreeNode<E> node, Color color) {
-        colors.put(node, color);
-    }
-
-    void removeColor(BinTreeNode<E> node) {
-        colors.remove(node);
-    }
-
-    public enum Color {
-        RED, BLACK
+    void setColor(RedBlackTreeNode<E> node, boolean color) {
+        if (node != null)
+            node.color = color;
     }
 }

@@ -20,7 +20,7 @@ public class HuffmanInsertion implements InsertionAlgo<String> {
         List<HuffmanTreeNode> leaves = new ArrayList<>();
 
         for (Map.Entry<Character, Integer> entry : map.entrySet()) {
-            HuffmanTreeNode node = huffman.newNode();
+            HuffmanTreeNode node = (HuffmanTreeNode) huffman.newNode();
             node.setData(entry.getKey().toString());
             node.setWeight(entry.getValue());
 

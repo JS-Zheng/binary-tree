@@ -2,6 +2,7 @@ package com.jszheng.searchtree;
 
 import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
+import com.jszheng.base.LinkedBinaryTree;
 import com.jszheng.deletion.DeletionAlgo;
 import com.jszheng.node.BinTreeNode;
 import com.jszheng.search.SearchResult;
@@ -63,7 +64,7 @@ public class BstDeletion<E extends Comparable<? super E>> implements DeletionAlg
         BinTreeNode<E> child = replaceByLMax ? targetNode.getLeftChild() : targetNode.getRightChild();
         // Use tmp tree to find extrema conveniently
         // Use newGeneralBst() to prevent the additional amortized operation after searching (e.g., SplayTree)
-        BinarySearchTree<E> subTree = bst.newGeneralBst();
+        BinarySearchTree<E> subTree = createGeneralBst();
         subTree.setRoot(child);
 
         // lChild Max or rChild Min
@@ -87,6 +88,11 @@ public class BstDeletion<E extends Comparable<? super E>> implements DeletionAlg
 
     void setReplaceByLMax(boolean replaceByLMax) {
         this.replaceByLMax = replaceByLMax;
+    }
+
+    private BinarySearchTree<E> createGeneralBst() {
+        BinaryTree<E> base = new LinkedBinaryTree<>();
+        return new BinarySearchTreeImpl<>(base);
     }
 
     // Degree 0

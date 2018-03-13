@@ -72,14 +72,14 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     @Override
     public void setRoot(E data) {
         if (root == null)
-            root = new LinkedTreeNode<>();
+            root = newNode();
 
         root.setData(data);
     }
 
     @Override
     public void setDataByArr(E[] data) {
-        root = new LinkedTreeNode<>();
+        root = newNode();
         root.setDataByArr(data);
     }
 

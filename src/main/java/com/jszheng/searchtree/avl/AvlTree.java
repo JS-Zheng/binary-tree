@@ -11,7 +11,7 @@ import com.jszheng.util.FibonacciNumber;
 
 import java.math.BigInteger;
 
-public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E> {
+public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E, BinaryTree<E>> {
 
     public AvlTree(BinaryTree<E> component) {
         super(component);
@@ -20,25 +20,6 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
     @Override
     public BinaryTree<E> copy(boolean deep) {
         return new AvlTree<>(component.copy(deep));
-    }
-
-    @Override
-    public AvlTree<E> newTree() {
-        return new AvlTree<>(component.newTree());
-    }
-
-    @Override
-    protected BstDeletion<E> createDeletionAlgo() {
-        if (deletionAlgo == null)
-            deletionAlgo = new AvlDeletion<>();
-        return deletionAlgo;
-    }
-
-    @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        if (insertionAlgo == null)
-            insertionAlgo = new AvlInsertion<>();
-        return insertionAlgo;
     }
 
     public int getBalanceFactor(BinTreeNode<E> node) {
@@ -73,6 +54,25 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
         E data = node != null ? node.getData() : null;
         int bf = getBalanceFactor(node);
         return data != null ? data.toString() + (bf == 0 ? "" : "(" + bf + ")") : " ";
+    }
+
+    @Override
+    public AvlTree<E> newTree() {
+        return new AvlTree<>(component.newTree());
+    }
+
+    @Override
+    protected BstDeletion<E> createDeletionAlgo() {
+        if (deletionAlgo == null)
+            deletionAlgo = new AvlDeletion<>();
+        return deletionAlgo;
+    }
+
+    @Override
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        if (insertionAlgo == null)
+            insertionAlgo = new AvlInsertion<>();
+        return insertionAlgo;
     }
 
     BinTreeNode<E> getHigherChild(BinTreeNode<E> parent) {

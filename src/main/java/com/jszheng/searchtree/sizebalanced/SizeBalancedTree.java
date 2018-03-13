@@ -8,7 +8,7 @@ import com.jszheng.searchtree.SelfBalancingBst;
 import com.jszheng.searchtree.rotation.LlRotation;
 import com.jszheng.searchtree.rotation.RrRotation;
 
-public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalancingBst<E> {
+public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalancingBst<E, BinaryTree<E>> {
 
     public SizeBalancedTree(BinaryTree<E> component) {
         super(component);
@@ -20,22 +20,15 @@ public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalan
     }
 
     @Override
-    public SizeBalancedTree<E> newTree() {
-        return new SizeBalancedTree<>(component.newTree());
-    }
-
-    @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        if (insertionAlgo == null)
-            insertionAlgo = new SbtInsertion<>();
-        return insertionAlgo;
-    }
-
-    @Override
     public String getNodeString(BinTreeNode<E> node) {
         Object data = node != null ? node.getData() : null;
         return data != null ? node.getData() + "(" + size(node) + ")" :
                 (getRoot() == node ? "⊙" : " ");
+    }
+
+    @Override
+    public SizeBalancedTree<E> newTree() {
+        return new SizeBalancedTree<>(component.newTree());
     }
 
     public BinTreeNode<E> selectKth(int k) {
@@ -56,6 +49,13 @@ public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalan
         }
 
         return null;
+    }
+
+    @Override
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        if (insertionAlgo == null)
+            insertionAlgo = new SbtInsertion<>();
+        return insertionAlgo;
     }
 
     void maintain(BinTreeNode<E> node, boolean checkLGrandSon) {
