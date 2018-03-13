@@ -2,7 +2,7 @@ package com.jszheng;
 
 public class Env {
 
-    public static final boolean dev = true;
+    public static final boolean dev = false;
     public final static String osName = System.getProperty("os.name");
     final static String COMPLETE_BINARY_TREE = "完整二元樹";
     final static String SIMPLE_BALANCED_TREE = "簡單平衡樹";
