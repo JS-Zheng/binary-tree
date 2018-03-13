@@ -5,7 +5,7 @@ import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BtDecorator;
 import com.jszheng.node.BinTreeNode;
 
-public abstract class AbstractHeap<E extends Comparable<? super E>> extends BtDecorator<E> implements Heap<E, BinTreeNode<E>> {
+public abstract class AbstractHeap<E extends Comparable<? super E>> extends BtDecorator<E, BinaryTree<E>> implements Heap<E, BinTreeNode<E>> {
 
     protected AbstractHeap(BinaryTree<E> component) {
         super(component);

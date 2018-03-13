@@ -1,6 +1,6 @@
 package com.jszheng.searchtree;
 
-public final class BstManipulator extends AbstractBstManipulator<BinarySearchTree> {
+public final class BstManipulator extends AbstractBstManipulator<AbstractBst> {
 
     public BstManipulator(Class dataType) {
         super(dataType);
@@ -15,7 +15,7 @@ public final class BstManipulator extends AbstractBstManipulator<BinarySearchTre
     }
 
     @Override
-    protected BinarySearchTree createTree() {
-        return new BinarySearchTree<>(baseBt());
+    protected AbstractBst createTree() {
+        return new BinarySearchTreeImpl<>(baseBt());
     }
 }

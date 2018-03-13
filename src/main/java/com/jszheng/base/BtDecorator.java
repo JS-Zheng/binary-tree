@@ -5,11 +5,11 @@ import com.jszheng.traversal.TraversalNodeHandler;
 
 import java.util.List;
 
-public abstract class BtDecorator<E> extends AbstractBinaryTree<E> {
+public abstract class BtDecorator<E, Base extends BinaryTree<E>> extends AbstractBinaryTree<E> {
 
-    protected BinaryTree<E> component;
+    protected Base component;
 
-    public BtDecorator(BinaryTree<E> component) {
+    public BtDecorator(Base component) {
         this.component = component;
     }
 

@@ -11,13 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-public class HuffmanTree extends BtDecorator<String> {
+public class HuffmanTree extends BtDecorator<String, HuffmanBase> {
 
     private Map<Character, String> codewordMap = new HashMap<>();
     private Map<String, Character> deCodewordMap = new HashMap<>();
     private String data;
 
-    public HuffmanTree(BinaryTree<String> component) {
+    public HuffmanTree(HuffmanBase component) {
         super(component);
     }
 
@@ -112,11 +112,6 @@ public class HuffmanTree extends BtDecorator<String> {
         return null;
     }
 
-    @Override
-    public HuffmanTreeNode newNode() {
-        return new HuffmanTreeNode();
-    }
-
     void clearCodewordMap() {
         codewordMap.clear();
     }
@@ -127,7 +122,7 @@ public class HuffmanTree extends BtDecorator<String> {
      */
     void huffmanAlgo(PriorityQueue<HuffmanTreeNode> pq, int count) {
         for (int i = 0; i < count; i++) {
-            HuffmanTreeNode newNode = newNode();
+            HuffmanTreeNode newNode = (HuffmanTreeNode) newNode();
             HuffmanTreeNode lChild = pq.poll();
             HuffmanTreeNode rChild = pq.poll();
 

@@ -9,7 +9,7 @@ import com.jszheng.searchtree.rotation.LlRotation;
 import com.jszheng.searchtree.rotation.RotationState;
 import com.jszheng.searchtree.rotation.RrRotation;
 
-public class SplayTree<E extends Comparable<? super E>> extends SelfBalancingBst<E> {
+public class SplayTree<E extends Comparable<? super E>> extends SelfBalancingBst<E, BinaryTree<E>> {
 
     public SplayTree(BinaryTree<E> component) {
         super(component);
@@ -18,25 +18,6 @@ public class SplayTree<E extends Comparable<? super E>> extends SelfBalancingBst
     @Override
     public BinaryTree<E> copy(boolean deep) {
         return new SplayTree<>(component.copy(deep));
-    }
-
-    @Override
-    public SplayTree<E> newTree() {
-        return new SplayTree<>(component.newTree());
-    }
-
-    @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        if (insertionAlgo == null)
-            insertionAlgo = new SplayInsertion<>();
-        return insertionAlgo;
-    }
-
-    @Override
-    protected BstSearch<E> createSearchAlgo() {
-        if (searchAlgo == null)
-            searchAlgo = new SplaySearch<>();
-        return searchAlgo;
     }
 
     public void fixAfterOperation(BinTreeNode<E> targetNode) {
@@ -64,5 +45,24 @@ public class SplayTree<E extends Comparable<? super E>> extends SelfBalancingBst
 
             state.rotate(this, rotateTarget);
         }
+    }
+
+    @Override
+    public SplayTree<E> newTree() {
+        return new SplayTree<>(component.newTree());
+    }
+
+    @Override
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        if (insertionAlgo == null)
+            insertionAlgo = new SplayInsertion<>();
+        return insertionAlgo;
+    }
+
+    @Override
+    protected BstSearch<E> createSearchAlgo() {
+        if (searchAlgo == null)
+            searchAlgo = new SplaySearch<>();
+        return searchAlgo;
     }
 }

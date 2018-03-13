@@ -4,7 +4,7 @@ import com.jszheng.base.BinaryTree;
 import com.jszheng.manipulator.BinTreeManipulator;
 import com.jszheng.search.SearchResult;
 
-public abstract class AbstractBstManipulator<T extends BinarySearchTree> extends BinTreeManipulator<T> {
+public abstract class AbstractBstManipulator<T extends AbstractBst> extends BinTreeManipulator<T> {
 
     public AbstractBstManipulator(Class dataType) {
         super(dataType);
@@ -28,7 +28,7 @@ public abstract class AbstractBstManipulator<T extends BinarySearchTree> extends
     }
 
     private void searchExtrema(BinaryTree bt, boolean searchMax) {
-        BinarySearchTree bst = ((BinarySearchTree) bt);
+        AbstractBst bst = ((AbstractBst) bt);
         SearchResult result = searchMax ? bst.searchMax() : bst.searchMin();
 
         if (result != null && result.getNode() != null)
