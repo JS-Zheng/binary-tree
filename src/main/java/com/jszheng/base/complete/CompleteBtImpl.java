@@ -7,7 +7,7 @@ import com.jszheng.search.SearchAlgo;
 
 public class CompleteBtImpl<E> extends BtDecorator<E, BinaryTree<E>> implements CompleteBinaryTree<E> {
 
-    public CompleteBtImpl(BinaryTree<E> component) {
+    CompleteBtImpl(BinaryTree<E> component) {
         super(component);
     }
 

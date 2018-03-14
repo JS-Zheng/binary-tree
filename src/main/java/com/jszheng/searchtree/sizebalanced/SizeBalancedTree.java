@@ -4,38 +4,50 @@ import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
+import com.jszheng.searchtree.BstDeletion;
 import com.jszheng.searchtree.SelfBalancingBst;
-import com.jszheng.searchtree.rotation.LlRotation;
-import com.jszheng.searchtree.rotation.RrRotation;
+import com.jszheng.searchtree.rotation.RotateListener;
 
-public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalancingBst<E, BinaryTree<E>> {
+public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalancingBst<E, SizeBalancedBase<E>> implements RotateListener<E> {
 
-    public SizeBalancedTree(BinaryTree<E> component) {
+    public SizeBalancedTree(SizeBalancedBase<E> component) {
         super(component);
     }
 
     @Override
     public BinaryTree<E> copy(boolean deep) {
-        return new SizeBalancedTree<>(component.copy(deep));
+        SizeBalancedBase<E> base = (SizeBalancedBase<E>) component.copy(deep);
+        return new SizeBalancedTree<>(base);
     }
 
     @Override
     public String getNodeString(BinTreeNode<E> node) {
         Object data = node != null ? node.getData() : null;
-        return data != null ? node.getData() + "(" + size(node) + ")" :
+        return data != null ? node.getData() + "(" + sizeOf((SbTreeNode<E>) node) + ")" :
                 (getRoot() == node ? "⊙" : " ");
     }
 
     @Override
     public SizeBalancedTree<E> newTree() {
-        return new SizeBalancedTree<>(component.newTree());
+        SizeBalancedBase<E> base = component.newTree();
+        return new SizeBalancedTree<>(base);
+    }
+
+    @Override
+    public void onRotateLeft(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> lChild) {
+        onRotate(parent, pivot, lChild);
+    }
+
+    @Override
+    public void onRotateRight(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> rChild) {
+        onRotate(parent, pivot, rChild);
     }
 
     public BinTreeNode<E> selectKth(int k) {
-        BinTreeNode<E> target = getRoot();
+        SbTreeNode<E> target = (SbTreeNode<E>) getRoot();
 
         while (target != null) {
-            BinTreeNode<E> lChild = target.getLeftChild();
+            SbTreeNode<E> lChild = target.getLeftChild();
             int lChildSize = sizeOf(lChild);
 
             int rankOfTarget = lChildSize + 1;
@@ -52,16 +64,23 @@ public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalan
     }
 
     @Override
+    protected BstDeletion<E> createDeletionAlgo() {
+        if (deletionAlgo == null)
+            deletionAlgo = new SbtDeletion<>();
+        return deletionAlgo;
+    }
+
+    @Override
     protected InsertionAlgo<E> createInsertionAlgo() {
         if (insertionAlgo == null)
             insertionAlgo = new SbtInsertion<>();
         return insertionAlgo;
     }
 
-    void maintain(BinTreeNode<E> node, boolean checkLGrandSon) {
+    void maintain(SbTreeNode<E> node, boolean checkLGrandSon) {
         if (node == null) return;
-        BinTreeNode<E> lChild = node.getLeftChild();
-        BinTreeNode<E> rChild = node.getRightChild();
+        SbTreeNode<E> lChild = node.getLeftChild();
+        SbTreeNode<E> rChild = node.getRightChild();
         int lChildSize = sizeOf(lChild);
         int rChildSize = sizeOf(rChild);
 
@@ -70,27 +89,27 @@ public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalan
         if (!basicCondition) return;
 
         if (checkLGrandSon) {
-            if (sizeOf(lChild.getLeftChild()) > rChildSize) {
-                // case 1: s[left[left[t]]>s[right[t]]
+            if (rChildSize < sizeOf(lChild.getLeftChild())) {
+                // case 1: s[right[t]] < s[left[left[t]]
                 if (Env.debug) System.out.println("case 1 -- target: " + node.getData());
-                new LlRotation().rotate(this, node);
-            } else if (sizeOf(lChild.getRightChild()) > rChildSize) {
-                // case 2: s[right[left[t]]>s[right[t]]
+                createLlRotate().rotate(this, node);
+            } else if (rChildSize < sizeOf(lChild.getRightChild())) {
+                // case 2: s[right[t]] < s[right[left[t]]
                 if (Env.debug) System.out.println("case 2 -- target: " + node.getData());
-                new RrRotation().rotate(this, lChild);
-                new LlRotation().rotate(this, node);
+
+                createLrRotate().rotate(this, node);
             } else
                 return;
         } else {
-            if (sizeOf(rChild.getRightChild()) > lChildSize) {
-                // case 3: s[right[right[t]]>s[left[t]]
+            if (lChildSize < sizeOf(rChild.getRightChild())) {
+                // case 3: s[left[t]] < s[right[right[t]]
                 if (Env.debug) System.out.println("case 3 -- target: " + node.getData());
-                new RrRotation().rotate(this, node);
-            } else if (sizeOf(rChild.getLeftChild()) > lChildSize) {
-                // case 4: s[left[right[t]]>s[left[t]]
+                createRrRotate().rotate(this, node);
+            } else if (lChildSize < sizeOf(rChild.getLeftChild())) {
+                // case 4: s[left[t]] < s[left[right[t]]
                 if (Env.debug) System.out.println("case 4 -- target: " + node.getData());
-                new LlRotation().rotate(this, rChild);
-                new RrRotation().rotate(this, node);
+
+                createRlRotate().rotate(this, node);
             } else
                 return;
         }
@@ -101,8 +120,20 @@ public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalan
         maintain(node, false);       //maintain the whole tree
     }
 
-    // witchcraft (Omit the maintenance of size)
-    private int sizeOf(BinTreeNode<E> node) {
-        return size(node);
+    private void onRotate(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> child) {
+        SbTreeNode<E> sbParent = (SbTreeNode<E>) parent;
+        SbTreeNode<E> sbPivot = (SbTreeNode<E>) pivot;
+
+        int sizeOfParent = sbParent.size;
+        int sizeOfPivot = sbPivot.size;
+        int sizeOfChild = child != null ? ((SbTreeNode<E>) child).size : 0;
+
+        sbPivot.size = sizeOfParent;
+        sbParent.size = sizeOfParent - sizeOfPivot + sizeOfChild;
+    }
+
+    private int sizeOf(SbTreeNode<E> node) {
+//        return size(node);
+        return node != null ? node.size : 0;
     }
 }

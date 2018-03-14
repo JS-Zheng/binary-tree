@@ -18,7 +18,7 @@ import static com.jszheng.Env.osName;
  * <p>
  * Created by zhengzhongsheng on 2017/10/24.
  */
-public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancingBst<E, RedBlackBase<E>> implements RotateListener {
+public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancingBst<E, RedBlackBase<E>> implements RotateListener<E> {
 
     public static final boolean RED = false;
     public static final boolean BLACK = true;
@@ -68,12 +68,12 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
     }
 
     @Override
-    public void onRotateLeft() {
+    public void onRotateLeft(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> lChild) {
         rotateLeftCount++;
     }
 
     @Override
-    public void onRotateRight() {
+    public void onRotateRight(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> rChild) {
         rotateRightCount++;
     }
 

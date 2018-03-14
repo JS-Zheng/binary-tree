@@ -1,8 +1,10 @@
 package com.jszheng.searchtree.rotation;
 
-public interface RotateListener {
+import com.jszheng.node.BinTreeNode;
 
-    void onRotateLeft();
+public interface RotateListener<E> {
 
-    void onRotateRight();
+    void onRotateLeft(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> lChild);
+
+    void onRotateRight(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> rChild);
 }

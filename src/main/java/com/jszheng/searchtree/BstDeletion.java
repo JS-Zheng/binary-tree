@@ -2,9 +2,9 @@ package com.jszheng.searchtree;
 
 import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
-import com.jszheng.base.LinkedBinaryTree;
 import com.jszheng.deletion.DeletionAlgo;
 import com.jszheng.node.BinTreeNode;
+import com.jszheng.search.SearchAlgo;
 import com.jszheng.search.SearchResult;
 
 public class BstDeletion<E extends Comparable<? super E>> implements DeletionAlgo<E> {
@@ -22,13 +22,21 @@ public class BstDeletion<E extends Comparable<? super E>> implements DeletionAlg
 
         this.bst = (BinarySearchTree<E>) bt;
 
-        BinTreeNode<E> targetNode = bst.search(data);
+        SearchAlgo<E> algo = createSearchAlgo();
+        SearchResult<E> result = algo.search(bst, data);
+        BinTreeNode<E> targetNode;
 
-        return (targetNode != null) && delete(bst, targetNode);
+        return result != null && ((targetNode = result.getNode()) != null)
+                && delete(bst, targetNode);
+
     }
 
     protected BinarySearchTree<E> getBt() {
         return this.bst;
+    }
+
+    protected SearchAlgo<E> createSearchAlgo() {
+        return new BstSearch<>();
     }
 
     protected boolean delete(BinarySearchTree<E> bst, BinTreeNode<E> targetNode) {
@@ -62,20 +70,17 @@ public class BstDeletion<E extends Comparable<? super E>> implements DeletionAlg
     // Degree 2 (just replace data)
     protected void deleteNodeByExtremaChild(BinarySearchTree<E> bst, BinTreeNode<E> targetNode, boolean replaceByLMax) {
         BinTreeNode<E> child = replaceByLMax ? targetNode.getLeftChild() : targetNode.getRightChild();
-        // Use tmp tree to find extrema conveniently
-        // Use newGeneralBst() to prevent the additional amortized operation after searching (e.g., SplayTree)
-        BinarySearchTree<E> subTree = createGeneralBst();
-        subTree.setRoot(child);
 
-        // lChild Max or rChild Min
-        SearchResult<E> result = replaceByLMax ? subTree.searchMax() : subTree.searchMin();
+        BinTreeNode<E> lastChild = null;
 
-        BinTreeNode<E> extremaChild;
-        if (result == null || (extremaChild = result.getNode()) == null)
-            return;
+        while (child != null) {
+            lastChild = child;
+            child = replaceByLMax ? child.getRightChild() : child.getLeftChild();
+        }
 
-        delete(subTree, extremaChild);
-        E extremaChildData = extremaChild.getData();
+        delete(bst, lastChild);
+        assert lastChild != null;
+        E extremaChildData = lastChild.getData();
         targetNode.setData(extremaChildData);
         if (Env.debug) {
             System.out.println("[delete] replace node data with " + extremaChildData);
@@ -88,11 +93,6 @@ public class BstDeletion<E extends Comparable<? super E>> implements DeletionAlg
 
     void setReplaceByLMax(boolean replaceByLMax) {
         this.replaceByLMax = replaceByLMax;
-    }
-
-    private BinarySearchTree<E> createGeneralBst() {
-        BinaryTree<E> base = new LinkedBinaryTree<>();
-        return new BinarySearchTreeImpl<>(base);
     }
 
     // Degree 0

@@ -2,8 +2,8 @@ package com.jszheng.searchtree;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.AbstractInsertionAlgo;
-import com.jszheng.insertion.InsertionLocator;
-import com.jszheng.node.BinTreeNode;
+import com.jszheng.search.SearchAlgo;
+import com.jszheng.search.SearchResult;
 
 /*
  * O(Log n)
@@ -22,33 +22,9 @@ public class BstInsertion<E extends Comparable<? super E>> extends AbstractInser
     }
 
     @Override
-    public InsertionLocator<E> insertData(E data) {
-        int searchCount = 0;
-        boolean isLeft = false;
-        BinTreeNode<E> lastNode = null;
-        BinTreeNode<E> currentNode = getBt().getRoot();
-
-        while (currentNode != null) {
-            searchCount++;
-
-            if (!handleNode(currentNode))
-                return null;
-
-            int compareResult = data.compareTo(currentNode.getData());
-            lastNode = currentNode;
-
-            if (compareResult < 0) {
-                currentNode = currentNode.getLeftChild();
-                isLeft = true;
-            } else if (compareResult == 0)
-                return null;
-            else {
-                currentNode = currentNode.getRightChild();
-                isLeft = false;
-            }
-        }
-
-        return new InsertionLocator<>(isLeft, lastNode, searchCount);
+    protected final SearchResult<E> insertData(E data) {
+        SearchAlgo<E> algo = createSearchAlgo();
+        return algo.search(getBt(), data);
     }
 
     @Override
@@ -57,9 +33,9 @@ public class BstInsertion<E extends Comparable<? super E>> extends AbstractInser
         return defaultResult && data != null;
     }
 
-    // Handles each node in process of BST Comparing
-    protected boolean handleNode(BinTreeNode<E> node) {
-        // Default do nothing.
-        return true;
+    protected SearchAlgo<E> createSearchAlgo() {
+        return new BstSearch<>();
     }
+
+
 }

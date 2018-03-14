@@ -9,7 +9,7 @@ public abstract class BtDecorator<E, Base extends BinaryTree<E>> extends Abstrac
 
     protected Base component;
 
-    public BtDecorator(Base component) {
+    protected BtDecorator(Base component) {
         this.component = component;
     }
 

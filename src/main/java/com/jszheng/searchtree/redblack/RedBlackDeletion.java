@@ -4,9 +4,7 @@ import com.jszheng.Env;
 import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BinarySearchTree;
 import com.jszheng.searchtree.BstDeletion;
-import com.jszheng.searchtree.rotation.LlRotation;
 import com.jszheng.searchtree.rotation.RotationState;
-import com.jszheng.searchtree.rotation.RrRotation;
 
 import static com.jszheng.searchtree.redblack.RedBlackTree.BLACK;
 import static com.jszheng.searchtree.redblack.RedBlackTree.RED;
@@ -70,7 +68,7 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
                 rbt.setColor(sibling, BLACK); // 兄弟變黑
                 rbt.setColor(parent, RED); // 父親變紅
 
-                RotationState state = isSiblingLeft ? new LlRotation() : new RrRotation();
+                RotationState state = isSiblingLeft ? rbt.createLlRotate() : rbt.createRrRotate();
                 state.rotate(rbt, parent); // 父親旋轉 -> 提升 sibling
 
                 sibling = isSiblingLeft ? parent.getLeftChild() : parent.getRightChild();
@@ -130,7 +128,7 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
                 rbt.setColor(interiorChild, BLACK); // 內子變黑
                 rbt.setColor(sibling, RED); // 兄弟變紅
 
-                RotationState state = isSiblingLeft ? new RrRotation() : new LlRotation();
+                RotationState state = isSiblingLeft ? rbt.createRrRotate() : rbt.createLlRotate();
                 state.rotate(rbt, sibling); // 兄弟旋轉
 
                 // CLRS: w = isSiblingLeft ? x.p.left : x.p.right;
@@ -153,7 +151,7 @@ class RedBlackDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
                 rbt.setColor(parent, BLACK); // 父親變黑
                 rbt.setColor(outsideChild, BLACK); // 外子變黑
 
-                RotationState state = isSiblingLeft ? new LlRotation() : new RrRotation();
+                RotationState state = isSiblingLeft ? rbt.createLlRotate() : rbt.createRrRotate();
                 state.rotate(rbt, parent); // 父親旋轉
             }
 

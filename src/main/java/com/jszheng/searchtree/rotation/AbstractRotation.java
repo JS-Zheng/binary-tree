@@ -5,7 +5,7 @@ import com.jszheng.node.BinTreeNode;
 
 abstract class AbstractRotation implements RotationState {
 
-    RotateListener listener;
+    private RotateListener listener;
 
     @Override
     public <E> void rotate(BinaryTree<E> bt, BinTreeNode<E> parent) {
@@ -51,7 +51,7 @@ abstract class AbstractRotation implements RotationState {
          *
          */
     <E> void rotateLeft(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> lChild) {
-        if (listener != null) listener.onRotateLeft();
+        if (listener != null) listener.onRotateLeft(parent, pivot, lChild);
         parent.setRightChild(lChild);
         pivot.setLeftChild(parent);
     }
@@ -82,7 +82,7 @@ abstract class AbstractRotation implements RotationState {
      *
      */
     <E> void rotateRight(BinTreeNode<E> parent, BinTreeNode<E> pivot, BinTreeNode<E> rChild) {
-        if (listener != null) listener.onRotateRight();
+        if (listener != null) listener.onRotateRight(parent, pivot, rChild);
         parent.setLeftChild(rChild);
         pivot.setRightChild(parent);
     }

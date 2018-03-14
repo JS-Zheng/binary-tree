@@ -30,7 +30,7 @@ class RedBlackBottomUpInsertion<E extends Comparable<? super E>> extends AbsRedB
             }
 
             if (rotateContinuousRedNode(rbt, target, parent, grandParent))
-                target = parent;
+                target = parent; // set target to its parent, if DoubleRotation
         }
 
         rbt.setColor(rbt.getRoot(), BLACK);

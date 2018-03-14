@@ -2,8 +2,8 @@ package com.jszheng.base.simplebalanced;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.AbstractInsertionAlgo;
-import com.jszheng.insertion.InsertionLocator;
 import com.jszheng.node.BinTreeNode;
+import com.jszheng.search.SearchResult;
 
 /*
  * O(Log n)
@@ -11,7 +11,7 @@ import com.jszheng.node.BinTreeNode;
 class SimpleBalancedInsertion<E> extends AbstractInsertionAlgo<E> {
 
     @Override
-    protected InsertionLocator<E> insertData(E data) {
+    protected SearchResult<E> insertData(E data) {
         BinaryTree<E> bt = getBt();
         boolean isLeft = false;
         BinTreeNode<E> lastNode = null;
@@ -37,6 +37,6 @@ class SimpleBalancedInsertion<E> extends AbstractInsertionAlgo<E> {
             }
         }
 
-        return new InsertionLocator<>(isLeft, lastNode, searchCount);
+        return new SearchResult<>(isLeft, lastNode, searchCount);
     }
 }

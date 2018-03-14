@@ -1,5 +1,6 @@
 package com.jszheng.manipulator;
 
+import com.jszheng.Env;
 import com.jszheng.base.Tree;
 
 import static com.jszheng.util.ScannerUtil.*;
@@ -12,7 +13,8 @@ public abstract class TreeManipulator<TreeType extends Tree> extends Manipulator
     protected TreeManipulator(Class dataType) {
         this.dataType = dataType;
         tree = createTree();
-        comment();
+        if (Env.debug)
+            comment();
     }
 
     @Override

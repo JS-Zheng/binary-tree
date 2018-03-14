@@ -11,7 +11,7 @@ abstract class AbstractBst<E extends Comparable<? super E>, Base extends BinaryT
     protected BstDeletion<E> deletionAlgo;
     protected BstSearch<E> searchAlgo;
 
-    public AbstractBst(Base component) {
+    AbstractBst(Base component) {
         super(component);
     }
 

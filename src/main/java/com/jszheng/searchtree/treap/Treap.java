@@ -6,9 +6,7 @@ import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BinarySearchTree;
 import com.jszheng.searchtree.BstDeletion;
 import com.jszheng.searchtree.SelfBalancingBst;
-import com.jszheng.searchtree.rotation.LlRotation;
 import com.jszheng.searchtree.rotation.RotationState;
-import com.jszheng.searchtree.rotation.RrRotation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -114,7 +112,7 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E, 
 
             boolean rotateCondition = maxHeap ? compare > 0 : compare < 0;
             if (rotateCondition) {
-                RotationState state = node.isLeftChild() ? new LlRotation() : new RrRotation();
+                RotationState state = node.isLeftChild() ? createLlRotate() : createRrRotate();
                 state.rotate(this, parent);
             } else
                 break;

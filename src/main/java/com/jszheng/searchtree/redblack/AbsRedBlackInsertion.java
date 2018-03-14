@@ -80,7 +80,7 @@ abstract class AbsRedBlackInsertion<E extends Comparable<? super E>> extends Bst
 
     boolean rotateContinuousRedNode(RedBlackTree<E> rbt, RedBlackTreeNode<E> child, RedBlackTreeNode<E> parent, RedBlackTreeNode<E> grandParent) {
         boolean isDoubleRotate = child.isLeftChild() != parent.isLeftChild();
-        RotationState state = rbt.getRotationState(parent, child);
+        RotationState state = rbt.createRotationState(parent, child);
         state.rotate(rbt, grandParent);
 
         if (!isDoubleRotate) {

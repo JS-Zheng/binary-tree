@@ -21,30 +21,39 @@ public class BstSearch<E extends Comparable<? super E>> implements SearchAlgo<E>
 
         this.bt = bt;
 
-        SearchResult<E> result = new SearchResult<>();
         int searchCount = 0;
-
+        boolean nextLeft = false;
+        SearchResult<E> result;
+        BinTreeNode<E> lastNode = null;
 
         while (currentNode != null) {
             searchCount++;
+            lastNode = currentNode;
 
-            @SuppressWarnings({"rawtypes", "unchecked"})
+            if (!handleNode(currentNode))
+                return null;
+
             int compareResult = data.compareTo(currentNode.getData());
 
             if (compareResult < 0) {
+                onSmallerThan(currentNode);
                 currentNode = currentNode.getLeftChild();
+                nextLeft = true;
             } else if (compareResult == 0) {
-                result.setNode(currentNode);
-                result.setSearchCount(searchCount);
-
+                result = new SearchResult<>(nextLeft, lastNode, searchCount);
+                result.setNode(currentNode); // only setNode() when node can be found
                 fixAfterSearch(currentNode);
                 return result;
+
             } else {
+                onGreaterThan(currentNode);
                 currentNode = currentNode.getRightChild();
+                nextLeft = false;
             }
         }
 
-        result.setSearchCount(searchCount);
+        result = new SearchResult<>(nextLeft, lastNode, searchCount);
+        onNodeNotFound(result);
 
         return result;
     }
@@ -63,6 +72,24 @@ public class BstSearch<E extends Comparable<? super E>> implements SearchAlgo<E>
 
     protected void fixAfterSearch(BinTreeNode<E> node) {
         // default do nothing.
+    }
+
+    // Handles each node in process of BST Comparing
+    protected boolean handleNode(BinTreeNode<E> node) {
+        // Default do nothing.
+        return true;
+    }
+
+    protected void onGreaterThan(BinTreeNode<E> currentNode) {
+
+    }
+
+    protected void onNodeNotFound(SearchResult<E> result) {
+
+    }
+
+    protected void onSmallerThan(BinTreeNode<E> currentNode) {
+
     }
 
     private SearchResult<E> searchExtrema(BinaryTree<E> bt, boolean searchMax) {
