@@ -22,28 +22,29 @@ class AvlInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
     protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         AvlTree<E> avlTree = getBt();
         Stack<Boolean> stack = new Stack<>();
-        BinTreeNode<E> lastNode;
-        BinTreeNode<E> currentNode = newNode;
+        BinTreeNode<E> lastNode = newNode;
+        BinTreeNode<E> currentNode = newNode.getParent();
 
         while (currentNode != null) {
-            lastNode = currentNode;
-            currentNode = currentNode.getParent();
-
-            if (currentNode == null)
-                break;
-
+            boolean isLastNodeLeft = lastNode.isLeftChild();
             int bf = avlTree.getBalanceFactor(currentNode);
+
             if (bf < -1 || bf > 1) {
                 boolean isGrandChildLeft = stack.pop();
                 // Unbalanced
                 if (Env.debug)
                     System.out.printf("[insert] node: %s is unbalanced -- BF: %d\n"
                             , currentNode.getData(), bf);
+
                 avlTree.handleUnbalancedNode(currentNode, bf, isGrandChildLeft);
-                break; // Important!
+
+                break;
             }
 
-            stack.push(lastNode.isLeftChild());
+            stack.push(isLastNodeLeft);
+
+            lastNode = currentNode;
+            currentNode = currentNode.getParent();
         }
     }
 }

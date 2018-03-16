@@ -17,7 +17,7 @@ public class LrRotation extends AbstractRotation {
      *          /           \
      *         /             \
      *        /               \
-     *       B (Pivot)         C
+     *       B (Child)         C
      *      / \               / \
      *     /   \             /   \
      *    /     \           /     \
@@ -56,17 +56,17 @@ public class LrRotation extends AbstractRotation {
      */
     @Override
     <E> BinTreeNode<E> rotateTree(BinaryTree<E> bt, BinTreeNode<E> parent) {
-        BinTreeNode<E> middle = parent.getLeftChild();
-        if (middle == null) return null;
+        BinTreeNode<E> child = parent.getLeftChild();
+        if (child == null) return null;
 
-        BinTreeNode<E> pivot = middle.getRightChild();
+        BinTreeNode<E> pivot = child.getRightChild();
         if (pivot == null) return null;
 
         if (Env.debug)
             System.out.println("[rotate] LR case: pivot is " + pivot.getData());
 
         // Note the first argument.
-        rotateLeft(middle, pivot, pivot.getLeftChild()); // RR
+        rotateLeft(child, pivot, pivot.getLeftChild()); // RR
 
         // Note the first argument.
         rotateRight(parent, pivot, pivot.getRightChild()); // LL

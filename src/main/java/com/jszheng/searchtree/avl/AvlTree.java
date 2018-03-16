@@ -6,7 +6,7 @@ import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstDeletion;
 import com.jszheng.searchtree.SelfBalancingBst;
-import com.jszheng.searchtree.rotation.*;
+import com.jszheng.searchtree.rotation.RotationState;
 import com.jszheng.util.FibonacciNumber;
 
 import java.math.BigInteger;
@@ -19,7 +19,8 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
 
     @Override
     public BinaryTree<E> copy(boolean deep) {
-        return new AvlTree<>(component.copy(deep));
+        BinaryTree<E> base = component.copy(deep);
+        return new AvlTree<>(base);
     }
 
     public int getBalanceFactor(BinTreeNode<E> node) {
@@ -75,30 +76,6 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
         return insertionAlgo;
     }
 
-    BinTreeNode<E> getHigherChild(BinTreeNode<E> parent) {
-        BinTreeNode<E> lChild = parent.getLeftChild();
-        BinTreeNode<E> rChild = parent.getRightChild();
-
-        if (lChild == null && rChild == null) {
-            return null;
-        } else if (lChild == null) {
-            return rChild;
-        } else if (rChild == null) {
-            return lChild;
-        }
-
-        int lChildHeight = height(lChild);
-        int rChildHeight = height(rChild);
-
-        if (lChildHeight > rChildHeight)
-            return lChild;
-        else if (lChildHeight < rChildHeight)
-            return rChild;
-        else
-            // 若雙子高度相同，取與 parent 方向相同者
-            return parent.isLeftChild() ? lChild : rChild;
-
-    }
 
     void handleUnbalancedNode(BinTreeNode<E> unbalancedNode, int bf, boolean isGrandChildLeft) {
         if (unbalancedNode == null)
@@ -109,20 +86,19 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
         switch (bf) {
             case 2: // L
                 if (isGrandChildLeft)
-                    state = new LlRotation();
+                    state = createLlRotate(); // LL
                 else
-                    state = new LrRotation();
+                    state = createLrRotate(); // LR
                 break;
-
             case -2: // R
-                if (isGrandChildLeft)
-                    state = new RlRotation();
+                if (!isGrandChildLeft)
+                    state = createRrRotate(); // RR
                 else
-                    state = new RrRotation();
-                break;
+                    state = createRlRotate(); // RL
         }
 
         assert state != null;
         state.rotate(this, unbalancedNode);
     }
+
 }

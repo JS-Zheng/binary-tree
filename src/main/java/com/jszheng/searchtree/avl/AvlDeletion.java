@@ -21,15 +21,29 @@ class AvlDeletion<E extends Comparable<? super E>> extends BstDeletion<E> {
         while (currentNode != null) {
             int bf = avlTree.getBalanceFactor(currentNode);
 
+            // parent 高度不變
+            if (bf == 1 || bf == -1) return;
+
             if (bf < -1 || bf > 1) {
-                BinTreeNode<E> child = avlTree.getHigherChild(currentNode);
-                boolean isGrandChildLeft = avlTree.getHigherChild(child).isLeftChild();
                 // Unbalanced
                 if (Env.debug)
                     System.out.printf("[delete] node: %s is unbalanced -- BF: %d\n"
                             , currentNode.getData(), bf);
+
+                BinTreeNode<E> child = bf == 2 ? currentNode.getLeftChild() : currentNode.getRightChild();
+                int childBf = avlTree.getBalanceFactor(child);
+                boolean isGrandChildLeft;
+
+                if (bf == 2)
+                    isGrandChildLeft = childBf >= 0;
+                else
+                    isGrandChildLeft = childBf > 0;
+
                 avlTree.handleUnbalancedNode(currentNode, bf, isGrandChildLeft);
-                break;
+
+                // child 原先已平衡
+                if (childBf == 0) return;
+
             }
 
             currentNode = currentNode.getParent();
