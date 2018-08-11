@@ -15,12 +15,6 @@ public abstract class SelfBalancingBst<E extends Comparable<? super E>, Base ext
         super(component);
     }
 
-    public RotationState createLlRotate() {
-        if (lLRotate == null)
-            lLRotate = new LlRotation();
-        return lLRotate;
-    }
-
     public RotationState createRotationState(BinTreeNode<E> pivot, BinTreeNode<E> child) {
         RotationState state;
 
@@ -45,15 +39,21 @@ public abstract class SelfBalancingBst<E extends Comparable<? super E>, Base ext
         return rRRotate;
     }
 
-    protected RotationState createLrRotate() {
-        if (lRRotate == null)
-            lRRotate = new LrRotation();
-        return lRRotate;
+    public RotationState createLlRotate() {
+        if (lLRotate == null)
+            lLRotate = new LlRotation();
+        return lLRotate;
     }
 
     protected RotationState createRlRotate() {
         if (rLRotate == null)
             rLRotate = new RlRotation();
         return rLRotate;
+    }
+
+    protected RotationState createLrRotate() {
+        if (lRRotate == null)
+            lRRotate = new LrRotation();
+        return lRRotate;
     }
 }

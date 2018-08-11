@@ -42,60 +42,51 @@ public class BinomialHeap<E extends Comparable<? super E>> extends AbstractMWayH
         return min.data;
     }
 
-    @Override
-    public String getNodeString(BinomialTreeNode<E> node) {
-        Object data = node != null ? node.getData() : null;
-        return data != null ? data.toString() + (node.isChildCut() ? "(#)" : "") :
-                (getRoot() == node ? "⊙" : " ");
-    }
+    // 需維護 first node
+    private void deleteRootWithConcatChild(BinomialTreeNode<E> node) {
+        if (node == null) return;
+        BinomialTreeNode<E> lSibling = node.getLeftSibling();
+        BinomialTreeNode<E> rSibling = node.getRightSibling();
+        BinomialTreeNode<E> rightmostOfRSibling = rSibling != null ? first.lLink : null;
 
-    @Override
-    public int size(BinomialTreeNode<E> node) {
-        BinomialTreeNode<E> tmp = node;
-        int count = 0;
-        while (tmp != null) {
-            count += (1 << tmp.degree);  // 2^degree
-            tmp = tmp.getRightSibling();
-        }
-        return count;
-    }
+        BinomialTreeNode<E> child = node.child;
 
-    public int maxDegree() {
-        if (first == null) return 0;
-
-        int size = size();
-        return (int) Math.floor(Math.log(size) / Math.log(2));
-    }
-
-    @Override
-    public void merge(BinomialHeap<E> bh) {
-        BinomialTreeNode<E> node;
-        if (bh == null || (node = bh.min) == null)
+        if (lSibling == null && rSibling == null && child == null) {
+            first = null;
+            min = null;
             return;
+        }
 
-        merge(node);
+        if (child != null) {
+            BinomialTreeNode<E> curr = child;
+            do {
+                curr.parent = null;
+                curr = curr.rLink;
+            } while (curr != child);
+        }
 
-        if (Env.debug) System.out.println();
-    }
+        if (lSibling != null) {
+            first.lLink = lSibling;
+            lSibling.rLink = first;
+            lSibling.isRLinkCircular = true;
 
-    @Override
-    public BinomialTreeNode<E> newNode() {
-        return new BinomialTreeNode<>();
-    }
+            // child 本身已維護好 circular 性質
+            concatRootList(child);
 
-    @Override
-    public AbstractMWayHeap<E, BinomialTreeNode<E>> newTree() {
-        return new BinomialHeap<>();
-    }
+        } else { // 被移除之 node 為原 first
+            first = child; // 可能為空
+        }
 
-    @Override
-    public BinomialTreeNode<E> search(E data) {
-        return super.search(data);
-    }
+        if (rSibling != null) {
+            rSibling.lLink = rightmostOfRSibling;
+            rSibling.isLLinkCircular = true;
+            rightmostOfRSibling.rLink = rSibling;
 
-    @Override
-    protected void insertNode(BinomialTreeNode<E> node) {
-        merge(node);
+            if (first != null)
+                concatRootList(rSibling);
+            else
+                first = rSibling;
+        }
     }
 
     // 尋找、合併相同分支度節點，並維護 min min
@@ -152,69 +143,33 @@ public class BinomialHeap<E extends Comparable<? super E>> extends AbstractMWayH
         }
     }
 
-    // 需維護 first node
-    private void deleteRootWithConcatChild(BinomialTreeNode<E> node) {
-        if (node == null) return;
-        BinomialTreeNode<E> lSibling = node.getLeftSibling();
-        BinomialTreeNode<E> rSibling = node.getRightSibling();
-        BinomialTreeNode<E> rightmostOfRSibling = rSibling != null ? first.lLink : null;
+    private void sortRootList(List<BinomialTreeNode<E>> roots) {
+        roots.sort(BinomialTreeNode::compareTo);
 
-        BinomialTreeNode<E> child = node.child;
+        int i = 0;
+        first = roots.get(0);
 
-        if (lSibling == null && rSibling == null && child == null) {
-            first = null;
-            min = null;
-            return;
+        for (; i < roots.size() - 1; i++) {
+            BinomialTreeNode<E> n1 = roots.get(i);
+            if (i == 0) {
+                first = n1;
+            }
+            BinomialTreeNode<E> n2 = roots.get(i + 1);
+            setSibling(n1, n2);
+
+            n1.isRLinkCircular = false;
+            n2.isLLinkCircular = false;
         }
 
-        if (child != null) {
-            BinomialTreeNode<E> curr = child;
-            do {
-                curr.parent = null;
-                curr = curr.rLink;
-            } while (curr != child);
-        }
+        first = roots.get(0);
+        min = first;
 
-        if (lSibling != null) {
-            first.lLink = lSibling;
-            lSibling.rLink = first;
-            lSibling.isRLinkCircular = true;
+        BinomialTreeNode<E> rMostRoot = roots.get(i);
+        rMostRoot.rLink = first;
+        rMostRoot.isRLinkCircular = true;
 
-            // child 本身已維護好 circular 性質
-            concatRootList(child);
-
-        } else { // 被移除之 node 為原 first
-            first = child; // 可能為空
-        }
-
-        if (rSibling != null) {
-            rSibling.lLink = rightmostOfRSibling;
-            rSibling.isLLinkCircular = true;
-            rightmostOfRSibling.rLink = rSibling;
-
-            if (first != null)
-                concatRootList(rSibling);
-            else
-                first = rSibling;
-        }
-    }
-
-    private void merge(BinomialTreeNode<E> node) {
-        if (node == null) return;
-
-        if (Env.debug) {
-            E data = node.getData();
-            System.out.println("[merge] target: " + data);
-        }
-
-        if (min == null) {
-            setRoot(node);
-            return;
-        }
-
-        concatRootList(node);
-
-        consolidate(node);
+        first.lLink = rMostRoot;
+        first.isLLinkCircular = true;
     }
 
     // 將 greaterRoot 作為 smallerRoot 之子樹
@@ -252,32 +207,77 @@ public class BinomialHeap<E extends Comparable<? super E>> extends AbstractMWayH
         smallerRoot.degree++;
     }
 
-    private void sortRootList(List<BinomialTreeNode<E>> roots) {
-        roots.sort(BinomialTreeNode::compareTo);
+    @Override
+    public String getNodeString(BinomialTreeNode<E> node) {
+        Object data = node != null ? node.getData() : null;
+        return data != null ? data.toString() + (node.isChildCut() ? "(#)" : "") :
+                (getRoot() == node ? "⊙" : " ");
+    }
 
-        int i = 0;
-        first = roots.get(0);
+    @Override
+    public int size(BinomialTreeNode<E> node) {
+        BinomialTreeNode<E> tmp = node;
+        int count = 0;
+        while (tmp != null) {
+            count += (1 << tmp.degree);  // 2^degree
+            tmp = tmp.getRightSibling();
+        }
+        return count;
+    }
 
-        for (; i < roots.size() - 1; i++) {
-            BinomialTreeNode<E> n1 = roots.get(i);
-            if (i == 0) {
-                first = n1;
-            }
-            BinomialTreeNode<E> n2 = roots.get(i + 1);
-            setSibling(n1, n2);
+    public int maxDegree() {
+        if (first == null) return 0;
 
-            n1.isRLinkCircular = false;
-            n2.isLLinkCircular = false;
+        int size = size();
+        return (int) Math.floor(Math.log(size) / Math.log(2));
+    }
+
+    @Override
+    public void merge(BinomialHeap<E> bh) {
+        BinomialTreeNode<E> node;
+        if (bh == null || (node = bh.min) == null)
+            return;
+
+        merge(node);
+
+        if (Env.debug) System.out.println();
+    }
+
+    private void merge(BinomialTreeNode<E> node) {
+        if (node == null) return;
+
+        if (Env.debug) {
+            E data = node.getData();
+            System.out.println("[merge] target: " + data);
         }
 
-        first = roots.get(0);
-        min = first;
+        if (min == null) {
+            setRoot(node);
+            return;
+        }
 
-        BinomialTreeNode<E> rMostRoot = roots.get(i);
-        rMostRoot.rLink = first;
-        rMostRoot.isRLinkCircular = true;
+        concatRootList(node);
 
-        first.lLink = rMostRoot;
-        first.isLLinkCircular = true;
+        consolidate(node);
+    }
+
+    @Override
+    public BinomialTreeNode<E> search(E data) {
+        return super.search(data);
+    }
+
+    @Override
+    public BinomialTreeNode<E> newNode() {
+        return new BinomialTreeNode<>();
+    }
+
+    @Override
+    public AbstractMWayHeap<E, BinomialTreeNode<E>> newTree() {
+        return new BinomialHeap<>();
+    }
+
+    @Override
+    protected void insertNode(BinomialTreeNode<E> node) {
+        merge(node);
     }
 }

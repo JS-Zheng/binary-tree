@@ -28,15 +28,6 @@ public class TreeManipulatorFactory extends Manipulator<Class> {
         return "========== B、請選擇二元樹 ==========\n";
     }
 
-    public void register(String name, Class manipulatorClz) {
-        operationNames.add(name);
-        operations.add(manipulatorClz);
-    }
-
-    public void setDataType(Class dataType) {
-        this.dataType = dataType;
-    }
-
     private TreeManipulator getManipulator(int id) {
         if (id > operations.size()) return null;
 
@@ -49,5 +40,14 @@ public class TreeManipulatorFactory extends Manipulator<Class> {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void register(String name, Class manipulatorClz) {
+        operationNames.add(name);
+        operations.add(manipulatorClz);
+    }
+
+    public void setDataType(Class dataType) {
+        this.dataType = dataType;
     }
 }

@@ -14,8 +14,7 @@ public class LinearSearch<E> implements SearchAlgo<E> {
 
     @Override
     public SearchResult<E> search(BinaryTree<E> bt, E data) {
-        if (bt == null)
-            return null;
+        if (bt == null) return null;
 
         // init per searching
         this.result = new SearchResult<>();
@@ -25,8 +24,7 @@ public class LinearSearch<E> implements SearchAlgo<E> {
             searchCount++;
             E nodeData = node.getData();
             result.setSearchCount(searchCount);
-
-            if (nodeData != null && nodeData.equals(data)) {
+            if (nodeData == data || (nodeData != null && nodeData.equals(data))) {
                 result.setNode(node);
                 return false;
             } else

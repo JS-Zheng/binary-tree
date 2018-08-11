@@ -17,12 +17,6 @@ class TreapInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
     }
 
     @Override
-    protected Treap<E> getBt() {
-        BinaryTree<E> bt = super.getBt();
-        return (Treap<E>) bt;
-    }
-
-    @Override
     protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         Treap<E> treap = getBt();
         if (specifiedPriority)
@@ -31,6 +25,12 @@ class TreapInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
             treap.putRandomPriority(newNode);
 
         treap.upHeap(newNode, maxHeap);
+    }
+
+    @Override
+    protected Treap<E> getBt() {
+        BinaryTree<E> bt = super.getBt();
+        return (Treap<E>) bt;
     }
 
     void setMaxHeap(boolean maxHeap) {

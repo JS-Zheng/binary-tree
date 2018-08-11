@@ -2,8 +2,7 @@ package com.jszheng.searchtree;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.AbstractInsertionAlgo;
-import com.jszheng.search.SearchAlgo;
-import com.jszheng.search.SearchResult;
+import com.jszheng.search.InsertableSearchResult;
 
 /*
  * O(Log n)
@@ -16,15 +15,15 @@ public class BstInsertion<E extends Comparable<? super E>> extends AbstractInser
     }
 
     @Override
-    protected BinarySearchTree<E> getBt() {
-        BinaryTree<E> bt = super.getBt();
-        return (BinarySearchTree<E>) bt;
+    protected final InsertableSearchResult<E> insertData(E data) {
+        BstSearch<E> algo = createSearchAlgo();
+        return algo.search(getBt(), data);
     }
 
     @Override
-    protected final SearchResult<E> insertData(E data) {
-        SearchAlgo<E> algo = createSearchAlgo();
-        return algo.search(getBt(), data);
+    protected BinarySearchTree<E> getBt() {
+        BinaryTree<E> bt = super.getBt();
+        return (BinarySearchTree<E>) bt;
     }
 
     @Override
@@ -33,9 +32,7 @@ public class BstInsertion<E extends Comparable<? super E>> extends AbstractInser
         return defaultResult && data != null;
     }
 
-    protected SearchAlgo<E> createSearchAlgo() {
+    protected BstSearch<E> createSearchAlgo() {
         return new BstSearch<>();
     }
-
-
 }

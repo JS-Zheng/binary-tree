@@ -12,11 +12,21 @@ import java.util.Queue;
  */
 class TopDownTreeNodeConstructor<E> implements TreeNodeConstructor<E>, BFSAlgo<BinTreeNode<E>, TopDownTreeNodeConstructor<E>.NodeInfo, Void> {
 
-    private final BinTreeNode<E> node;
-    private E[] data;
+    private final BinTreeNode<E> root;
+    private E[] arr;
+    private boolean nullable;
 
-    TopDownTreeNodeConstructor(BinTreeNode<E> node) {
-        this.node = node;
+    TopDownTreeNodeConstructor(BinTreeNode<E> root) {
+        this.root = root;
+    }
+
+    @Override
+    public boolean init(BinTreeNode<E> node) {
+        if (arr == null || arr.length < 1) return false;
+        E rootData = this.arr[0];
+        if (rootData == null && !nullable) return false;
+        node.setData(rootData);
+        return true;
     }
 
     @Override
@@ -28,64 +38,53 @@ class TopDownTreeNodeConstructor<E> implements TreeNodeConstructor<E>, BFSAlgo<B
     }
 
     @Override
-    public boolean init(BinTreeNode<E> node) {
-        if (data != null && data.length > 0) {
-            node.setData(data[0]);
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
     public boolean onDataPolled(Queue<TopDownTreeNodeConstructor<E>.NodeInfo> queue,
                                 TopDownTreeNodeConstructor<E>.NodeInfo info) {
         int index = info.index;
         BinTreeNode<E> node = info.node;
+
         NodeInfo lChildInfo = getChildInfo(node, index, true);
         NodeInfo rChildInfo = getChildInfo(node, index, false);
 
-        if (lChildInfo != null && lChildInfo.node != null)
+        if (lChildInfo != null)
             queue.offer(lChildInfo);
 
-        if (rChildInfo != null && rChildInfo.node != null)
+        if (rChildInfo != null)
             queue.offer(rChildInfo);
 
         return true;
     }
 
-
-    @Override
-    public void setDataByArr(E[] data) {
-        this.data = data;
-        execute(node);
-    }
-
     private NodeInfo getChildInfo(BinTreeNode<E> node, int index, boolean isLeft) {
         int childIndex = isLeft ? BinaryTreeLemma.lChildIndex(index) : BinaryTreeLemma.rChildIndex(index);
+        if (childIndex >= arr.length) return null;
 
-        if (childIndex < data.length) {
-            BinTreeNode<E> child = null;
-            E childData = data[childIndex];
+        BinTreeNode<E> child;
+        E childData = arr[childIndex];
 
-            if (childData != null) {
-                child = this.node.newNode();
-                child.setData(childData);
-            }
+        if (childData != null || nullable) {
+            child = this.root.newNode();
+            child.setData(childData);
+        } else
+            return null;
 
-            if (isLeft)
-                node.setLeftChild(child);
-            else
-                node.setRightChild(child);
+        if (isLeft)
+            node.setLeftChild(child);
+        else
+            node.setRightChild(child);
 
-            NodeInfo info = new NodeInfo();
-            info.node = child;
-            info.index = childIndex;
+        NodeInfo info = new NodeInfo();
+        info.node = child;
+        info.index = childIndex;
 
-            return info;
-        }
+        return info;
+    }
 
-        return null;
+    @Override
+    public void setDataArr(E[] data, boolean nullable) {
+        this.arr = data;
+        this.nullable = nullable;
+        execute(root);
     }
 
     class NodeInfo {

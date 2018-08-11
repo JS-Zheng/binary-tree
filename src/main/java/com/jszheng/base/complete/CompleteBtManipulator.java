@@ -12,6 +12,11 @@ public class CompleteBtManipulator extends BinTreeManipulator<CompleteBinaryTree
     }
 
     @Override
+    protected CompleteBinaryTree createTree() {
+        return new CompleteBtImpl(baseBt());
+    }
+
+    @Override
     protected void comment() {
         System.out.println("[註]: 完整二元樹 (Complete Binary Tree)");
         System.out.println("a. 這裡指所有「外部節點」都擁有相同 深度 (depth)，");
@@ -20,12 +25,8 @@ public class CompleteBtManipulator extends BinTreeManipulator<CompleteBinaryTree
         System.out.println();
         System.out.println("b. 有些書的定義則傾向於 正規二元樹 (Proper Binary Tree)，");
         System.out.println("   不要求「外部節點」擁有相同深度，但所有「內部節點」分支度需為 2，例如：");
-        BinaryTree<String> ex = new LinkedBinaryTree<>("a", "b", "c", null, null, "d", "e");
+        String arr[] = {"a", "b", "c", null, null, "d", "e"};
+        BinaryTree<String> ex = new LinkedBinaryTree<>(arr);
         new MyBtPrinter().print(ex);
-    }
-
-    @Override
-    protected CompleteBinaryTree createTree() {
-        return new CompleteBtImpl(baseBt());
     }
 }

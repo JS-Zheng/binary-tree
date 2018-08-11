@@ -35,22 +35,33 @@ public class Deap<E extends Comparable<? super E>> extends AbsBinDoubleEndedHeap
         return maxNode != null ? maxNode.getData() : null;
     }
 
-    @Override
-    public E deleteMin() {
-        return deleteExtrema(false);
-    }
+    private E deleteExtrema(boolean max) {
+        BinTreeNode<E> target = searchExtremaNode(max);
+        if (target == null) return null;
+        E extrema = target.getData();
 
-    @Override
-    public E searchMin() {
-        BinTreeNode<E> minNode = searchExtremaNode(false);
-        return minNode != null ? minNode.getData() : null;
-    }
+        BinTreeNode<E> lastNode = getLastNode();
+        E lastNodeData = lastNode.getData();
+        lastNode.deleteParent();
 
-    @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        if (insertionAlgo == null)
-            insertionAlgo = new DeapInsertion<>();
-        return insertionAlgo;
+        // If the target is lastNode, simply delete it.
+        if (lastNode == target)
+            return extrema;
+
+        while (target.degree() != 0) {
+            BinTreeNode<E> lChild = target.getLeftChild();
+            BinTreeNode<E> rChild = target.getRightChild();
+            BinTreeNode<E> extremaDescendant = compareNode(lChild, rChild, max);
+            E extremaDescendantData = extremaDescendant.getData();
+
+            target.setData(extremaDescendantData);
+            target = extremaDescendant;
+        }
+
+        target.setData(lastNodeData);
+        insertionFixUp(target);
+
+        return extrema;
     }
 
     /*
@@ -97,35 +108,6 @@ public class Deap<E extends Comparable<? super E>> extends AbsBinDoubleEndedHeap
             upHeap(newNode, !isNewNodeInLTree);
     }
 
-    private E deleteExtrema(boolean max) {
-        BinTreeNode<E> target = searchExtremaNode(max);
-        if (target == null) return null;
-        E extrema = target.getData();
-
-        BinTreeNode<E> lastNode = getLastNode();
-        E lastNodeData = lastNode.getData();
-        lastNode.deleteParent();
-
-        // If the target is lastNode, simply delete it.
-        if (lastNode == target)
-            return extrema;
-
-        while (target.degree() != 0) {
-            BinTreeNode<E> lChild = target.getLeftChild();
-            BinTreeNode<E> rChild = target.getRightChild();
-            BinTreeNode<E> extremaDescendant = compareNode(lChild, rChild, max);
-            E extremaDescendantData = extremaDescendant.getData();
-
-            target.setData(extremaDescendantData);
-            target = extremaDescendant;
-        }
-
-        target.setData(lastNodeData);
-        insertionFixUp(target);
-
-        return extrema;
-    }
-
     private BinTreeNode<E> getCorrespondingNode(BinTreeNode<E> node) {
         BinTreeNode<E> result = null;
 
@@ -145,5 +127,23 @@ public class Deap<E extends Comparable<? super E>> extends AbsBinDoubleEndedHeap
         }
 
         return result;
+    }
+
+    @Override
+    public E deleteMin() {
+        return deleteExtrema(false);
+    }
+
+    @Override
+    public E searchMin() {
+        BinTreeNode<E> minNode = searchExtremaNode(false);
+        return minNode != null ? minNode.getData() : null;
+    }
+
+    @Override
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        if (insertionAlgo == null)
+            insertionAlgo = new DeapInsertion<>();
+        return insertionAlgo;
     }
 }

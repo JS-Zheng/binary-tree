@@ -16,14 +16,14 @@ public class DeapInsertion<E extends Comparable<? super E>> extends CompleteBtIn
     }
 
     @Override
-    protected Deap<E> getBt() {
-        BinaryTree<E> bt = super.getBt();
-        return (Deap<E>) bt;
-    }
-
-    @Override
     protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         Deap<E> deap = getBt();
         deap.insertionFixUp(newNode);
+    }
+
+    @Override
+    protected Deap<E> getBt() {
+        BinaryTree<E> bt = super.getBt();
+        return (Deap<E>) bt;
     }
 }

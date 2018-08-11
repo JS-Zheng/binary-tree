@@ -9,9 +9,9 @@ public final class RbtManipulator extends AbstractBstManipulator<RedBlackTree> {
     }
 
     @Override
-    protected void addInsertOp() {
-        super.addInsertOp();
-        addOperation("insert (Top-down)", new TopDownInsertOperation());
+    protected RedBlackTree createTree() {
+        RedBlackBase<Object> base = new RedBlackBase<>();
+        return new RedBlackTree(base);
     }
 
     @Override
@@ -32,9 +32,9 @@ public final class RbtManipulator extends AbstractBstManipulator<RedBlackTree> {
     }
 
     @Override
-    protected RedBlackTree createTree() {
-        RedBlackBase<Object> base = new RedBlackBase<>();
-        return new RedBlackTree(base);
+    protected void addInsertOp() {
+        super.addInsertOp();
+        addOperation("insert (Top-down)", new TopDownInsertOperation());
     }
 
     class TopDownInsertOperation extends InsertOperation {

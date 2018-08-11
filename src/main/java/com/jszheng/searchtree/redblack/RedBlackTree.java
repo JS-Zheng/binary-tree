@@ -32,12 +32,6 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
         super(component);
     }
 
-    // use 'public access modifier' to facilitate testing
-    public boolean colorOf(RedBlackTreeNode<E> node) {
-        // BLACK of default value is prepared for External Node.
-        return node == null ? BLACK : node.color;
-    }
-
     @Override
     public RedBlackTree<E> copy(boolean deep) {
         RedBlackBase<E> base = (RedBlackBase<E>) component.copy(deep);
@@ -55,10 +49,20 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
                     "(" + (colorOf((RedBlackTreeNode<E>) node) == BLACK ? "⚫" : "🔴") + ")" : " "; // Keep one space to mock null.
     }
 
-    @SafeVarargs
-    public final void insertByTopDown(E... data) {
+    // use 'public access modifier' to facilitate testing
+    public boolean colorOf(RedBlackTreeNode<E> node) {
+        // BLACK of default value is prepared for External Node.
+        return node == null ? BLACK : node.color;
+    }
+
+    public final void insertByTopDown(E datum) {
         InsertionAlgo<E> algo = new RedBlackTopDownInsertion<>();
-        insertDataArr(algo, data);
+        algo.insert(this, datum);
+    }
+
+    public final void insertByTopDown(E[] data) {
+        InsertionAlgo<E> algo = new RedBlackTopDownInsertion<>();
+        insertDataWithSpecifyAlgo(data, algo);
     }
 
     @Override
@@ -78,14 +82,10 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
     }
 
     @Override
-    public RedBlackTreeNode<E> getRoot() {
-        return (RedBlackTreeNode<E>) super.getRoot();
-    }
-
-    @Override
-    public void setRoot(E data) {
-        super.setRoot(data);
-        setColor(getRoot(), BLACK);
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        if (insertionAlgo == null)
+            insertionAlgo = new RedBlackBottomUpInsertion<>();
+        return insertionAlgo;
     }
 
     @Override
@@ -96,11 +96,17 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
     }
 
     @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        if (insertionAlgo == null)
-            insertionAlgo = new RedBlackBottomUpInsertion<>();
-        return insertionAlgo;
+    public RedBlackTreeNode<E> getRoot() {
+        return (RedBlackTreeNode<E>) super.getRoot();
     }
+
+
+    @Override
+    public void setRoot(E data) {
+        super.setRoot(data);
+        setColor(getRoot(), BLACK);
+    }
+
 
     void setColor(RedBlackTreeNode<E> node, boolean color) {
         if (node != null)

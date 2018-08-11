@@ -22,6 +22,30 @@ public class LevelOrderTraversal<E> extends AbstractIterativeTraversal<E>
     private BinaryTree<E> bt;
 
     @Override
+    public boolean init(BinaryTree<E> bt) {
+        if (bt != null) {
+            this.bt = bt;
+            this.maxCount = bt.maxNodes();
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public BinTreeNode<E> firstItem(BinaryTree<E> bt) {
+        BinTreeNode<E> root = bt.getRoot();
+        indexMap.put(root, 0);
+        levelMap.put(root, 1);
+        return root;
+    }
+
+    @Override
+    public boolean onDataPolled(Queue<BinTreeNode<E>> queue, BinTreeNode<E> node) {
+        return execute(queue, node, dataList);
+    }
+
+    @Override
     public boolean execute(Queue<BinTreeNode<E>> queue, BinTreeNode<E> node, List<BinTreeNode<E>> dataList) {
         if (node == null)
             return false;
@@ -42,29 +66,21 @@ public class LevelOrderTraversal<E> extends AbstractIterativeTraversal<E>
         return true;
     }
 
-    @Override
-    public BinTreeNode<E> firstItem(BinaryTree<E> bt) {
-        BinTreeNode<E> root = bt.getRoot();
+    private void offerChild(Queue<BinTreeNode<E>> queue, BinTreeNode<E> child, boolean isLeft, int parentIndex, int level) {
+        int maxChildIndex = isLeft ? lChildIndex(dataList.size() - 1) : rChildIndex(dataList.size() - 1);
 
-        indexMap.put(root, 0);
-        levelMap.put(root, 1);
-        return root;
-    }
-
-    @Override
-    public boolean init(BinaryTree<E> bt) {
-        if (bt != null) {
-            this.bt = bt;
-            this.maxCount = bt.maxCount();
-            return true;
+        if (child == null && fullBtMode &&
+                maxChildIndex < this.maxCount) {
+            child = bt.newNode(); // mock null Node.
+            pseudoNode.put(child, true);
         }
 
-        return false;
-    }
-
-    @Override
-    public boolean onDataPolled(Queue<BinTreeNode<E>> queue, BinTreeNode<E> node) {
-        return execute(queue, node, dataList);
+        if (child != null) {
+            int childIndex = isLeft ? lChildIndex(parentIndex) : rChildIndex(parentIndex);
+            queue.offer(child);
+            indexMap.put(child, childIndex);
+            levelMap.put(child, level + 1);
+        }
     }
 
     @Override
@@ -98,22 +114,5 @@ public class LevelOrderTraversal<E> extends AbstractIterativeTraversal<E>
 
     protected boolean isPseudoNode(BinTreeNode<E> node) {
         return pseudoNode.getOrDefault(node, false);
-    }
-
-    private void offerChild(Queue<BinTreeNode<E>> queue, BinTreeNode<E> child, boolean isLeft, int parentIndex, int level) {
-        int maxChildIndex = isLeft ? lChildIndex(dataList.size() - 1) : rChildIndex(dataList.size() - 1);
-
-        if (child == null && fullBtMode &&
-                maxChildIndex < this.maxCount) {
-            child = bt.newNode(); // mock null Node.
-            pseudoNode.put(child, true);
-        }
-
-        if (child != null) {
-            int childIndex = isLeft ? lChildIndex(parentIndex) : rChildIndex(parentIndex);
-            queue.offer(child);
-            indexMap.put(child, childIndex);
-            levelMap.put(child, level + 1);
-        }
     }
 }

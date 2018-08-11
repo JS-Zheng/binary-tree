@@ -23,6 +23,8 @@ abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<
         maxHeap = isMaxHeap();
     }
 
+    abstract boolean isMaxHeap();
+
     @Override
     public String getNodeString(BinTreeNode<E> node) {
         Object data = node != null ? node.getData() : null;
@@ -107,16 +109,14 @@ abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<
             System.out.println("[merge] complete");
     }
 
-    abstract boolean isMaxHeap();
+    @Override
+    protected SearchAlgo<E> createSearchAlgo() {
+        return new LinearSearch<>();
+    }
 
     @Override
     protected InsertionAlgo<E> createInsertionAlgo() {
         return new LeftistTreeInsertion<>();
-    }
-
-    @Override
-    protected SearchAlgo<E> createSearchAlgo() {
-        return new LinearSearch<>();
     }
 
     // O(log n)

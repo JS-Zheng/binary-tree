@@ -4,10 +4,6 @@ import java.util.Stack;
 
 public interface DFSAlgo<Param, Item, Result> {
 
-    default Stack<Item> createStack() {
-        return new Stack<>(); // To support null element.
-    }
-
     default Result execute(Param param) {
         Stack<Item> stack = createStack();
 
@@ -30,9 +26,13 @@ public interface DFSAlgo<Param, Item, Result> {
         return onFinish(param);
     }
 
-    Item firstItem(Param param);
+    default Stack<Item> createStack() {
+        return new Stack<>(); // To support null element.
+    }
 
     boolean init(Param param);
+
+    Item firstItem(Param param);
 
     default boolean loopCondition(Stack<Item> stack) {
         return !stack.isEmpty();

@@ -54,10 +54,10 @@ public class SplayTree<E extends Comparable<? super E>> extends SelfBalancingBst
     }
 
     @Override
-    protected BstDeletion<E> createDeletionAlgo() {
-        if (deletionAlgo == null)
-            deletionAlgo = new SplayDeletion<>();
-        return deletionAlgo;
+    protected BstSearch<E> createSearchAlgo() {
+        if (searchAlgo == null)
+            searchAlgo = new SplaySearch<>();
+        return searchAlgo;
     }
 
     @Override
@@ -68,9 +68,9 @@ public class SplayTree<E extends Comparable<? super E>> extends SelfBalancingBst
     }
 
     @Override
-    protected BstSearch<E> createSearchAlgo() {
-        if (searchAlgo == null)
-            searchAlgo = new SplaySearch<>();
-        return searchAlgo;
+    protected BstDeletion<E> createDeletionAlgo() {
+        if (deletionAlgo == null)
+            deletionAlgo = new SplayDeletion<>();
+        return deletionAlgo;
     }
 }

@@ -6,12 +6,12 @@ import com.jszheng.searchtree.BstInsertion;
 class SplayInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
 
     @Override
-    protected SplayTree<E> getBt() {
-        return (SplayTree<E>) super.getBt();
+    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
+        getBt().fixAfterOperation(newNode);
     }
 
     @Override
-    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
-        getBt().fixAfterOperation(newNode);
+    protected SplayTree<E> getBt() {
+        return (SplayTree<E>) super.getBt();
     }
 }

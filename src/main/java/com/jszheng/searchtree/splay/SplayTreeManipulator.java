@@ -9,6 +9,11 @@ public final class SplayTreeManipulator extends AbstractBstManipulator<SplayTree
     }
 
     @Override
+    protected SplayTree createTree() {
+        return new SplayTree(baseBt());
+    }
+
+    @Override
     protected void comment() {
         System.out.println("[註]: 伸展樹 (Splay Tree)");
         System.out.println("a. 為一種 self-balancing 二元搜尋樹");
@@ -17,10 +22,5 @@ public final class SplayTreeManipulator extends AbstractBstManipulator<SplayTree
         System.out.println("d. 進行 Select 操作後，可隨時利用 print 觀察變化喔 :)");
         System.out.println("e. 使用分攤 (amortized) 方式，使插入、尋找 與刪除時間達 O(log n)");
         System.out.println();
-    }
-
-    @Override
-    protected SplayTree createTree() {
-        return new SplayTree(baseBt());
     }
 }

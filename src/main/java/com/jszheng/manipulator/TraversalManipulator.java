@@ -11,6 +11,17 @@ class TraversalManipulator extends Manipulator<TreeOperation<BinaryTree>> {
     }
 
     @Override
+    protected void addDefaultOperation() {
+        addOperation("前序", bt -> bt.traverse("Pre"));
+
+        addOperation("中序", bt -> bt.traverse("In"));
+
+        addOperation("後序", bt -> bt.traverse("Post"));
+
+        addOperation("階層", bt -> bt.traverse("Level"));
+    }
+
+    @Override
     public boolean handleOperation(int operationId) {
         if (!validateInput(operationId))
             return false;
@@ -22,16 +33,5 @@ class TraversalManipulator extends Manipulator<TreeOperation<BinaryTree>> {
     @Override
     protected String getChoosePrompt() {
         return "";
-    }
-
-    @Override
-    protected void addDefaultOperation() {
-        addOperation("前序", bt -> bt.traverse("Pre"));
-
-        addOperation("中序", bt -> bt.traverse("In"));
-
-        addOperation("後序", bt -> bt.traverse("Post"));
-
-        addOperation("階層", bt -> bt.traverse("Level"));
     }
 }

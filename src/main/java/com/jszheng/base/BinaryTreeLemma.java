@@ -10,10 +10,6 @@ public interface BinaryTreeLemma {
         return (index << 1) + 2;
     }
 
-    static int parentIndex(int index) {
-        return Math.floorDiv((index - 1), 2);
-    }
-
     static boolean isDescendantIndex(int ancestorIndex, int index) {
         if (ancestorIndex < 0 || index < 0)
             return false;
@@ -28,6 +24,10 @@ public interface BinaryTreeLemma {
             if (ancestorIndex == index) return true;
 
         return false;
+    }
+
+    static int parentIndex(int index) {
+        return Math.floorDiv((index - 1), 2);
     }
 
     // i 從 1 開始
@@ -48,7 +48,7 @@ public interface BinaryTreeLemma {
 
     // i 從 1 開始
     // 高度為 i 的樹 之 最大總 Node 數: 2^i -1
-    static int maxCount(int height) {
+    static int maxNodes(int height) {
         return (int) Math.pow(2, height) - 1;
     }
 }

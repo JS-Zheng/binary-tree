@@ -46,16 +46,13 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
     }
 
     @Override
-    public int maxCount() {
+    public int maxNodes() {
         int maxLevel = height();
-        return BinaryTreeLemma.maxCount(maxLevel);
+        return BinaryTreeLemma.maxNodes(maxLevel);
     }
 
     @Override
     public BinTreeNode<E> search(E data) {
-        if (data == null)
-            return null;
-
         SearchAlgo<E> algo = createSearchAlgo();
         SearchResult<E> result = algo.search(this, data);
 
@@ -90,55 +87,6 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
             node.setRightChild(tmpLeft);
             node.isRoot();
         }
-    }
-
-    @Override
-    public void insert(E... data) {
-        if (data.length < 1) return;
-
-        // Default Algo
-        InsertionAlgo<E> algo = createInsertionAlgo();
-        insertDataArr(algo, data);
-    }
-
-    @Override
-    public int size(BinTreeNode<E> node) {
-        if (node == null)
-            return 0;
-
-        int nL = size(node.getLeftChild());
-        int nR = size(node.getRightChild());
-        return nL + nR + 1;
-    }
-
-    protected abstract InsertionAlgo<E> createInsertionAlgo();
-
-    protected abstract SearchAlgo<E> createSearchAlgo();
-
-    protected void insertDataArr(InsertionAlgo<E> algo, E[] data) {
-        for (E d : data) {
-            if (Env.debug) System.out.println("[insert] data: " + d);
-            algo.insert(this, d);
-            if (Env.debug) System.out.println();
-        }
-    }
-
-    BinTreeNode<E> copyNodes(BinTreeNode<E> node, boolean deep) {
-        if (node == null)
-            return null;
-
-        BinTreeNode<E> copyNode;
-
-        if (!deep)
-            copyNode = node;
-        else {
-            copyNode = node.newNode();
-
-            copyNode.setData(node.getData());
-            copyNode.setLeftChild(copyNodes(node.getLeftChild(), true));
-            copyNode.setRightChild(copyNodes(node.getRightChild(), true));
-        }
-        return copyNode;
     }
 
     private SkewedState checkTreeSkewed(boolean checkLeft) {
@@ -176,5 +124,57 @@ abstract class AbstractBinaryTree<E> implements BinaryTree<E> {
             return null;
         else
             return checkLeft ? LEFT_SKEWED : RIGHT_SKEWED;
+    }
+
+    protected abstract SearchAlgo<E> createSearchAlgo();
+
+    @Override
+    public void insert(E datum) {
+        InsertionAlgo<E> algo = createInsertionAlgo();
+        algo.insert(this, datum);
+    }
+
+    @Override
+    public void insert(E[] data) {
+        InsertionAlgo<E> algo = createInsertionAlgo();
+        insertDataWithSpecifyAlgo(data, algo);
+    }
+
+    protected void insertDataWithSpecifyAlgo(E[] data, InsertionAlgo<E> algo) {
+        for (E d : data) {
+            if (Env.debug) System.out.println("[insert] data: " + d);
+            algo.insert(this, d);
+            if (Env.debug) System.out.println();
+        }
+    }
+
+    @Override
+    public int size(BinTreeNode<E> node) {
+        if (node == null)
+            return 0;
+
+        int nL = size(node.getLeftChild());
+        int nR = size(node.getRightChild());
+        return nL + nR + 1;
+    }
+
+    protected abstract InsertionAlgo<E> createInsertionAlgo();
+
+    BinTreeNode<E> copyNodes(BinTreeNode<E> node, boolean deep) {
+        if (node == null)
+            return null;
+
+        BinTreeNode<E> copyNode;
+
+        if (!deep)
+            copyNode = node;
+        else {
+            copyNode = node.newNode();
+
+            copyNode.setData(node.getData());
+            copyNode.setLeftChild(copyNodes(node.getLeftChild(), true));
+            copyNode.setRightChild(copyNodes(node.getRightChild(), true));
+        }
+        return copyNode;
     }
 }

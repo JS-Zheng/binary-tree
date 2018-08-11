@@ -12,8 +12,6 @@ public interface BinTreeNode<E> extends TreeNode<E> {
 
     BinTreeNode<E> newNode();
 
-    void setDataByArr(E[] data);
-
     void setParent(BinTreeNode<E> node, boolean isLeft);
 
     int getIndex();

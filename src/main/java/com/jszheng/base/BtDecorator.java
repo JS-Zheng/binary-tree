@@ -24,6 +24,16 @@ public abstract class BtDecorator<E, Base extends BinaryTree<E>> extends Abstrac
     }
 
     @Override
+    public void setDataArr(E[] data, boolean nullable) {
+        component.setDataArr(data, nullable);
+    }
+
+    @Override
+    public BinTreeNode<E> getLastNode() {
+        return component.getLastNode();
+    }
+
+    @Override
     public BinTreeNode<E> getRoot() {
         return component.getRoot();
     }
@@ -34,18 +44,18 @@ public abstract class BtDecorator<E, Base extends BinaryTree<E>> extends Abstrac
     }
 
     @Override
-    public void setDataByArr(E[] data) {
-        component.setDataByArr(data);
-    }
-
-    @Override
-    public BinTreeNode<E> getLastNode() {
-        return component.getLastNode();
-    }
-
-    @Override
     public void setRoot(BinTreeNode<E> root) {
         component.setRoot(root);
+    }
+
+    @Override
+    public BinTreeNode<E> newNode() {
+        return component.newNode();
+    }
+
+    @Override
+    public int size() {
+        return component.size();
     }
 
     @Override
@@ -74,8 +84,8 @@ public abstract class BtDecorator<E, Base extends BinaryTree<E>> extends Abstrac
     }
 
     @Override
-    public int maxCount() {
-        return component.maxCount();
+    public int maxNodes() {
+        return component.maxNodes();
     }
 
     @Override
@@ -96,16 +106,6 @@ public abstract class BtDecorator<E, Base extends BinaryTree<E>> extends Abstrac
     @Override
     public int size(BinTreeNode<E> node) {
         return component.size(node);
-    }
-
-    @Override
-    public BinTreeNode<E> newNode() {
-        return component.newNode();
-    }
-
-    @Override
-    public int size() {
-        return component.size();
     }
 
     @Override

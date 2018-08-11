@@ -13,14 +13,6 @@ public class ScannerUtil {
         return getInput(prompt, TYPE_LINE).nextLine();
     }
 
-    public static String getString(String prompt) {
-        return getInput(prompt, TYPE_STRING).next();
-    }
-
-    public static int getInteger(String prompt) {
-        return getInput(prompt, TYPE_INT).nextInt();
-    }
-
     private static Scanner getInput(String prompt, int type) {
         Scanner sc = new Scanner(System.in);
         System.out.println(prompt);
@@ -50,5 +42,13 @@ public class ScannerUtil {
             condition = !sc.hasNext();
 
         return condition;
+    }
+
+    public static String getString(String prompt) {
+        return getInput(prompt, TYPE_STRING).next();
+    }
+
+    public static int getInteger(String prompt) {
+        return getInput(prompt, TYPE_INT).nextInt();
     }
 }

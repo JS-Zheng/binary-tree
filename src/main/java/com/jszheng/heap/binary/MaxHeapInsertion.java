@@ -10,13 +10,13 @@ import com.jszheng.node.BinTreeNode;
 class MaxHeapInsertion<E extends Comparable<? super E>> extends HeapInsertion<E> {
 
     @Override
-    protected MaxBinaryHeap<E> getBt() {
-        BinaryTree<E> bt = super.getBt();
-        return (MaxBinaryHeap<E>) bt;
+    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
+        getBt().upHeap(newNode, true);
     }
 
     @Override
-    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
-        getBt().upHeap(newNode, true);
+    protected MaxBinaryHeap<E> getBt() {
+        BinaryTree<E> bt = super.getBt();
+        return (MaxBinaryHeap<E>) bt;
     }
 }

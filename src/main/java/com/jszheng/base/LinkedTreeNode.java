@@ -16,11 +16,6 @@ public class LinkedTreeNode<E> implements BinTreeNode<E> {
     protected LinkedTreeNode() {
     }
 
-    @SafeVarargs
-    LinkedTreeNode(E... items) { // care heap pollution
-        setDataByArr(items);
-    }
-
     @Override
     public BinTreeNode<E> copy() {
         BinTreeNode<E> copy = null;
@@ -63,14 +58,6 @@ public class LinkedTreeNode<E> implements BinTreeNode<E> {
     public BinTreeNode<E> newNode() {
         return new LinkedTreeNode<>();
     }
-
-    // Need to prevent empty node has non-null child.
-    @Override
-    public void setDataByArr(E[] data) {
-        TreeNodeConstructor<E> constructor = new TopDownTreeNodeConstructor<>(this);
-        constructor.setDataByArr(data);
-    }
-
 
     @Override
     public void setParent(BinTreeNode<E> node, boolean isLeft) {
@@ -175,6 +162,39 @@ public class LinkedTreeNode<E> implements BinTreeNode<E> {
         return parent == null;
     }
 
+    private void setChild(BinTreeNode<E> child, boolean isLeft) {
+        if (child == this)
+            throw new RuntimeException("Can't set self as subTree.");
+
+        BinTreeNode<E> formerChild = isLeft ? lChild : rChild;
+
+        if (formerChild == child) return;
+
+        // 1. delete parent of former child
+        if (formerChild != null)
+            formerChild.deleteParent();
+
+        // 2. delete old parent of new child (有需要才做)
+        // check isLeftChild to prevent situation like set rightChild to left
+        BinTreeNode<E> parentOfNewChild;
+        if (child != null && (parentOfNewChild = child.getParent()) != null &&
+                (parentOfNewChild != this || child.isLeftChild() != isLeft))
+            child.deleteParent();
+
+        // 3. set child
+        if (isLeft)
+            lChild = child;
+        else
+            rChild = child;
+
+        if (child == null) return;
+
+        // 4. validate parent of new child
+        BinTreeNode<E> validateParent = child.getParent();
+        if (validateParent != this)
+            child.setParent(this, isLeft);
+    }
+
     @Override
     public int degree() {
         if (lChild != null && rChild != null)
@@ -259,38 +279,5 @@ public class LinkedTreeNode<E> implements BinTreeNode<E> {
         }
 
         return result;
-    }
-
-    private void setChild(BinTreeNode<E> child, boolean isLeft) {
-        if (child == this)
-            throw new RuntimeException("Can't set self as subTree.");
-
-        BinTreeNode<E> formerChild = isLeft ? lChild : rChild;
-
-        if (formerChild == child) return;
-
-        // 1. delete parent of former child
-        if (formerChild != null)
-            formerChild.deleteParent();
-
-        // 2. delete old parent of new child (有需要才做)
-        // check isLeftChild to prevent situation like set rightChild to left
-        BinTreeNode<E> parentOfNewChild;
-        if (child != null && (parentOfNewChild = child.getParent()) != null &&
-                (parentOfNewChild != this || child.isLeftChild() != isLeft))
-            child.deleteParent();
-
-        // 3. set child
-        if (isLeft)
-            lChild = child;
-        else
-            rChild = child;
-
-        if (child == null) return;
-
-        // 4. validate parent of new child
-        BinTreeNode<E> validateParent = child.getParent();
-        if (validateParent != this)
-            child.setParent(this, isLeft);
     }
 }

@@ -9,6 +9,12 @@ public final class SbtManipulator extends AbstractBstManipulator<SizeBalancedTre
     }
 
     @Override
+    protected SizeBalancedTree createTree() {
+        SizeBalancedBase base = new SizeBalancedBase();
+        return new SizeBalancedTree(base);
+    }
+
+    @Override
     protected void comment() {
         System.out.println("[註]: 大小平衡樹 (Size-Balanced Tree)");
         System.out.println("a. 節點結構 -- data(size)");
@@ -20,11 +26,5 @@ public final class SbtManipulator extends AbstractBstManipulator<SizeBalancedTre
         System.out.println("f. 針對 e. 的兩種解法 -- 1.backtrack修復size(耗時)  2.使用Dummy Node(耗空間)");
         System.out.println("g. 插入、搜尋 與刪除: O(log n)");
         System.out.println();
-    }
-
-    @Override
-    protected SizeBalancedTree createTree() {
-        SizeBalancedBase base = new SizeBalancedBase();
-        return new SizeBalancedTree(base);
     }
 }

@@ -9,6 +9,11 @@ public class MinLeftistTreeManipulator extends AbsMinBinaryHeapManipulator<MinLe
     }
 
     @Override
+    protected MinLeftistTree<Comparable<? super Comparable>> createTree() {
+        return new MinLeftistTree<>(baseBt());
+    }
+
+    @Override
     protected void comment() {
         System.out.println("[註]: 最小左傾樹 (Min Leftist Tree)");
         System.out.println("a. 節點結構 --  data(到外部節點之最短路徑長度)");
@@ -18,10 +23,5 @@ public class MinLeftistTreeManipulator extends AbsMinBinaryHeapManipulator<MinLe
         System.out.println("e. 尋找最大值: O(1)");
         System.out.println("f. 插入、合併 與刪除最小值: Θ(log n)");
         System.out.println();
-    }
-
-    @Override
-    protected MinLeftistTree<Comparable<? super Comparable>> createTree() {
-        return new MinLeftistTree<>(baseBt());
     }
 }

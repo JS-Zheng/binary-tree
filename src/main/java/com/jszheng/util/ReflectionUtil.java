@@ -15,6 +15,14 @@ public class ReflectionUtil {
         return instance;
     }
 
+    private static void printClzName(String clzName) {
+        if (debug) {
+            System.out.println("==========實例物件==========");
+            System.out.println(clzName);
+            System.out.println("===========================");
+        }
+    }
+
     public static Object newInstanceByClzWithParam(Class clz, Class[] typeList, Object[] params) throws Exception {
         Object instance;
         String clzName = clz.getName();
@@ -23,13 +31,5 @@ public class ReflectionUtil {
         printClzName(clzName);
 
         return instance;
-    }
-
-    private static void printClzName(String clzName) {
-        if (debug) {
-            System.out.println("==========實例物件==========");
-            System.out.println(clzName);
-            System.out.println("===========================");
-        }
     }
 }

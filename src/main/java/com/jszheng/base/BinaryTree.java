@@ -26,22 +26,13 @@ public interface BinaryTree<E> extends Tree<E, BinTreeNode<E>>, Traversable<E>, 
 
     int leavesCount(BinTreeNode<E> node);
 
-    int maxCount();
+    int maxNodes();
 
     BinaryTree<E> newTree();
 
-    default void print() {
-        BtPrinter printer = new MyBtPrinter();
-        printer.print(this);
-    }
-
-    BinTreeNode<E> getRoot();
-
-    void setRoot(E data);
-
     BinTreeNode<E> search(E data);
 
-    void setDataByArr(E[] data);
+    void setDataArr(E[] data, boolean nullable);
 
     SkewedState skewedState();
 
@@ -50,4 +41,13 @@ public interface BinaryTree<E> extends Tree<E, BinTreeNode<E>>, Traversable<E>, 
     void swap(BinTreeNode<E> node);
 
     BinTreeNode<E> getLastNode();
+
+    BinTreeNode<E> getRoot();
+
+    default void print() {
+        BtPrinter printer = new MyBtPrinter();
+        printer.print(this);
+    }
+
+    void setRoot(E data);
 }

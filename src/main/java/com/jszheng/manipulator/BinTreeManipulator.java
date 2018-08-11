@@ -19,19 +19,6 @@ public abstract class BinTreeManipulator<T extends BinaryTree> extends TreeManip
     }
 
     @Override
-    protected void addOtherOp() {
-        addOperation("traverse", bt -> {
-            TraversalManipulator manipulator = new TraversalManipulator(bt);
-            int operationId = ScannerUtil.getInteger(manipulator.getPrompt());
-            if (operationId == 0) return;
-            manipulator.handleOperation(operationId);
-            System.out.println();
-        });
-
-        addOperation("print", bt -> printer.print(bt));
-    }
-
-    @Override
     protected void addSearchOp() {
         addOperation("search", bt -> {
             Object searchData = getInput("Search Data:");
@@ -44,6 +31,19 @@ public abstract class BinTreeManipulator<T extends BinaryTree> extends TreeManip
                 System.out.println("Not Found " + (isWindows ? ":(" : "😞"));
             }
         });
+    }
+
+    @Override
+    protected void addOtherOp() {
+        addOperation("traverse", bt -> {
+            TraversalManipulator manipulator = new TraversalManipulator(bt);
+            int operationId = ScannerUtil.getInteger(manipulator.getPrompt());
+            if (operationId == 0) return;
+            manipulator.handleOperation(operationId);
+            System.out.println();
+        });
+
+        addOperation("print", bt -> printer.print(bt));
     }
 
     @Override

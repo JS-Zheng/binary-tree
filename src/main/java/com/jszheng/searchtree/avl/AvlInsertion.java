@@ -13,12 +13,6 @@ import java.util.Stack;
 class AvlInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
 
     @Override
-    protected AvlTree<E> getBt() {
-        BinaryTree<E> bt = super.getBt();
-        return (AvlTree<E>) bt;
-    }
-
-    @Override
     protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         AvlTree<E> avlTree = getBt();
         Stack<Boolean> stack = new Stack<>();
@@ -46,5 +40,11 @@ class AvlInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
             lastNode = currentNode;
             currentNode = currentNode.getParent();
         }
+    }
+
+    @Override
+    protected AvlTree<E> getBt() {
+        BinaryTree<E> bt = super.getBt();
+        return (AvlTree<E>) bt;
     }
 }

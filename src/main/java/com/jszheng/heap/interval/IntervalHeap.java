@@ -43,6 +43,65 @@ public class IntervalHeap<E extends Comparable<? super E>> extends AbsBinDoubleE
         putData(getRoot(), data);
     }
 
+    // 需維護區間性質 (左小右大)
+    void putData(BinTreeNode<E> node, E data) {
+        List<E> dataList = nodeData.computeIfAbsent(node, k -> new ArrayList<>());
+        if (dataList.size() > 1)
+            throw new RuntimeException("element size overflow");
+        else if (dataList.size() == 1) {
+            dataList.add(data);
+            validateInterval(node);
+        } else {
+            dataList.add(data);
+        }
+    }
+
+    private void validateInterval(BinTreeNode<E> node) {
+        List<E> dataList = nodeData.computeIfAbsent(node, k -> new ArrayList<>());
+        if (dataList.size() != 2) return;
+
+        E lData = dataList.get(0);
+        E rData = dataList.get(1);
+        if (lData == null || rData == null) return;
+        if (lData.compareTo(rData) < 0) return;
+
+        if (Env.debug)
+            System.out.println("[swap] lInterval: " + lData + " is greater than rInterval: " + rData + " => swap!");
+        // swap
+        swapNodeData(node);
+    }
+
+    // low-level API -- 不需維護區間性質
+    void swapNodeData(BinTreeNode<E> node) {
+        List<E> dataList = nodeData.computeIfAbsent(node, k -> new ArrayList<>());
+        E lData = dataList.size() > 0 ? dataList.get(0) : null;
+        E rData = dataList.size() > 1 ? dataList.get(1) : null;
+        putLData(node, rData);
+        putRData(node, lData);
+    }
+
+    // low-level API -- 不需維護區間性質
+    private void putLData(BinTreeNode<E> node, E data) {
+        List<E> dataList = nodeData.computeIfAbsent(node, k -> new ArrayList<>());
+        if (dataList.size() < 1)
+            dataList.add(data);
+        else
+            dataList.set(0, data); // 覆蓋舊左區間
+    }
+
+    // low-level API -- 不需維護區間性質
+    private void putRData(BinTreeNode<E> node, E data) {
+        List<E> dataList = nodeData.computeIfAbsent(node, k -> new ArrayList<>());
+        // 填補左區間
+        if (dataList.size() < 1)
+            dataList.add(null);
+
+        if (dataList.size() > 1)
+            dataList.set(1, data); // 覆蓋舊右區間
+        else
+            dataList.add(data);
+    }
+
     @Override
     public BinaryTree<E> copy(boolean deep) {
         return new IntervalHeap<>(component.copy(deep));
@@ -53,14 +112,6 @@ public class IntervalHeap<E extends Comparable<? super E>> extends AbsBinDoubleE
         return new IntervalHeap<>(component.newTree());
     }
 
-    public E dataOf(BinTreeNode<E> node, boolean maxHeap) {
-        List<E> dataList = nodeData.get(node);
-        if (dataList == null) return null;
-        int index = !maxHeap ? 0 : 1;
-        if (dataList.size() <= index) return null;
-        return dataList.get(index);
-    }
-
     @Override
     public E deleteMax() {
         return deleteExtrema(true);
@@ -69,6 +120,35 @@ public class IntervalHeap<E extends Comparable<? super E>> extends AbsBinDoubleE
     @Override
     public E searchMax() {
         return searchExtrema(true);
+    }
+
+    // // O(1)
+    private E searchExtrema(boolean max) {
+        if (isEmpty()) return null;
+
+        BinTreeNode<E> root = getRoot();
+        E lData = lDataOf(root);
+        E rData = rDataOf(root);
+        if (max)
+            return rData != null ? rData : lData;
+        else
+            return lData != null ? lData : rData;
+    }
+
+    E lDataOf(BinTreeNode<E> node) {
+        return dataOf(node, false);
+    }
+
+    E rDataOf(BinTreeNode<E> node) {
+        return dataOf(node, true);
+    }
+
+    public E dataOf(BinTreeNode<E> node, boolean maxHeap) {
+        List<E> dataList = nodeData.get(node);
+        if (dataList == null) return null;
+        int index = !maxHeap ? 0 : 1;
+        if (dataList.size() <= index) return null;
+        return dataList.get(index);
     }
 
     @Override
@@ -183,23 +263,6 @@ public class IntervalHeap<E extends Comparable<? super E>> extends AbsBinDoubleE
         return 0;
     }
 
-    E lDataOf(BinTreeNode<E> node) {
-        return dataOf(node, false);
-    }
-
-    // 需維護區間性質 (左小右大)
-    void putData(BinTreeNode<E> node, E data) {
-        List<E> dataList = nodeData.computeIfAbsent(node, k -> new ArrayList<>());
-        if (dataList.size() > 1)
-            throw new RuntimeException("element size overflow");
-        else if (dataList.size() == 1) {
-            dataList.add(data);
-            validateInterval(node);
-        } else {
-            dataList.add(data);
-        }
-    }
-
     void putLDataWithValidate(BinTreeNode<E> node, E data) {
         putLData(node, data);
         validateInterval(node);
@@ -208,19 +271,6 @@ public class IntervalHeap<E extends Comparable<? super E>> extends AbsBinDoubleE
     void putRDataWithValidate(BinTreeNode<E> node, E data) {
         putRData(node, data);
         validateInterval(node);
-    }
-
-    E rDataOf(BinTreeNode<E> node) {
-        return dataOf(node, true);
-    }
-
-    // low-level API -- 不需維護區間性質
-    void swapNodeData(BinTreeNode<E> node) {
-        List<E> dataList = nodeData.computeIfAbsent(node, k -> new ArrayList<>());
-        E lData = dataList.size() > 0 ? dataList.get(0) : null;
-        E rData = dataList.size() > 1 ? dataList.get(1) : null;
-        putLData(node, rData);
-        putRData(node, lData);
     }
 
     private void deleteData(BinTreeNode<E> node, boolean max) {
@@ -284,41 +334,6 @@ public class IntervalHeap<E extends Comparable<? super E>> extends AbsBinDoubleE
         return extrema;
     }
 
-    // low-level API -- 不需維護區間性質
-    private void putLData(BinTreeNode<E> node, E data) {
-        List<E> dataList = nodeData.computeIfAbsent(node, k -> new ArrayList<>());
-        if (dataList.size() < 1)
-            dataList.add(data);
-        else
-            dataList.set(0, data); // 覆蓋舊左區間
-    }
-
-    // low-level API -- 不需維護區間性質
-    private void putRData(BinTreeNode<E> node, E data) {
-        List<E> dataList = nodeData.computeIfAbsent(node, k -> new ArrayList<>());
-        // 填補左區間
-        if (dataList.size() < 1)
-            dataList.add(null);
-
-        if (dataList.size() > 1)
-            dataList.set(1, data); // 覆蓋舊右區間
-        else
-            dataList.add(data);
-    }
-
-    // // O(1)
-    private E searchExtrema(boolean max) {
-        if (isEmpty()) return null;
-
-        BinTreeNode<E> root = getRoot();
-        E lData = lDataOf(root);
-        E rData = rDataOf(root);
-        if (max)
-            return rData != null ? rData : lData;
-        else
-            return lData != null ? lData : rData;
-    }
-
     // 需維護區間性質
     private void swap(BinTreeNode<E> node, E data, BinTreeNode<E> parent, E parentData, boolean maxHeap) {
         if (maxHeap) {
@@ -328,21 +343,6 @@ public class IntervalHeap<E extends Comparable<? super E>> extends AbsBinDoubleE
             putLDataWithValidate(node, parentData);
             putLDataWithValidate(parent, data);
         }
-    }
-
-    private void validateInterval(BinTreeNode<E> node) {
-        List<E> dataList = nodeData.computeIfAbsent(node, k -> new ArrayList<>());
-        if (dataList.size() != 2) return;
-
-        E lData = dataList.get(0);
-        E rData = dataList.get(1);
-        if (lData == null || rData == null) return;
-        if (lData.compareTo(rData) < 0) return;
-
-        if (Env.debug)
-            System.out.println("[swap] lInterval: " + lData + " is greater than rInterval: " + rData + " => swap!");
-        // swap
-        swapNodeData(node);
     }
 
 

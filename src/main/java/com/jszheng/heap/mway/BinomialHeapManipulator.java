@@ -7,6 +7,11 @@ public class BinomialHeapManipulator extends AbstractMWayMinHeapManipulator<Bino
     }
 
     @Override
+    protected BinomialHeap createTree() {
+        return new BinomialHeap<>();
+    }
+
+    @Override
     protected void comment() {
         System.out.println("[註]: 二項式堆積 (Binomial Heap)");
         System.out.println("a. 二項式堆積『並非』二元樹");
@@ -18,10 +23,5 @@ public class BinomialHeapManipulator extends AbstractMWayMinHeapManipulator<Bino
         System.out.println("   而非 Horowitz 所指的『合併』 root list -- O(1)");
         System.out.println("g. 插入攤銷時間 --  O(1)");
         System.out.println();
-    }
-
-    @Override
-    protected BinomialHeap createTree() {
-        return new BinomialHeap<>();
     }
 }

@@ -23,13 +23,6 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
         return new AvlTree<>(base);
     }
 
-    public int getBalanceFactor(BinTreeNode<E> node) {
-        int hL = height(node.getLeftChild());
-        int hR = height(node.getRightChild());
-
-        return hL - hR;
-    }
-
     public int getMaxHeightToConstructAvl(int nodeCount) {
         int i = 0;
         while ((FibonacciNumber.getNumber(i + 2).subtract(BigInteger.ONE)).intValue() < nodeCount) {
@@ -57,16 +50,16 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
         return data != null ? data.toString() + (bf == 0 ? "" : "(" + bf + ")") : " ";
     }
 
-    @Override
-    public AvlTree<E> newTree() {
-        return new AvlTree<>(component.newTree());
+    public int getBalanceFactor(BinTreeNode<E> node) {
+        int hL = height(node.getLeftChild());
+        int hR = height(node.getRightChild());
+
+        return hL - hR;
     }
 
     @Override
-    protected BstDeletion<E> createDeletionAlgo() {
-        if (deletionAlgo == null)
-            deletionAlgo = new AvlDeletion<>();
-        return deletionAlgo;
+    public AvlTree<E> newTree() {
+        return new AvlTree<>(component.newTree());
     }
 
     @Override
@@ -76,6 +69,12 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
         return insertionAlgo;
     }
 
+    @Override
+    protected BstDeletion<E> createDeletionAlgo() {
+        if (deletionAlgo == null)
+            deletionAlgo = new AvlDeletion<>();
+        return deletionAlgo;
+    }
 
     void handleUnbalancedNode(BinTreeNode<E> unbalancedNode, int bf, boolean isGrandChildLeft) {
         if (unbalancedNode == null)

@@ -36,7 +36,7 @@ abstract class BinaryHeap<E extends Comparable<? super E>> extends AbstractHeap<
                     + (maxHeap ? "MaxHeap" : "MinHeap") + " =====");
 
         // Build CompleteBinaryTree
-        setDataByArr(data);
+        setDataArr(data, false);
 
         List<BinTreeNode<E>> nodes = traverse("Level", false, false, node -> true);
         int lastNodeIndex = nodes.size() - 1;

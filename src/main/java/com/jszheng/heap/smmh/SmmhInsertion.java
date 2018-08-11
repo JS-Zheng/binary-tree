@@ -15,12 +15,6 @@ public class SmmhInsertion<E extends Comparable<? super E>> extends CompleteBtIn
     }
 
     @Override
-    protected SymmetricMinMaxHeap<E> getBt() {
-        BinaryTree<E> bt = super.getBt();
-        return (SymmetricMinMaxHeap<E>) bt;
-    }
-
-    @Override
     protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         int newNodeIndex = newNode.getIndex();
         if (newNodeIndex == 1) return;
@@ -69,5 +63,11 @@ public class SmmhInsertion<E extends Comparable<? super E>> extends CompleteBtIn
             if (parent == null) return;
             grandParent = parent.getParent();
         }
+    }
+
+    @Override
+    protected SymmetricMinMaxHeap<E> getBt() {
+        BinaryTree<E> bt = super.getBt();
+        return (SymmetricMinMaxHeap<E>) bt;
     }
 }

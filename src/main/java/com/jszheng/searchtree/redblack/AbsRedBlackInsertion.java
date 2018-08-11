@@ -13,6 +13,23 @@ import static com.jszheng.searchtree.redblack.RedBlackTree.RED;
  */
 abstract class AbsRedBlackInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
 
+    void changeColorWithRedNodeCheck(RedBlackTreeNode<E> parent, RedBlackTreeNode<E> lChild, RedBlackTreeNode<E> rChild) {
+        RedBlackTree<E> rbt = getBt();
+
+        changeColor(parent, lChild, rChild);
+
+        if (!parent.isRoot()) {
+            rbt.setColor(parent, RED);
+
+            if (Env.debug)
+                System.out.println("[insert] make parentNode " + parent.getData() + " RED.");
+
+            // Must do this!
+            // 檢查 parent 與 grandParent 是否產生連續紅色
+            checkContinuousRedNode(parent);
+        }
+    }
+
     @Override
     protected RedBlackTree<E> getBt() {
         BinaryTree<E> bt = super.getBt();
@@ -34,23 +51,6 @@ abstract class AbsRedBlackInsertion<E extends Comparable<? super E>> extends Bst
         rbt.setColor(parent, RED);
     }
 
-    void changeColorWithRedNodeCheck(RedBlackTreeNode<E> parent, RedBlackTreeNode<E> lChild, RedBlackTreeNode<E> rChild) {
-        RedBlackTree<E> rbt = getBt();
-
-        changeColor(parent, lChild, rChild);
-
-        if (!parent.isRoot()) {
-            rbt.setColor(parent, RED);
-
-            if (Env.debug)
-                System.out.println("[insert] make parentNode " + parent.getData() + " RED.");
-
-            // Must do this!
-            // 檢查 parent 與 grandParent 是否產生連續紅色
-            checkContinuousRedNode(parent);
-        }
-    }
-
     // 檢查 child 與 parent 有無連續 RED，若有則需作 Rotation
     void checkContinuousRedNode(RedBlackTreeNode<E> child) {
         RedBlackTree<E> rbt = getBt();
@@ -70,14 +70,6 @@ abstract class AbsRedBlackInsertion<E extends Comparable<? super E>> extends Bst
         rotateContinuousRedNode(rbt, child, parent, grandParent);
     }
 
-    boolean isNeedColorChange(RedBlackTreeNode<E> lChild, RedBlackTreeNode<E> rChild) {
-        RedBlackTree<E> rbt = getBt();
-        boolean lColor = rbt.colorOf(lChild);
-        boolean rColor = rbt.colorOf(rChild);
-
-        return lColor == RED && rColor == RED;
-    }
-
     boolean rotateContinuousRedNode(RedBlackTree<E> rbt, RedBlackTreeNode<E> child, RedBlackTreeNode<E> parent, RedBlackTreeNode<E> grandParent) {
         boolean isDoubleRotate = child.isLeftChild() != parent.isLeftChild();
         RotationState state = rbt.createRotationState(parent, child);
@@ -92,5 +84,13 @@ abstract class AbsRedBlackInsertion<E extends Comparable<? super E>> extends Bst
         }
 
         return isDoubleRotate;
+    }
+
+    boolean isNeedColorChange(RedBlackTreeNode<E> lChild, RedBlackTreeNode<E> rChild) {
+        RedBlackTree<E> rbt = getBt();
+        boolean lColor = rbt.colorOf(lChild);
+        boolean rColor = rbt.colorOf(rChild);
+
+        return lColor == RED && rColor == RED;
     }
 }

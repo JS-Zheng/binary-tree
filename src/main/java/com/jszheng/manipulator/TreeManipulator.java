@@ -11,10 +11,23 @@ public abstract class TreeManipulator<TreeType extends Tree> extends Manipulator
     protected Class dataType;
 
     protected TreeManipulator(Class dataType) {
-        this.dataType = dataType;
         tree = createTree();
-        if (Env.debug)
-            comment();
+        this.dataType = dataType;
+        if (Env.debug) comment();
+    }
+
+    protected abstract TreeType createTree();
+
+    protected void comment() {
+        // default do nothing
+    }
+
+    @Override
+    protected final void addDefaultOperation() {
+        addInsertOp();
+        addDeleteOp();
+        addSearchOp();
+        addOtherOp();
     }
 
     @Override
@@ -27,32 +40,20 @@ public abstract class TreeManipulator<TreeType extends Tree> extends Manipulator
     }
 
     @Override
-    protected String getChoosePrompt() {
-        return "========== C、請選擇操作 ==========\n";
-    }
-
-    @Override
-    protected final void addDefaultOperation() {
-        addInsertOp();
-        addDeleteOp();
-        addSearchOp();
-        addOtherOp();
-    }
-
-    @Override
     protected void afterExecute(int typeId) {
         System.out.println();
     }
 
-    protected void addDeleteOp() {
-        // default do nothing
+    @Override
+    protected String getChoosePrompt() {
+        return "========== C、請選擇操作 ==========\n";
     }
 
     protected void addInsertOp() {
         addOperation("insert", new InsertOperation());
     }
 
-    protected void addOtherOp() {
+    protected void addDeleteOp() {
         // default do nothing
     }
 
@@ -60,11 +61,9 @@ public abstract class TreeManipulator<TreeType extends Tree> extends Manipulator
         // default do nothing
     }
 
-    protected void comment() {
+    protected void addOtherOp() {
         // default do nothing
     }
-
-    protected abstract TreeType createTree();
 
     protected Object getInput(String prompt) {
         if (dataType == Integer.class) {

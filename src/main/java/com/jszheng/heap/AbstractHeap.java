@@ -41,12 +41,6 @@ public abstract class AbstractHeap<E extends Comparable<? super E>> extends BtDe
         }
     }
 
-    protected BinTreeNode<E> lastLevelNode(BinTreeNode<E> currentNode) {
-        // Root of Tree probably has parent (i.e., SubTree)
-        if (currentNode == getRoot()) return null;
-        return currentNode.getParent();
-    }
-
     protected void upHeap(BinTreeNode<E> node, boolean maxHeap) {
         BinTreeNode<E> parent = lastLevelNode(node);
 
@@ -69,5 +63,11 @@ public abstract class AbstractHeap<E extends Comparable<? super E>> extends BtDe
             node = parent;
             parent = lastLevelNode(node);
         }
+    }
+
+    protected BinTreeNode<E> lastLevelNode(BinTreeNode<E> currentNode) {
+        // Root of Tree probably has parent (i.e., SubTree)
+        if (currentNode == getRoot()) return null;
+        return currentNode.getParent();
     }
 }

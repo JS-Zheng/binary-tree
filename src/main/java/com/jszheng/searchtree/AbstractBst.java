@@ -39,10 +39,11 @@ abstract class AbstractBst<E extends Comparable<? super E>, Base extends BinaryT
         return createSearchAlgo().searchMin(this);
     }
 
-    protected BstDeletion<E> createDeletionAlgo() {
-        if (deletionAlgo == null)
-            deletionAlgo = new BstDeletion<>();
-        return deletionAlgo;
+    @Override
+    protected BstSearch<E> createSearchAlgo() {
+        if (searchAlgo == null)
+            searchAlgo = new BstSearch<>();
+        return searchAlgo;
     }
 
     @Override
@@ -52,10 +53,9 @@ abstract class AbstractBst<E extends Comparable<? super E>, Base extends BinaryT
         return insertionAlgo;
     }
 
-    @Override
-    protected BstSearch<E> createSearchAlgo() {
-        if (searchAlgo == null)
-            searchAlgo = new BstSearch<>();
-        return searchAlgo;
+    protected BstDeletion<E> createDeletionAlgo() {
+        if (deletionAlgo == null)
+            deletionAlgo = new BstDeletion<>();
+        return deletionAlgo;
     }
 }

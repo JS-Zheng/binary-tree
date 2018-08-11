@@ -1,17 +1,17 @@
 package com.jszheng.base.complete;
 
 import com.jszheng.insertion.AbstractInsertionAlgo;
-import com.jszheng.search.SearchResult;
+import com.jszheng.search.InsertableSearchResult;
 
 /*
  * O(n)
  */
 public class CompleteBtInsertion<E> extends AbstractInsertionAlgo<E> {
 
-    protected SearchResult<E> result;
+    protected InsertableSearchResult<E> result;
 
     @Override
-    public SearchResult<E> insertData(E data) {
+    public InsertableSearchResult<E> insertData(E data) {
         result = null; // Must do this.
         final int[] searchCount = {0};
 
@@ -19,12 +19,12 @@ public class CompleteBtInsertion<E> extends AbstractInsertionAlgo<E> {
             searchCount[0]++;
 
             if (!node.hasLeftChild()) {
-                result = new SearchResult<E>(true, node, searchCount[0]);
+                result = new InsertableSearchResult<>(true, node, searchCount[0]);
                 return false;
             }
 
             if (!node.hasRightChild()) {
-                result = new SearchResult<>(false, node, searchCount[0]);
+                result = new InsertableSearchResult<>(false, node, searchCount[0]);
                 return false;
             }
 

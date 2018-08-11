@@ -7,6 +7,11 @@ public class PairingHeapManipulator extends AbsMWayMinReducibleHeapManipulator<P
     }
 
     @Override
+    protected PairingHeap createTree() {
+        return new PairingHeap();
+    }
+
+    @Override
     protected void comment() {
         System.out.println("[註]: 成對堆積 (Pairing Heap)");
         System.out.println("a. 成對堆積『並非』二元樹");
@@ -19,10 +24,5 @@ public class PairingHeapManipulator extends AbsMWayMinReducibleHeapManipulator<P
         System.out.println("h. 攤銷時間 -- 合併、減少鍵值: o(log n)  刪除任意值、刪除最小值: O(log n)");
         System.out.println("i. 儘管理論上 decreaseKey & deleteMin 時間複雜度較差，『實務』上效能大多優於費氏堆積");
         System.out.println();
-    }
-
-    @Override
-    protected PairingHeap createTree() {
-        return new PairingHeap();
     }
 }

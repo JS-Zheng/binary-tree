@@ -53,6 +53,38 @@ public class PairingHeap<E extends Comparable<? super E>> extends AbstractMWayHe
         return null;
     }
 
+    private void merge(PairingTreeNode<E> node) {
+        if (node == null) return;
+
+        if (Env.debug) {
+            E data = node.getData();
+            System.out.println("[merge] target: " + data);
+        }
+
+        if (min == null) {
+            setRoot(node);
+            return;
+        }
+
+        // compare link
+        PairingTreeNode<E> smallerNode = compareNode(min, node, false);
+        PairingTreeNode<E> greaterNode = smallerNode == min ? node : min;
+        boolean isReplaceRoot = greaterNode == min;
+
+        PairingTreeNode<E> formerChild = smallerNode.child;
+        concatNodeList(greaterNode, formerChild);
+
+        smallerNode.child = greaterNode;
+        smallerNode.degree++;
+
+        greaterNode.parent = smallerNode;
+
+        if (isReplaceRoot) {
+            first = smallerNode;
+            min = smallerNode;
+        }
+    }
+
     @Override
     public E deleteMin() {
         // implement by two-pass pairing heap
@@ -157,37 +189,5 @@ public class PairingHeap<E extends Comparable<? super E>> extends AbstractMWayHe
         merge(newHeap);
 
         return deleteData;
-    }
-
-    private void merge(PairingTreeNode<E> node) {
-        if (node == null) return;
-
-        if (Env.debug) {
-            E data = node.getData();
-            System.out.println("[merge] target: " + data);
-        }
-
-        if (min == null) {
-            setRoot(node);
-            return;
-        }
-
-        // compare link
-        PairingTreeNode<E> smallerNode = compareNode(min, node, false);
-        PairingTreeNode<E> greaterNode = smallerNode == min ? node : min;
-        boolean isReplaceRoot = greaterNode == min;
-
-        PairingTreeNode<E> formerChild = smallerNode.child;
-        concatNodeList(greaterNode, formerChild);
-
-        smallerNode.child = greaterNode;
-        smallerNode.degree++;
-
-        greaterNode.parent = smallerNode;
-
-        if (isReplaceRoot) {
-            first = smallerNode;
-            min = smallerNode;
-        }
     }
 }

@@ -1,7 +1,6 @@
 package com.jszheng.searchtree.redblack;
 
 import com.jszheng.node.BinTreeNode;
-import com.jszheng.search.SearchAlgo;
 import com.jszheng.searchtree.BstSearch;
 
 import static com.jszheng.searchtree.redblack.RedBlackTree.BLACK;
@@ -13,7 +12,7 @@ import static com.jszheng.searchtree.redblack.RedBlackTree.RED;
 class RedBlackTopDownInsertion<E extends Comparable<? super E>> extends AbsRedBlackInsertion<E> {
 
     @Override
-    protected SearchAlgo<E> createSearchAlgo() {
+    protected BstSearch<E> createSearchAlgo() {
         return new RbtInsertionSearch();
     }
 

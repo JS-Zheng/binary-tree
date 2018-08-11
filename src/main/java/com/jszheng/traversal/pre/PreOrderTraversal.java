@@ -14,13 +14,13 @@ public class PreOrderTraversal<E> extends AbstractIterativeTraversal<E> implemen
     protected List<BinTreeNode<E>> dataList = new ArrayList<>();
 
     @Override
-    public BinTreeNode<E> firstItem(BinaryTree<E> bt) {
-        return bt.getRoot();
+    public boolean init(BinaryTree<E> bt) {
+        return bt != null && bt.getRoot() != null;
     }
 
     @Override
-    public boolean init(BinaryTree<E> bt) {
-        return bt != null && bt.getRoot() != null;
+    public BinTreeNode<E> firstItem(BinaryTree<E> bt) {
+        return bt.getRoot();
     }
 
     @Override

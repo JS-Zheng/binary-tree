@@ -23,12 +23,12 @@ public class SimpleBalancedTree<E> extends BtDecorator<E, BinaryTree<E>> {
     }
 
     @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        return new SimpleBalancedInsertion<>();
+    protected SearchAlgo<E> createSearchAlgo() {
+        return new LinearSearch<>();
     }
 
     @Override
-    protected SearchAlgo<E> createSearchAlgo() {
-        return new LinearSearch<>();
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        return new SimpleBalancedInsertion<>();
     }
 }

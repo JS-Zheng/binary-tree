@@ -83,6 +83,10 @@ public class HuffmanTree extends BtDecorator<String, HuffmanBase> {
         return result;
     }
 
+    private String getCodeword(char c) {
+        return codewordMap.get(c);
+    }
+
     @Override
     public String getNodeString(BinTreeNode<String> node) {
         HuffmanTreeNode hmNode = (HuffmanTreeNode) node;
@@ -95,9 +99,25 @@ public class HuffmanTree extends BtDecorator<String, HuffmanBase> {
     }
 
     @Override
-    public void insert(String... data) {
+    protected SearchAlgo<String> createSearchAlgo() {
+        return null;
+    }
+
+    @Override
+    public void insert(String data) {
         super.insert(data);
-        this.data = data[data.length - 1];
+        this.data = data;
+    }
+
+    @Override
+    public void insert(String[] data) {
+        StringBuilder builder = new StringBuilder();
+        for (String s : data) {
+            builder.append(s);
+        }
+        String result = builder.toString();
+        super.insert(result);
+        this.data = result;
     }
 
     @Override
@@ -105,11 +125,6 @@ public class HuffmanTree extends BtDecorator<String, HuffmanBase> {
         if (insertionAlgo == null)
             insertionAlgo = new HuffmanInsertion();
         return insertionAlgo;
-    }
-
-    @Override
-    protected SearchAlgo<String> createSearchAlgo() {
-        return null;
     }
 
     void clearCodewordMap() {
@@ -173,9 +188,5 @@ public class HuffmanTree extends BtDecorator<String, HuffmanBase> {
 
     void putDeCodeword(String codeword, char c) {
         deCodewordMap.put(codeword, c);
-    }
-
-    private String getCodeword(char c) {
-        return codewordMap.get(c);
     }
 }

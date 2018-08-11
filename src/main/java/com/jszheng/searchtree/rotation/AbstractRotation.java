@@ -25,6 +25,19 @@ abstract class AbstractRotation implements RotationState {
             bt.setRoot(pivot);
     }
 
+    abstract <E> BinTreeNode<E> rotateTree(BinaryTree<E> bt, BinTreeNode<E> parent);
+
+    private <E> void setGrandParent(BinTreeNode<E> grandParent, boolean orinLeft, BinTreeNode<E> newParent) {
+        if (grandParent != null) {
+            if (orinLeft)
+                grandParent.setLeftChild(newParent);
+            else
+                grandParent.setRightChild(newParent);
+        } else {
+            newParent.deleteParent();
+        }
+    }
+
     /*
          * Tri-node restructuring
          *
@@ -85,18 +98,5 @@ abstract class AbstractRotation implements RotationState {
         if (listener != null) listener.onRotateRight(parent, pivot, rChild);
         parent.setLeftChild(rChild);
         pivot.setRightChild(parent);
-    }
-
-    abstract <E> BinTreeNode<E> rotateTree(BinaryTree<E> bt, BinTreeNode<E> parent);
-
-    private <E> void setGrandParent(BinTreeNode<E> grandParent, boolean orinLeft, BinTreeNode<E> newParent) {
-        if (grandParent != null) {
-            if (orinLeft)
-                grandParent.setLeftChild(newParent);
-            else
-                grandParent.setRightChild(newParent);
-        } else {
-            newParent.deleteParent();
-        }
     }
 }

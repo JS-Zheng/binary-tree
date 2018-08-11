@@ -18,6 +18,19 @@ public class TraversalAlgoFactory {
         return create(clz, isFullMode, handler);
     }
 
+    private static String capFirstChar(String str) {
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    private static Class getClassByOrder(String order, boolean recursive) {
+        try {
+            String algoClz = getTraversalClzName(order, recursive);
+            return Class.forName(algoClz);
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+    }
+
     public static TraversalAlgo create(Class clz, boolean isFullMode, TraversalNodeHandler handler) {
         TraversalAlgo algo = null;
         if (clz != null) {
@@ -39,32 +52,19 @@ public class TraversalAlgoFactory {
         return algo;
     }
 
-    private static String capFirstChar(String str) {
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
-    }
-
-    private static Class getClassByOrder(String order, boolean recursive) {
-        try {
-            String algoClz = getTraversalClzName(order, recursive);
-            return Class.forName(algoClz);
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
-    }
-
     private static String getTraversalClzName(String order, boolean recursive) {
         String packageName = getTraversalPackageName(order);
         String simpleName = getTraversalClzSimpleName(order, recursive);
         return packageName + "." + simpleName;
     }
 
-    private static String getTraversalClzSimpleName(String order, boolean recursive) {
-        String recursiveStr = recursive ? "Recursive" : "";
-        return order + "Order" + recursiveStr + "Traversal";
-    }
-
     private static String getTraversalPackageName(String order) {
         order = order.toLowerCase();
         return TraversalAlgo.class.getPackage().getName() + "." + order;
+    }
+
+    private static String getTraversalClzSimpleName(String order, boolean recursive) {
+        String recursiveStr = recursive ? "Recursive" : "";
+        return order + "Order" + recursiveStr + "Traversal";
     }
 }

@@ -2,6 +2,7 @@ package com.jszheng.searchtree;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.node.BinTreeNode;
+import com.jszheng.search.InsertableSearchResult;
 import com.jszheng.search.SearchAlgo;
 import com.jszheng.search.SearchResult;
 
@@ -13,7 +14,7 @@ public class BstSearch<E extends Comparable<? super E>> implements SearchAlgo<E>
     private BinaryTree<E> bt;
 
     @Override
-    public SearchResult<E> search(BinaryTree<E> bt, E data) {
+    public InsertableSearchResult<E> search(BinaryTree<E> bt, E data) {
         BinTreeNode<E> currentNode;
 
         if (bt == null || (currentNode = bt.getRoot()) == null)
@@ -23,7 +24,7 @@ public class BstSearch<E extends Comparable<? super E>> implements SearchAlgo<E>
 
         int searchCount = 0;
         boolean nextLeft = false;
-        SearchResult<E> result;
+        InsertableSearchResult<E> result;
         BinTreeNode<E> lastNode = null;
 
         while (currentNode != null) {
@@ -40,7 +41,7 @@ public class BstSearch<E extends Comparable<? super E>> implements SearchAlgo<E>
                 currentNode = currentNode.getLeftChild();
                 nextLeft = true;
             } else if (compareResult == 0) {
-                result = new SearchResult<>(nextLeft, lastNode, searchCount);
+                result = new InsertableSearchResult<>(nextLeft, lastNode, searchCount);
                 result.setNode(currentNode); // only setNode() when node can be found
                 fixAfterSearch(currentNode);
                 return result;
@@ -52,32 +53,24 @@ public class BstSearch<E extends Comparable<? super E>> implements SearchAlgo<E>
             }
         }
 
-        result = new SearchResult<>(nextLeft, lastNode, searchCount);
+        result = new InsertableSearchResult<>(nextLeft, lastNode, searchCount);
         onNodeNotFound(result);
 
         return result;
-    }
-
-    public SearchResult<E> searchMax(BinaryTree<E> bt) {
-        return searchExtrema(bt, true);
-    }
-
-    public SearchResult<E> searchMin(BinaryTree<E> bt) {
-        return searchExtrema(bt, false);
-    }
-
-    protected BinaryTree<E> getBt() {
-        return bt;
-    }
-
-    protected void fixAfterSearch(BinTreeNode<E> node) {
-        // default do nothing.
     }
 
     // Handles each node in process of BST Comparing
     protected boolean handleNode(BinTreeNode<E> node) {
         // Default do nothing.
         return true;
+    }
+
+    protected void onSmallerThan(BinTreeNode<E> currentNode) {
+
+    }
+
+    protected void fixAfterSearch(BinTreeNode<E> node) {
+        // default do nothing.
     }
 
     protected void onGreaterThan(BinTreeNode<E> currentNode) {
@@ -88,8 +81,8 @@ public class BstSearch<E extends Comparable<? super E>> implements SearchAlgo<E>
 
     }
 
-    protected void onSmallerThan(BinTreeNode<E> currentNode) {
-
+    public SearchResult<E> searchMax(BinaryTree<E> bt) {
+        return searchExtrema(bt, true);
     }
 
     private SearchResult<E> searchExtrema(BinaryTree<E> bt, boolean searchMax) {
@@ -117,5 +110,13 @@ public class BstSearch<E extends Comparable<? super E>> implements SearchAlgo<E>
         fixAfterSearch(lastNode);
 
         return result;
+    }
+
+    public SearchResult<E> searchMin(BinaryTree<E> bt) {
+        return searchExtrema(bt, false);
+    }
+
+    protected BinaryTree<E> getBt() {
+        return bt;
     }
 }

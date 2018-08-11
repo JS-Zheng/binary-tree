@@ -41,6 +41,10 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E, 
                 (getRoot() == node ? "⊙" : " "); // Keep one space to mock null.
     }
 
+    Integer priorityOf(BinTreeNode<E> node) {
+        return priority.get(node);
+    }
+
     public void insertWithPriority(E data, int p) {
         if (isEmpty()) {
             setRoot(data, p);
@@ -54,6 +58,15 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E, 
         insertionAlgo.insert(this, data);
     }
 
+    private void setRoot(E data, int p) {
+        super.setRoot(data);
+        putPriority(getRoot(), p);
+    }
+
+    void putPriority(BinTreeNode<E> node, int p) {
+        priority.put(node, p);
+    }
+
     @Override
     public BinarySearchTree<E> newTree() {
         return new Treap<>(component.newTree());
@@ -65,15 +78,18 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E, 
         putRandomPriority(getRoot());
     }
 
-    boolean isMaxHeap() {
-        return maxHeap;
+    void putRandomPriority(BinTreeNode<E> node) {
+        putRandomPriority(node, 65535);
     }
 
-    @Override
-    protected BstDeletion<E> createDeletionAlgo() {
-        if (deletionAlgo == null)
-            deletionAlgo = new TreapDeletion<>();
-        return deletionAlgo;
+    private void putRandomPriority(BinTreeNode<E> node, int bound) {
+        Random rdm = new Random();
+        int i = rdm.nextInt(bound);
+        priority.put(node, i);
+    }
+
+    boolean isMaxHeap() {
+        return maxHeap;
     }
 
     @Override
@@ -85,16 +101,11 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E, 
         return insertionAlgo;
     }
 
-    Integer priorityOf(BinTreeNode<E> node) {
-        return priority.get(node);
-    }
-
-    void putPriority(BinTreeNode<E> node, int p) {
-        priority.put(node, p);
-    }
-
-    void putRandomPriority(BinTreeNode<E> node) {
-        putRandomPriority(node, 65535);
+    @Override
+    protected BstDeletion<E> createDeletionAlgo() {
+        if (deletionAlgo == null)
+            deletionAlgo = new TreapDeletion<>();
+        return deletionAlgo;
     }
 
     void removePriority(BinTreeNode<E> node) {
@@ -119,16 +130,5 @@ public class Treap<E extends Comparable<? super E>> extends SelfBalancingBst<E, 
 
             parent = node.getParent();
         }
-    }
-
-    private void putRandomPriority(BinTreeNode<E> node, int bound) {
-        Random rdm = new Random();
-        int i = rdm.nextInt(bound);
-        priority.put(node, i);
-    }
-
-    private void setRoot(E data, int p) {
-        super.setRoot(data);
-        putPriority(getRoot(), p);
     }
 }

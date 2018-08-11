@@ -7,6 +7,11 @@ public class FibonacciHeapManipulator extends AbsMWayMinReducibleHeapManipulator
     }
 
     @Override
+    protected FibonacciHeap createTree() {
+        return new FibonacciHeap(false);
+    }
+
+    @Override
     protected void comment() {
         System.out.println("[註]: 費氏堆積 (Fibonacci Heap)");
         System.out.println("a. 節點結構 -- 若某子節點曾失去過 child，以 (#) 符號標記");
@@ -20,10 +25,5 @@ public class FibonacciHeapManipulator extends AbsMWayMinReducibleHeapManipulator
         System.out.println("i. 攤銷時間 -- 減少鍵值: O(1)  刪除任意值、刪除最小值: O(log n)");
         System.out.println("j. 移除極值 合併策略採 CLRS 之作法 -- consolidate start from right sibling of target");
         System.out.println();
-    }
-
-    @Override
-    protected FibonacciHeap createTree() {
-        return new FibonacciHeap(false);
     }
 }

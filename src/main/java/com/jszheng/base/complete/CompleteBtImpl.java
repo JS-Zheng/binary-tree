@@ -22,12 +22,12 @@ public class CompleteBtImpl<E> extends BtDecorator<E, BinaryTree<E>> implements 
     }
 
     @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        return new CompleteBtInsertion<>();
+    protected SearchAlgo<E> createSearchAlgo() {
+        return new LinearSearch<>();
     }
 
     @Override
-    protected SearchAlgo<E> createSearchAlgo() {
-        return new LinearSearch<>();
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        return new CompleteBtInsertion<>();
     }
 }

@@ -59,17 +59,17 @@ public class AbstractMWayTreeNode<E, Self extends AbstractMWayTreeNode<E, Self>>
         return getSibling(false);
     }
 
+    private Self getSibling(boolean rSibling) {
+        if (rSibling && isRLinkCircular) return null;
+        else if (!rSibling && isLLinkCircular) return null;
+        else return rSibling ? rLink : lLink;
+    }
+
     public Self getParent() {
         return parent;
     }
 
     public Self getRightSibling() {
         return getSibling(true);
-    }
-
-    private Self getSibling(boolean rSibling) {
-        if (rSibling && isRLinkCircular) return null;
-        else if (!rSibling && isLLinkCircular) return null;
-        else return rSibling ? rLink : lLink;
     }
 }

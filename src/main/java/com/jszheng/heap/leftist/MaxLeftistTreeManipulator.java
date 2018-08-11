@@ -9,6 +9,11 @@ public class MaxLeftistTreeManipulator extends AbsMaxBinaryHeapManipulator<MaxLe
     }
 
     @Override
+    protected MaxLeftistTree<Comparable<? super Comparable>> createTree() {
+        return new MaxLeftistTree<>(baseBt());
+    }
+
+    @Override
     protected void comment() {
         System.out.println("[註]: 最大左傾樹 (Max Leftist Tree)");
         System.out.println("a. 節點結構 --  data(到外部節點之最短路徑長度)");
@@ -18,10 +23,5 @@ public class MaxLeftistTreeManipulator extends AbsMaxBinaryHeapManipulator<MaxLe
         System.out.println("e. 尋找最大值: O(1)");
         System.out.println("f. 插入、合併 與刪除最大值: Θ(log n)");
         System.out.println();
-    }
-
-    @Override
-    protected MaxLeftistTree<Comparable<? super Comparable>> createTree() {
-        return new MaxLeftistTree<>(baseBt());
     }
 }

@@ -9,6 +9,11 @@ public final class AvlManipulator extends AbstractBstManipulator<AvlTree> {
     }
 
     @Override
+    protected AvlTree createTree() {
+        return new AvlTree(baseBt());
+    }
+
+    @Override
     protected void comment() {
         System.out.println("[註]: Avl 樹 (Avl Tree)");
         System.out.println("a. 節點結構 -- data(平衡因子)");
@@ -17,10 +22,5 @@ public final class AvlManipulator extends AbstractBstManipulator<AvlTree> {
         System.out.println("d. 若無指明，『高度平衡樹』通常即指 Avl Tree");
         System.out.println("e. 插入、搜尋 與刪除: O(log n)");
         System.out.println();
-    }
-
-    @Override
-    protected AvlTree createTree() {
-        return new AvlTree(baseBt());
     }
 }

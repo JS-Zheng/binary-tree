@@ -5,12 +5,7 @@ import java.util.Queue;
 
 public interface BFSAlgo<Param, Item, Result> {
 
-    default Queue<Item> createQueue() {
-        return new LinkedList<>(); // To support null element.
-    }
-
     default Result execute(Param param) {
-
         Queue<Item> queue = createQueue();
 
         // Prevent Init Error.
@@ -20,9 +15,7 @@ public interface BFSAlgo<Param, Item, Result> {
         Item item = firstItem(param);
         queue.offer(item);
 
-
         while (loopCondition(queue)) {
-
             Item queueItem = queue.poll();
 
             if (!onDataPolled(queue, queueItem))
@@ -32,9 +25,13 @@ public interface BFSAlgo<Param, Item, Result> {
         return onFinish(param);
     }
 
-    Item firstItem(Param param);
+    default Queue<Item> createQueue() {
+        return new LinkedList<>(); // To support null element.
+    }
 
     boolean init(Param param);
+
+    Item firstItem(Param param);
 
     default boolean loopCondition(Queue<Item> queue) {
         return !queue.isEmpty();

@@ -2,7 +2,6 @@ package com.jszheng.searchtree.sizebalanced;
 
 import com.jszheng.base.BinaryTree;
 import com.jszheng.node.BinTreeNode;
-import com.jszheng.search.SearchAlgo;
 import com.jszheng.searchtree.BstInsertion;
 import com.jszheng.searchtree.BstSearch;
 
@@ -29,7 +28,7 @@ class SbtInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
     }
 
     @Override
-    protected SearchAlgo<E> createSearchAlgo() {
+    protected BstSearch<E> createSearchAlgo() {
         return new SbtInsertionSearch();
     }
 
@@ -49,17 +48,17 @@ class SbtInsertion<E extends Comparable<? super E>> extends BstInsertion<E> {
     class SbtInsertionSearch extends BstSearch<E> {
 
         @Override
-        protected void fixAfterSearch(BinTreeNode<E> node) { // 此點已存在
-            for (SbTreeNode<E> n : nodeList)
-                n.size--;
-        }
-
-        @Override
         protected boolean handleNode(BinTreeNode<E> node) {
             SbTreeNode<E> sbNode = (SbTreeNode<E>) node;
             sbNode.size++;
             nodeList.add(sbNode);
             return true;
+        }
+
+        @Override
+        protected void fixAfterSearch(BinTreeNode<E> node) { // 此點已存在
+            for (SbTreeNode<E> n : nodeList)
+                n.size--;
         }
     }
 }

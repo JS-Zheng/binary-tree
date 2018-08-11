@@ -16,19 +16,46 @@ public abstract class AbstractMWayHeap<E extends Comparable<? super E>,
 
     private TreePrinter printer;
 
-    @Override
-    @SafeVarargs
-    public final void insert(E... data) {
-        for (E d : data) {
-            if (Env.debug) System.out.println("[insert] data: " + d);
-            Node node = newNode();
-            node.data = d;
-            if (min == null)
-                setRoot(node);
-            else
-                insertNode(node);
+    public void postOrder() {
+        postOrderTraverse(first, new DefaultNodeHandler());
+        System.out.println("\n");
+    }
 
-            if (Env.debug) System.out.println();
+    public Node search(E data) {
+        SearchNodeHandler handler = new SearchNodeHandler(data);
+        postOrderTraverse(first, handler);
+        return handler.result;
+    }
+
+    @Override
+    public Node getRoot() {
+        return min;
+    }
+
+    // 設置新的根節點 (將取代現有之 min list)
+    @Override
+    public void setRoot(Node node) {
+        first = node;
+        min = node;
+    }
+
+    @Override
+    public void insert(E datum) {
+        if (Env.debug) System.out.println("[insert] data: " + datum);
+        Node node = newNode();
+        node.data = datum;
+        if (min == null)
+            setRoot(node);
+        else
+            insertNode(node);
+
+        if (Env.debug) System.out.println();
+    }
+
+    @Override
+    public final void insert(E[] data) {
+        for (E d : data) {
+            insert(d);
         }
     }
 
@@ -71,40 +98,19 @@ public abstract class AbstractMWayHeap<E extends Comparable<? super E>,
     }
 
     @Override
-    public Node getRoot() {
-        return min;
-    }
-
-    // 設置新的根節點 (將取代現有之 min list)
-    @Override
-    public void setRoot(Node node) {
-        first = node;
-        min = node;
-    }
-
-    @Override
     public boolean isEmpty() {
         return min == null;
     }
 
     public abstract AbstractMWayHeap<E, Node> newTree();
 
-    public void postOrder() {
-        postOrderTraverse(first, new DefaultNodeHandler());
-        System.out.println("\n");
-    }
-
-    public Node search(E data) {
-        SearchNodeHandler handler = new SearchNodeHandler(data);
-        postOrderTraverse(first, handler);
-        return handler.result;
-    }
-
-    private Node getRightmostRoot() {
-        return first.lLink;
-    }
-
     protected abstract void insertNode(Node node);
+
+    // precondition: first 及 target 所在之串列需維護好 circular doubly linked list
+    // postcondition: 將以 first 起始之 min list，與 target node list 進行串連
+    void concatRootList(Node target) {
+        concatNodeList(first, target);
+    }
 
     void concatNodeList(Node node, Node target) {
         if (node == null || target == null) return;
@@ -124,10 +130,24 @@ public abstract class AbstractMWayHeap<E extends Comparable<? super E>,
         rMostRootOfTarget.isRLinkCircular = true;
     }
 
-    // precondition: first 及 target 所在之串列需維護好 circular doubly linked list
-    // postcondition: 將以 first 起始之 min list，與 target node list 進行串連
-    void concatRootList(Node target) {
-        concatNodeList(first, target);
+    private Node getLMostOrRMostNode(Node start, boolean leftmost) {
+        Node result = start;
+        Node currentRoot = start;
+        while (currentRoot != null) {
+            result = currentRoot;
+            currentRoot = leftmost ? currentRoot.getLeftSibling() : currentRoot.getRightSibling();
+        }
+        return result;
+    }
+
+    private Node getRightmostRoot() {
+        return first.lLink;
+    }
+
+    // low-level API -- Do not need to maintain circular state of link.
+    void setSibling(Node n1, Node n2) {
+        n1.rLink = n2;
+        n2.lLink = n1;
     }
 
     // 移除 parent 的 子節點 -- child
@@ -169,22 +189,6 @@ public abstract class AbstractMWayHeap<E extends Comparable<? super E>,
         first = node;
         first.isLLinkCircular = true;
         first.lLink.isRLinkCircular = true;
-    }
-
-    // low-level API -- Do not need to maintain circular state of link.
-    void setSibling(Node n1, Node n2) {
-        n1.rLink = n2;
-        n2.lLink = n1;
-    }
-
-    private Node getLMostOrRMostNode(Node start, boolean leftmost) {
-        Node result = start;
-        Node currentRoot = start;
-        while (currentRoot != null) {
-            result = currentRoot;
-            currentRoot = leftmost ? currentRoot.getLeftSibling() : currentRoot.getRightSibling();
-        }
-        return result;
     }
 
     // 以 parent 判斷節點是否位於 rootList

@@ -33,8 +33,13 @@ public interface Tree<E, Node extends TreeNode<E>> {
                 (getRoot() == node ? "⊙" : " "); // Keep one space to mock null.
     }
 
-    @SuppressWarnings("unchecked")
-    void insert(E... data);
+    Node getRoot();
+
+    void setRoot(Node node);
+
+    void insert(E datum);
+
+    void insert(E[] data);
 
     Node newNode();
 
@@ -43,15 +48,11 @@ public interface Tree<E, Node extends TreeNode<E>> {
         printer.print(this);
     }
 
-    int size(Node node);
-
     default int size() {
         return size(getRoot());
     }
 
-    Node getRoot();
-
-    void setRoot(Node node);
+    int size(Node node);
 
     boolean isEmpty();
 }

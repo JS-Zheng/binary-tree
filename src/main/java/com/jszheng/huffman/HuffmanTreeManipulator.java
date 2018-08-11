@@ -12,8 +12,20 @@ public class HuffmanTreeManipulator extends BinTreeManipulator<HuffmanTree> {
         super(dataType);
     }
 
-    protected void addInsertOp() {
-        addOperation("編碼", new EncodeOperation());
+    @Override
+    protected void addSearchOp() {
+        // do nothing
+    }
+
+    @Override
+    protected void addOtherOp() {
+        addOperation("解碼", new DecodeOperation());
+        super.addOtherOp();
+    }
+
+    @Override
+    protected HuffmanTree createTree() {
+        return new HuffmanTree(new HuffmanBase());
     }
 
     @Override
@@ -28,20 +40,8 @@ public class HuffmanTreeManipulator extends BinTreeManipulator<HuffmanTree> {
         System.out.println();
     }
 
-    @Override
-    protected HuffmanTree createTree() {
-        return new HuffmanTree(new HuffmanBase());
-    }
-
-    @Override
-    protected void addOtherOp() {
-        addOperation("解碼", new DecodeOperation());
-        super.addOtherOp();
-    }
-
-    @Override
-    protected void addSearchOp() {
-        // do nothing
+    protected void addInsertOp() {
+        addOperation("編碼", new EncodeOperation());
     }
 
     private class EncodeOperation implements TreeOperation<HuffmanTree> {

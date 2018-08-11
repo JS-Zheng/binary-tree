@@ -38,53 +38,6 @@ public class MinMaxHeap<E extends Comparable<? super E>> extends AbsBinDoubleEnd
         return maxNode != null ? maxNode.getData() : null;
     }
 
-    @Override
-    public E deleteMin() {
-        return deleteExtrema(false);
-    }
-
-    @Override
-    public E searchMin() {
-        BinTreeNode<E> minNode = searchExtremaNode(false);
-        return minNode != null ? minNode.getData() : null;
-    }
-
-    @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        return new MinMaxHeapInsertion<>();
-    }
-
-    @Override
-    protected BinTreeNode<E> lastLevelNode(BinTreeNode<E> currentNode) {
-        BinTreeNode<E> parent = currentNode.getParent();
-        return parent != null ? parent.getParent() : null;
-    }
-
-    @Override
-    protected void upHeap(BinTreeNode<E> node, boolean maxHeap) {
-        super.upHeap(node, maxHeap);
-    }
-
-    @Override
-    protected BinTreeNode<E> searchExtremaNode(boolean max) {
-        BinTreeNode<E> root = getRoot();
-        if (root == null) return null;
-        if (!max) return root;
-
-        // Find Max
-        BinTreeNode<E> lChild = root.getLeftChild();
-        BinTreeNode<E> rChild = root.getRightChild();
-        if (lChild == null && rChild == null)
-            return root;
-        else
-            return compareNode(lChild, rChild, true);
-    }
-
-    boolean isMinLevel(BinTreeNode<E> node) {
-        int level = node.getLevel();
-        return level % 2 == 1;
-    }
-
     private E deleteExtrema(boolean max) {
         BinTreeNode<E> root = getRoot();
         BinTreeNode<E> target = max ? searchExtremaNode(true) : root;
@@ -167,5 +120,52 @@ public class MinMaxHeap<E extends Comparable<? super E>> extends AbsBinDoubleEnd
         }
 
         return extrema;
+    }
+
+    @Override
+    protected BinTreeNode<E> searchExtremaNode(boolean max) {
+        BinTreeNode<E> root = getRoot();
+        if (root == null) return null;
+        if (!max) return root;
+
+        // Find Max
+        BinTreeNode<E> lChild = root.getLeftChild();
+        BinTreeNode<E> rChild = root.getRightChild();
+        if (lChild == null && rChild == null)
+            return root;
+        else
+            return compareNode(lChild, rChild, true);
+    }
+
+    @Override
+    public E deleteMin() {
+        return deleteExtrema(false);
+    }
+
+    @Override
+    public E searchMin() {
+        BinTreeNode<E> minNode = searchExtremaNode(false);
+        return minNode != null ? minNode.getData() : null;
+    }
+
+    @Override
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        return new MinMaxHeapInsertion<>();
+    }
+
+    @Override
+    protected void upHeap(BinTreeNode<E> node, boolean maxHeap) {
+        super.upHeap(node, maxHeap);
+    }
+
+    @Override
+    protected BinTreeNode<E> lastLevelNode(BinTreeNode<E> currentNode) {
+        BinTreeNode<E> parent = currentNode.getParent();
+        return parent != null ? parent.getParent() : null;
+    }
+
+    boolean isMinLevel(BinTreeNode<E> node) {
+        int level = node.getLevel();
+        return level % 2 == 1;
     }
 }

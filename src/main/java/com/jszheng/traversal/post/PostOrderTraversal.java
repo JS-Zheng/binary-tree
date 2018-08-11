@@ -16,13 +16,13 @@ public class PostOrderTraversal<E> extends AbstractIterativeTraversal<E> impleme
     private List<BinTreeNode<E>> dataList = new ArrayList<>();
 
     @Override
-    public BinTreeNode<E> firstItem(BinaryTree<E> bt) {
-        return bt.getRoot();
+    public boolean init(BinaryTree<E> bt) {
+        return bt != null && bt.getRoot() != null;
     }
 
     @Override
-    public boolean init(BinaryTree<E> bt) {
-        return bt != null && bt.getRoot() != null;
+    public BinTreeNode<E> firstItem(BinaryTree<E> bt) {
+        return bt.getRoot();
     }
 
     @Override

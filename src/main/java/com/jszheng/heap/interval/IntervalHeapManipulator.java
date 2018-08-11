@@ -10,6 +10,11 @@ public class IntervalHeapManipulator extends DoubleEndedHeapManipulator {
     }
 
     @Override
+    protected BinaryTree createTree() {
+        return new IntervalHeap(baseBt());
+    }
+
+    @Override
     protected void comment() {
         System.out.println("[註]: 區間堆積 (Interval Heap)");
         System.out.println("a. 為一種雙向優先權佇列 (double-ended priority queue)");
@@ -19,10 +24,5 @@ public class IntervalHeapManipulator extends DoubleEndedHeapManipulator {
         System.out.println("e. 尋找最小、最大值: O(1)");
         System.out.println("f. 插入 與 刪除最小、最大值: O(log n)");
         System.out.println();
-    }
-
-    @Override
-    protected BinaryTree createTree() {
-        return new IntervalHeap(baseBt());
     }
 }

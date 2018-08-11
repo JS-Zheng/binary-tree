@@ -3,5 +3,5 @@ package com.jszheng.base;
 @FunctionalInterface
 interface TreeNodeConstructor<E> {
 
-    void setDataByArr(E[] data);
+    void setDataArr(E[] data, boolean nullable);
 }

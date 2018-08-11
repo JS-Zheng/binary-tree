@@ -10,6 +10,11 @@ public class SmmhManipulator extends DoubleEndedHeapManipulator {
     }
 
     @Override
+    protected BinaryTree createTree() {
+        return new SymmetricMinMaxHeap(baseBt());
+    }
+
+    @Override
     protected void comment() {
         System.out.println("[註]: 對稱式最小最大堆積 (Symmetric Min-Max Heap)");
         System.out.println("a. 為一種雙向優先權佇列 (double-ended priority queue)");
@@ -21,10 +26,5 @@ public class SmmhManipulator extends DoubleEndedHeapManipulator {
         System.out.println("f. 插入 與 刪除最小、最大值: O(log n)");
         System.out.println("https://pdfs.semanticscholar.org/351a/044138834e032c11ddf07d6d656bfa4d2bcc.pdf");
         System.out.println();
-    }
-
-    @Override
-    protected BinaryTree createTree() {
-        return new SymmetricMinMaxHeap(baseBt());
     }
 }

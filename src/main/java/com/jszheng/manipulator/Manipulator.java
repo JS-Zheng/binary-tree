@@ -15,6 +15,10 @@ public abstract class Manipulator<Operation> {
         addDefaultOperation();
     }
 
+    protected void addDefaultOperation() {
+        // Empty
+    }
+
     public void executeWithPrompt() {
         while (true) {
             try {
@@ -31,12 +35,35 @@ public abstract class Manipulator<Operation> {
         }
     }
 
+    String getPrompt() {
+        StringBuilder result = new StringBuilder();
+        String choosePrompt = getChoosePrompt();
+        String operationsName = getOperationsName();
+        String backPrompt = getBackPrompt();
+
+        result.append(choosePrompt)
+                .append(operationsName)
+                .append(backPrompt);
+
+        return result.toString();
+    }
+
+    boolean validateInput(int operationId) {
+        if (operationId > operations.size() || operationId < 0) {
+            String errorPrompt = "輸入錯誤，請重新輸入\n";
+            System.out.println(errorPrompt);
+            return false;
+        }
+
+        return true;
+    }
+
     public boolean handleOperation(int operationId) {
         return operationId != 0;
     }
 
-    private String getBackPrompt() {
-        return "      [0]返回";
+    protected void afterExecute(int typeId) {
+        // Empty
     }
 
     protected abstract String getChoosePrompt();
@@ -54,39 +81,12 @@ public abstract class Manipulator<Operation> {
         return result.toString();
     }
 
-    String getPrompt() {
-        StringBuilder result = new StringBuilder();
-        String choosePrompt = getChoosePrompt();
-        String operationsName = getOperationsName();
-        String backPrompt = getBackPrompt();
-
-        result.append(choosePrompt)
-                .append(operationsName)
-                .append(backPrompt);
-
-        return result.toString();
-    }
-
-    protected void addDefaultOperation() {
-        // Empty
+    private String getBackPrompt() {
+        return "      [0]返回";
     }
 
     protected void addOperation(String name, Operation operation) {
         this.operationNames.add(name);
         this.operations.add(operation);
-    }
-
-    protected void afterExecute(int typeId) {
-        // Empty
-    }
-
-    boolean validateInput(int operationId) {
-        if (operationId > operations.size() || operationId < 0) {
-            String errorPrompt = "輸入錯誤，請重新輸入\n";
-            System.out.println(errorPrompt);
-            return false;
-        }
-
-        return true;
     }
 }

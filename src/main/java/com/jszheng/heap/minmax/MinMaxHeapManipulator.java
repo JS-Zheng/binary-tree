@@ -10,6 +10,11 @@ public class MinMaxHeapManipulator extends DoubleEndedHeapManipulator {
     }
 
     @Override
+    protected BinaryTree createTree() {
+        return new MinMaxHeap(baseBt());
+    }
+
+    @Override
     protected void comment() {
         System.out.println("[註]: 最小最大堆積 (Min-max Heap)");
         System.out.println("a. 為一種雙向優先權佇列 (double-ended priority queue)");
@@ -20,10 +25,5 @@ public class MinMaxHeapManipulator extends DoubleEndedHeapManipulator {
         System.out.println("f. 插入 與 刪除最小、最大值: O(log n)");
         System.out.println("http://cglab.ca/~morin/teaching/5408/refs/minmax.pdf");
         System.out.println();
-    }
-
-    @Override
-    protected BinaryTree createTree() {
-        return new MinMaxHeap(baseBt());
     }
 }

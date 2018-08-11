@@ -7,12 +7,6 @@ import com.jszheng.node.BinTreeNode;
 public class MinMaxHeapInsertion<E extends Comparable<? super E>> extends HeapInsertion<E> {
 
     @Override
-    protected MinMaxHeap<E> getBt() {
-        BinaryTree<E> bt = super.getBt();
-        return (MinMaxHeap<E>) bt;
-    }
-
-    @Override
     protected void fixAfterInsertion(BinTreeNode<E> newNode) {
         BinTreeNode<E> parent = newNode.getParent();
         if (parent == null) return;
@@ -38,5 +32,11 @@ public class MinMaxHeapInsertion<E extends Comparable<? super E>> extends HeapIn
         }
 
         heap.upHeap(adjustStart, adjustMax);
+    }
+
+    @Override
+    protected MinMaxHeap<E> getBt() {
+        BinaryTree<E> bt = super.getBt();
+        return (MinMaxHeap<E>) bt;
     }
 }

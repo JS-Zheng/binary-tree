@@ -9,6 +9,11 @@ public final class TreapManipulator extends AbstractBstManipulator<Treap> {
     }
 
     @Override
+    protected Treap createTree() {
+        return new Treap<>(baseBt());
+    }
+
+    @Override
     protected void comment() {
         System.out.println("[註]: 樹堆 (Treap)");
         System.out.println("a. 節點結構: data(隨機優先權)");
@@ -19,10 +24,5 @@ public final class TreapManipulator extends AbstractBstManipulator<Treap> {
         System.out.println("f. Avg Case -- 插入、搜尋 與刪除: O(log n)");
         System.out.println("g. Worst Case -- 插入、搜尋 與刪除: O(n)");
         System.out.println();
-    }
-
-    @Override
-    protected Treap createTree() {
-        return new Treap<>(baseBt());
     }
 }

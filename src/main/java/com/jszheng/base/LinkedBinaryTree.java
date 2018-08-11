@@ -18,13 +18,15 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 
     private BinTreeNode<E> root;
 
-    // prevent execute empty-varargs constructor
     public LinkedBinaryTree() {
     }
 
-    @SafeVarargs
-    public LinkedBinaryTree(E... items) { // care heap pollution
-        setDataByArr(items);
+    public LinkedBinaryTree(E[] items) {
+        setDataArr(items, false);
+    }
+
+    public LinkedBinaryTree(E[] items, boolean nullable) {
+        setDataArr(items, nullable);
     }
 
     @Override
@@ -65,6 +67,21 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     }
 
     @Override
+    public void setDataArr(E[] arr, boolean nullable) {
+        if ((arr.length < 1) || (arr[0] == null) && !nullable) return;
+        root = newNode();
+        TreeNodeConstructor<E> constructor = new TopDownTreeNodeConstructor<>(root);
+        constructor.setDataArr(arr, nullable);
+    }
+
+    @Override
+    public BinTreeNode<E> getLastNode() {
+        List<BinTreeNode<E>> list = traverse("Level", false, false, node -> true);
+        int i = list.size() - 1;
+        return list.get(i);
+    }
+
+    @Override
     public BinTreeNode<E> getRoot() {
         return this.root;
     }
@@ -78,21 +95,13 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     }
 
     @Override
-    public void setDataByArr(E[] data) {
-        root = newNode();
-        root.setDataByArr(data);
-    }
-
-    @Override
-    public BinTreeNode<E> getLastNode() {
-        List<BinTreeNode<E>> list = traverse("Level", false, false, node -> true);
-        int i = list.size() - 1;
-        return list.get(i);
-    }
-
-    @Override
     public void setRoot(BinTreeNode<E> node) {
         this.root = node;
+    }
+
+    @Override
+    public BinTreeNode<E> newNode() {
+        return new LinkedTreeNode<>();
     }
 
     @Override
@@ -100,9 +109,16 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
         return root == null;
     }
 
-    @Override
-    public BinTreeNode<E> newNode() {
-        return new LinkedTreeNode<>();
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private List<BinTreeNode<E>> traverse(TraversalAlgo algo) {
+        List<BinTreeNode<E>> result = null;
+
+        if (algo != null)
+            result = algo.traverse(this);
+        else if (Env.debug)
+            System.out.println("TraversalAlgo Factory Error");
+
+        return result;
     }
 
     @Override
@@ -119,14 +135,6 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     }
 
     @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        // Default Algo
-        if (insertionAlgo == null)
-            insertionAlgo = new CompleteBtInsertion<>();
-        return insertionAlgo;
-    }
-
-    @Override
     protected SearchAlgo<E> createSearchAlgo() {
         // Default Algo
         if (searchAlgo == null)
@@ -134,15 +142,11 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
         return searchAlgo;
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private List<BinTreeNode<E>> traverse(TraversalAlgo algo) {
-        List<BinTreeNode<E>> result = null;
-
-        if (algo != null)
-            result = algo.traverse(this);
-        else if (Env.debug)
-            System.out.println("TraversalAlgo Factory Error");
-
-        return result;
+    @Override
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        // Default Algo
+        if (insertionAlgo == null)
+            insertionAlgo = new CompleteBtInsertion<>();
+        return insertionAlgo;
     }
 }

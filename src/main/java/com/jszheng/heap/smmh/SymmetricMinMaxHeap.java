@@ -33,22 +33,6 @@ public class SymmetricMinMaxHeap<E extends Comparable<? super E>> extends AbsBin
         return maxNode != null ? maxNode.getData() : null;
     }
 
-    @Override
-    public E deleteMin() {
-        return deleteExtrema(false);
-    }
-
-    @Override
-    public E searchMin() {
-        BinTreeNode<E> minNode = searchExtremaNode(false);
-        return minNode != null ? minNode.getData() : null;
-    }
-
-    @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        return new SmmhInsertion<>();
-    }
-
     private E deleteExtrema(boolean max) {
         BinTreeNode<E> target = searchExtremaNode(max);
         if (target == null) return null;
@@ -93,5 +77,21 @@ public class SymmetricMinMaxHeap<E extends Comparable<? super E>> extends AbsBin
         }
 
         return extrema;
+    }
+
+    @Override
+    public E deleteMin() {
+        return deleteExtrema(false);
+    }
+
+    @Override
+    public E searchMin() {
+        BinTreeNode<E> minNode = searchExtremaNode(false);
+        return minNode != null ? minNode.getData() : null;
+    }
+
+    @Override
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        return new SmmhInsertion<>();
     }
 }

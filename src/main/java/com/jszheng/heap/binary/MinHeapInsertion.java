@@ -10,13 +10,13 @@ import com.jszheng.node.BinTreeNode;
 class MinHeapInsertion<E extends Comparable<? super E>> extends HeapInsertion<E> {
 
     @Override
-    protected MinBinaryHeap<E> getBt() {
-        BinaryTree<E> bt = super.getBt();
-        return (MinBinaryHeap<E>) bt;
+    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
+        getBt().upHeap(newNode, false);
     }
 
     @Override
-    protected void fixAfterInsertion(BinTreeNode<E> newNode) {
-        getBt().upHeap(newNode, false);
+    protected MinBinaryHeap<E> getBt() {
+        BinaryTree<E> bt = super.getBt();
+        return (MinBinaryHeap<E>) bt;
     }
 }

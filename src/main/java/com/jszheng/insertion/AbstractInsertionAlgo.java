@@ -3,7 +3,7 @@ package com.jszheng.insertion;
 import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
 import com.jszheng.node.BinTreeNode;
-import com.jszheng.search.SearchResult;
+import com.jszheng.search.InsertableSearchResult;
 
 public abstract class AbstractInsertionAlgo<E> implements InsertionAlgo<E> {
 
@@ -21,13 +21,13 @@ public abstract class AbstractInsertionAlgo<E> implements InsertionAlgo<E> {
         }
 
         // main hook
-        SearchResult<E> result = insertData(data);
+        InsertableSearchResult<E> result = insertData(data);
 
         boolean isLeft;
         BinTreeNode<E> targetParentNode;
 
         if (result == null
-                || (targetParentNode = result.getLastNode()) == null)
+                || (targetParentNode = result.getParentNode()) == null)
             return false;
 
         if (!isAllowDuplicated() && result.getNode() != null) {
@@ -56,9 +56,8 @@ public abstract class AbstractInsertionAlgo<E> implements InsertionAlgo<E> {
         return true;
     }
 
-    protected BinaryTree<E> getBt() {
-        return bt;
-    }
+    // Find parent of insert target (before insert)
+    protected abstract InsertableSearchResult<E> insertData(E data);
 
     protected boolean isAllowDuplicated() {
         return false;
@@ -68,8 +67,9 @@ public abstract class AbstractInsertionAlgo<E> implements InsertionAlgo<E> {
         // default do nothing.
     }
 
-    // Find parent of insert target (before insert)
-    protected abstract SearchResult<E> insertData(E data);
+    protected BinaryTree<E> getBt() {
+        return bt;
+    }
 
     protected boolean validateBt(E data) {
         return bt != null;
