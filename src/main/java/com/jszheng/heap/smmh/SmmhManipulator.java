@@ -11,7 +11,7 @@ public class SmmhManipulator extends DoubleEndedHeapManipulator {
 
     @Override
     protected BinaryTree createTree() {
-        return new SymmetricMinMaxHeap(baseBt());
+        return new SymmetricMinMaxHeap();
     }
 
     @Override

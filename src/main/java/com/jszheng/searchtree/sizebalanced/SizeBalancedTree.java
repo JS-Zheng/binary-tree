@@ -1,24 +1,14 @@
 package com.jszheng.searchtree.sizebalanced;
 
 import com.jszheng.Env;
-import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstDeletion;
 import com.jszheng.searchtree.SelfBalancingBst;
 import com.jszheng.searchtree.rotation.RotateListener;
 
-public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalancingBst<E, SizeBalancedBase<E>> implements RotateListener<E> {
+public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalancingBst<E> implements RotateListener<E> {
 
-    public SizeBalancedTree(SizeBalancedBase<E> component) {
-        super(component);
-    }
-
-    @Override
-    public BinaryTree<E> copy(boolean deep) {
-        SizeBalancedBase<E> base = (SizeBalancedBase<E>) component.copy(deep);
-        return new SizeBalancedTree<>(base);
-    }
 
     @Override
     public String getNodeString(BinTreeNode<E> node) {
@@ -34,8 +24,12 @@ public class SizeBalancedTree<E extends Comparable<? super E>> extends SelfBalan
 
     @Override
     public SizeBalancedTree<E> newTree() {
-        SizeBalancedBase<E> base = component.newTree();
-        return new SizeBalancedTree<>(base);
+        return new SizeBalancedTree<>();
+    }
+
+    @Override
+    public SbTreeNode<E> newNode() {
+        return new SbTreeNode<>();
     }
 
     @Override

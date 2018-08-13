@@ -13,7 +13,7 @@ public class CompleteBtManipulator extends BinTreeManipulator<CompleteBinaryTree
 
     @Override
     protected CompleteBinaryTree createTree() {
-        return new CompleteBtImpl(baseBt());
+        return new CompleteBtImpl();
     }
 
     @Override

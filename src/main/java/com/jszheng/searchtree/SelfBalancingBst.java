@@ -1,19 +1,14 @@
 package com.jszheng.searchtree;
 
-import com.jszheng.base.BinaryTree;
 import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.rotation.*;
 
-public abstract class SelfBalancingBst<E extends Comparable<? super E>, Base extends BinaryTree<E>> extends AbstractBst<E, Base> {
+public abstract class SelfBalancingBst<E extends Comparable<? super E>> extends AbstractBst<E> {
 
     private RotationState rRRotate;
     private RotationState lLRotate;
     private RotationState rLRotate;
     private RotationState lRRotate;
-
-    protected SelfBalancingBst(Base component) {
-        super(component);
-    }
 
     public RotationState createRotationState(BinTreeNode<E> pivot, BinTreeNode<E> child) {
         RotationState state;

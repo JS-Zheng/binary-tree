@@ -1,7 +1,6 @@
 package com.jszheng.heap.binary;
 
 import com.jszheng.Env;
-import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BinaryTreeLemma;
 import com.jszheng.base.complete.CompleteBinaryTree;
 import com.jszheng.base.complete.LinearSearch;
@@ -15,8 +14,7 @@ abstract class BinaryHeap<E extends Comparable<? super E>> extends AbstractHeap<
 
     private final boolean maxHeap;
 
-    BinaryHeap(BinaryTree<E> component) {
-        super(component);
+    BinaryHeap() {
         maxHeap = isMaxHeap();
     }
 

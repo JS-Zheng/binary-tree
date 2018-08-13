@@ -1,6 +1,5 @@
 package com.jszheng.searchtree.avl;
 
-import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BinaryTreeLemma;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
@@ -11,17 +10,8 @@ import com.jszheng.util.FibonacciNumber;
 
 import java.math.BigInteger;
 
-public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E, BinaryTree<E>> {
+public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E> {
 
-    public AvlTree(BinaryTree<E> component) {
-        super(component);
-    }
-
-    @Override
-    public BinaryTree<E> copy(boolean deep) {
-        BinaryTree<E> base = component.copy(deep);
-        return new AvlTree<>(base);
-    }
 
     public int getMaxHeightToConstructAvl(int nodeCount) {
         int i = 0;
@@ -59,7 +49,7 @@ public class AvlTree<E extends Comparable<? super E>> extends SelfBalancingBst<E
 
     @Override
     public AvlTree<E> newTree() {
-        return new AvlTree<>(component.newTree());
+        return new AvlTree<>();
     }
 
     @Override

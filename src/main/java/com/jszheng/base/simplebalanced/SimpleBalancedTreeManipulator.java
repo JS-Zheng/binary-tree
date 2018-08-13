@@ -10,7 +10,7 @@ public class SimpleBalancedTreeManipulator extends BinTreeManipulator<SimpleBala
 
     @Override
     protected SimpleBalancedTree createTree() {
-        return new SimpleBalancedTree<>(baseBt());
+        return new SimpleBalancedTree<>();
     }
 
     @Override

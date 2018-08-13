@@ -10,7 +10,7 @@ public class MinLeftistTreeManipulator extends AbsMinBinaryHeapManipulator<MinLe
 
     @Override
     protected MinLeftistTree<Comparable<? super Comparable>> createTree() {
-        return new MinLeftistTree<>(baseBt());
+        return new MinLeftistTree<>();
     }
 
     @Override

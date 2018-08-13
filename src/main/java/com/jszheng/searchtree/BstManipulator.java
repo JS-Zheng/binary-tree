@@ -8,7 +8,7 @@ public final class BstManipulator extends AbstractBstManipulator<AbstractBst> {
 
     @Override
     protected AbstractBst createTree() {
-        return new BinarySearchTreeImpl<>(baseBt());
+        return new BinarySearchTreeImpl<>();
     }
 
     @Override

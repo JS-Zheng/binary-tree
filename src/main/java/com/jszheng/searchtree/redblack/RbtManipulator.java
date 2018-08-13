@@ -10,8 +10,7 @@ public final class RbtManipulator extends AbstractBstManipulator<RedBlackTree> {
 
     @Override
     protected RedBlackTree createTree() {
-        RedBlackBase<Object> base = new RedBlackBase<>();
-        return new RedBlackTree(base);
+        return new RedBlackTree();
     }
 
     @Override

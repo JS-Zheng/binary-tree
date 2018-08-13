@@ -11,7 +11,7 @@ public class IntervalHeapManipulator extends DoubleEndedHeapManipulator {
 
     @Override
     protected BinaryTree createTree() {
-        return new IntervalHeap(baseBt());
+        return new IntervalHeap();
     }
 
     @Override

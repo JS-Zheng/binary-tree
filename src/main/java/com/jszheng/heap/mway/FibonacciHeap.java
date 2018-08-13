@@ -54,8 +54,8 @@ public class FibonacciHeap<E extends Comparable<? super E>> extends BinomialHeap
     }
 
     @Override
-    public AbstractMWayHeap<E, BinomialTreeNode<E>> newTree() {
-        return new FibonacciHeap<>();
+    public FibonacciHeap<E> newTree() {
+        return new FibonacciHeap<>(mergeWithSort);
     }
 
     @Override

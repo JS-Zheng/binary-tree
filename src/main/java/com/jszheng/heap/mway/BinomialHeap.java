@@ -12,9 +12,10 @@ import java.util.Map;
 public class BinomialHeap<E extends Comparable<? super E>> extends AbstractMWayHeap<E, BinomialTreeNode<E>>
         implements MinHeap<E, BinomialTreeNode<E>>, MeldableHeap<BinomialHeap<E>, E, BinomialTreeNode<E>> {
 
-    private boolean mergeWithSort;
+    protected boolean mergeWithSort;
 
     public BinomialHeap() {
+
     }
 
     public BinomialHeap(boolean mergeWithSort) {
@@ -272,8 +273,8 @@ public class BinomialHeap<E extends Comparable<? super E>> extends AbstractMWayH
     }
 
     @Override
-    public AbstractMWayHeap<E, BinomialTreeNode<E>> newTree() {
-        return new BinomialHeap<>();
+    public BinomialHeap<E> newTree() {
+        return new BinomialHeap<>(mergeWithSort);
     }
 
     @Override

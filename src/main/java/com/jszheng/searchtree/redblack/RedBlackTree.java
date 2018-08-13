@@ -18,7 +18,7 @@ import static com.jszheng.Env.osName;
  * <p>
  * Created by zhengzhongsheng on 2017/10/24.
  */
-public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancingBst<E, RedBlackBase<E>> implements RotateListener<E> {
+public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancingBst<E> implements RotateListener<E> {
 
     public static final boolean RED = false;
     public static final boolean BLACK = true;
@@ -27,16 +27,6 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
     public int rotateLeftCount = 0;
     public int rotateRightCount = 0;
     public int colorChangeCount = 0;
-
-    public RedBlackTree(RedBlackBase<E> component) {
-        super(component);
-    }
-
-    @Override
-    public RedBlackTree<E> copy(boolean deep) {
-        RedBlackBase<E> base = (RedBlackBase<E>) component.copy(deep);
-        return new RedBlackTree<>(base);
-    }
 
     @Override
     public String getNodeString(BinTreeNode<E> node) {
@@ -67,8 +57,28 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
 
     @Override
     public RedBlackTree<E> newTree() {
-        RedBlackBase<E> base = (RedBlackBase<E>) component.newTree();
-        return new RedBlackTree<>(base);
+        return new RedBlackTree<>();
+    }
+
+    @Override
+    public RedBlackTreeNode<E> getRoot() {
+        return (RedBlackTreeNode<E>) super.getRoot();
+    }
+
+    @Override
+    public void setRoot(E data) {
+        super.setRoot(data);
+        setColor(getRoot(), BLACK);
+    }
+
+    @Override
+    public RedBlackTreeNode<E> newNode() {
+        return new RedBlackTreeNode<>();
+    }
+
+    void setColor(RedBlackTreeNode<E> node, boolean color) {
+        if (node != null)
+            node.color = color;
     }
 
     @Override
@@ -93,23 +103,5 @@ public class RedBlackTree<E extends Comparable<? super E>> extends SelfBalancing
         if (deletionAlgo == null)
             deletionAlgo = new RedBlackDeletion<>();
         return deletionAlgo;
-    }
-
-    @Override
-    public RedBlackTreeNode<E> getRoot() {
-        return (RedBlackTreeNode<E>) super.getRoot();
-    }
-
-
-    @Override
-    public void setRoot(E data) {
-        super.setRoot(data);
-        setColor(getRoot(), BLACK);
-    }
-
-
-    void setColor(RedBlackTreeNode<E> node, boolean color) {
-        if (node != null)
-            node.color = color;
     }
 }

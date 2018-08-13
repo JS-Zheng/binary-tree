@@ -9,9 +9,6 @@ public interface BinarySearchTree<E> extends BinaryTree<E> {
 
     void delete(E data, boolean replaceByLMax);
 
-    @Override
-    BinarySearchTree<E> newTree();
-
     SearchResult<E> searchMax();
 
     SearchResult<E> searchMin();

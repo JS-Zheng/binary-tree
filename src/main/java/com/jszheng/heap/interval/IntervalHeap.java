@@ -1,7 +1,6 @@
 package com.jszheng.heap.interval;
 
 import com.jszheng.Env;
-import com.jszheng.base.BinaryTree;
 import com.jszheng.base.complete.CompleteBinaryTree;
 import com.jszheng.heap.AbsBinDoubleEndedHeap;
 import com.jszheng.heap.DoubleEndedHeap;
@@ -27,14 +26,15 @@ public class IntervalHeap<E extends Comparable<? super E>> extends AbsBinDoubleE
 
     private Map<BinTreeNode<E>, List<E>> nodeData = new HashMap<>();
 
-    public IntervalHeap(BinaryTree<E> component) {
-        super(component);
-    }
-
     @Override
     public void clearRoot() {
         super.clearRoot();
         nodeData.clear();
+    }
+
+    @Override
+    public IntervalHeap<E> newTree() {
+        return new IntervalHeap<>();
     }
 
     @Override
@@ -103,13 +103,8 @@ public class IntervalHeap<E extends Comparable<? super E>> extends AbsBinDoubleE
     }
 
     @Override
-    public BinaryTree<E> copy(boolean deep) {
-        return new IntervalHeap<>(component.copy(deep));
-    }
-
-    @Override
-    public BinaryTree<E> newTree() {
-        return new IntervalHeap<>(component.newTree());
+    protected InsertionAlgo<E> createInsertionAlgo() {
+        return new IntervalInsertion<>();
     }
 
     @Override
@@ -172,11 +167,6 @@ public class IntervalHeap<E extends Comparable<? super E>> extends AbsBinDoubleE
         else if (rData != null)
             return rData.toString();
         return " ";
-    }
-
-    @Override
-    protected InsertionAlgo<E> createInsertionAlgo() {
-        return new IntervalInsertion<>();
     }
 
     @Override

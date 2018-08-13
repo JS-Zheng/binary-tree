@@ -10,8 +10,7 @@ public final class SbtManipulator extends AbstractBstManipulator<SizeBalancedTre
 
     @Override
     protected SizeBalancedTree createTree() {
-        SizeBalancedBase base = new SizeBalancedBase();
-        return new SizeBalancedTree(base);
+        return new SizeBalancedTree();
     }
 
     @Override

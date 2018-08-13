@@ -1,31 +1,11 @@
 package com.jszheng.heap.minmax;
 
-import com.jszheng.base.BinaryTree;
 import com.jszheng.base.complete.CompleteBinaryTree;
 import com.jszheng.heap.AbsBinDoubleEndedHeap;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 
 public class MinMaxHeap<E extends Comparable<? super E>> extends AbsBinDoubleEndedHeap<E> implements CompleteBinaryTree<E> {
-
-    public MinMaxHeap(BinaryTree<E> component) {
-        super(component);
-    }
-
-    @Override
-    public BinaryTree<E> copy(boolean deep) {
-        return new MinMaxHeap<>(component.copy(deep));
-    }
-
-    @Override
-    public String getLevelString(int level) {
-        return level % 2 == 1 ? " -- Min" : " -- Max";
-    }
-
-    @Override
-    public BinaryTree<E> newTree() {
-        return new MinMaxHeap<>(component.newTree());
-    }
 
     @Override
     public E deleteMax() {
@@ -146,6 +126,16 @@ public class MinMaxHeap<E extends Comparable<? super E>> extends AbsBinDoubleEnd
     public E searchMin() {
         BinTreeNode<E> minNode = searchExtremaNode(false);
         return minNode != null ? minNode.getData() : null;
+    }
+
+    @Override
+    public String getLevelString(int level) {
+        return level % 2 == 1 ? " -- Min" : " -- Max";
+    }
+
+    @Override
+    public MinMaxHeap<E> newTree() {
+        return new MinMaxHeap<>();
     }
 
     @Override

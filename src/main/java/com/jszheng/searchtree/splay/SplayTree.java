@@ -1,6 +1,5 @@
 package com.jszheng.searchtree.splay;
 
-import com.jszheng.base.BinaryTree;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 import com.jszheng.searchtree.BstDeletion;
@@ -10,16 +9,8 @@ import com.jszheng.searchtree.rotation.LlRotation;
 import com.jszheng.searchtree.rotation.RotationState;
 import com.jszheng.searchtree.rotation.RrRotation;
 
-public class SplayTree<E extends Comparable<? super E>> extends SelfBalancingBst<E, BinaryTree<E>> {
+public class SplayTree<E extends Comparable<? super E>> extends SelfBalancingBst<E> {
 
-    public SplayTree(BinaryTree<E> component) {
-        super(component);
-    }
-
-    @Override
-    public BinaryTree<E> copy(boolean deep) {
-        return new SplayTree<>(component.copy(deep));
-    }
 
     public void fixAfterOperation(BinTreeNode<E> targetNode) {
         if (targetNode == null) return;
@@ -50,10 +41,9 @@ public class SplayTree<E extends Comparable<? super E>> extends SelfBalancingBst
 
     @Override
     public SplayTree<E> newTree() {
-        return new SplayTree<>(component.newTree());
+        return new SplayTree<>();
     }
 
-    @Override
     protected BstSearch<E> createSearchAlgo() {
         if (searchAlgo == null)
             searchAlgo = new SplaySearch<>();

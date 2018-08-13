@@ -1,8 +1,7 @@
 package com.jszheng.heap.leftist;
 
 import com.jszheng.Env;
-import com.jszheng.base.BinaryTree;
-import com.jszheng.base.BtDecorator;
+import com.jszheng.base.LinkedBinaryTree;
 import com.jszheng.base.complete.LinearSearch;
 import com.jszheng.heap.MeldableHeap;
 import com.jszheng.insertion.InsertionAlgo;
@@ -13,13 +12,12 @@ import com.jszheng.search.SearchAlgo;
 // for all nodes are internal node
 //
 // It's not a Complete Binary Tree.
-abstract class LeftistTree<E extends Comparable<? super E>> extends BtDecorator<E, BinaryTree<E>>
+abstract class LeftistTree<E extends Comparable<? super E>> extends LinkedBinaryTree<E>
         implements MeldableHeap<LeftistTree<E>, E, BinTreeNode<E>> {
 
     private final boolean maxHeap;
 
-    LeftistTree(BinaryTree<E> component) {
-        super(component);
+    LeftistTree() {
         maxHeap = isMaxHeap();
     }
 

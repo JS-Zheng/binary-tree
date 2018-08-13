@@ -8,6 +8,6 @@ public class MaxHeapManipulator extends AbsMaxBinaryHeapManipulator<MaxBinaryHea
 
     @Override
     protected MaxBinaryHeap<Comparable<? super Comparable>> createTree() {
-        return new MaxBinaryHeap<>(baseBt());
+        return new MaxBinaryHeap<>();
     }
 }

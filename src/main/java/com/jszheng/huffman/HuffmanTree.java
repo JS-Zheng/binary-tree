@@ -2,7 +2,7 @@ package com.jszheng.huffman;
 
 import com.jszheng.Env;
 import com.jszheng.base.BinaryTree;
-import com.jszheng.base.BtDecorator;
+import com.jszheng.base.LinkedBinaryTree;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 import com.jszheng.search.SearchAlgo;
@@ -11,15 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-public class HuffmanTree extends BtDecorator<String, HuffmanBase> {
+public class HuffmanTree extends LinkedBinaryTree<String> {
 
     private Map<Character, String> codewordMap = new HashMap<>();
     private Map<String, Character> deCodewordMap = new HashMap<>();
     private String data;
-
-    public HuffmanTree(HuffmanBase component) {
-        super(component);
-    }
 
     @Override
     public BinaryTree<String> copy(boolean deep) {
@@ -27,8 +23,25 @@ public class HuffmanTree extends BtDecorator<String, HuffmanBase> {
     }
 
     @Override
-    public BinaryTree<String> newTree() {
+    public HuffmanTree newTree() {
         return null;
+    }
+
+    @Override
+    public HuffmanTreeNode newNode() {
+        return new HuffmanTreeNode();
+    }
+
+    @Override
+    protected SearchAlgo<String> createSearchAlgo() {
+        return null;
+    }
+
+    @Override
+    protected InsertionAlgo<String> createInsertionAlgo() {
+        if (insertionAlgo == null)
+            insertionAlgo = new HuffmanInsertion();
+        return insertionAlgo;
     }
 
     public String decode(String codewords) {
@@ -99,11 +112,6 @@ public class HuffmanTree extends BtDecorator<String, HuffmanBase> {
     }
 
     @Override
-    protected SearchAlgo<String> createSearchAlgo() {
-        return null;
-    }
-
-    @Override
     public void insert(String data) {
         super.insert(data);
         this.data = data;
@@ -118,13 +126,6 @@ public class HuffmanTree extends BtDecorator<String, HuffmanBase> {
         String result = builder.toString();
         super.insert(result);
         this.data = result;
-    }
-
-    @Override
-    protected InsertionAlgo<String> createInsertionAlgo() {
-        if (insertionAlgo == null)
-            insertionAlgo = new HuffmanInsertion();
-        return insertionAlgo;
     }
 
     void clearCodewordMap() {

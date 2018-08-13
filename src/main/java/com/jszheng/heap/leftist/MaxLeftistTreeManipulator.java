@@ -10,7 +10,7 @@ public class MaxLeftistTreeManipulator extends AbsMaxBinaryHeapManipulator<MaxLe
 
     @Override
     protected MaxLeftistTree<Comparable<? super Comparable>> createTree() {
-        return new MaxLeftistTree<>(baseBt());
+        return new MaxLeftistTree<>();
     }
 
     @Override

@@ -10,7 +10,7 @@ public final class AvlManipulator extends AbstractBstManipulator<AvlTree> {
 
     @Override
     protected AvlTree createTree() {
-        return new AvlTree(baseBt());
+        return new AvlTree();
     }
 
     @Override

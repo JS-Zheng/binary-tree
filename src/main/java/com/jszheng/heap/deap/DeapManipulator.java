@@ -11,7 +11,7 @@ public class DeapManipulator extends DoubleEndedHeapManipulator {
 
     @Override
     protected BinaryTree createTree() {
-        return new Deap(baseBt());
+        return new Deap();
     }
 
     @Override

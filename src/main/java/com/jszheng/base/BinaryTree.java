@@ -32,6 +32,10 @@ public interface BinaryTree<E> extends Tree<E, BinTreeNode<E>>, Traversable<E>, 
 
     BinTreeNode<E> search(E data);
 
+    default void setDataArr(E[] arr) {
+        setDataArr(arr, false);
+    }
+
     void setDataArr(E[] data, boolean nullable);
 
     SkewedState skewedState();

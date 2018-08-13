@@ -25,7 +25,7 @@ public class HuffmanTreeManipulator extends BinTreeManipulator<HuffmanTree> {
 
     @Override
     protected HuffmanTree createTree() {
-        return new HuffmanTree(new HuffmanBase());
+        return new HuffmanTree();
     }
 
     @Override

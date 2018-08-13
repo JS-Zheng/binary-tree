@@ -1,15 +1,10 @@
 package com.jszheng.heap;
 
 import com.jszheng.Env;
-import com.jszheng.base.BinaryTree;
-import com.jszheng.base.BtDecorator;
+import com.jszheng.base.LinkedBinaryTree;
 import com.jszheng.node.BinTreeNode;
 
-public abstract class AbstractHeap<E extends Comparable<? super E>> extends BtDecorator<E, BinaryTree<E>> implements Heap<E, BinTreeNode<E>> {
-
-    protected AbstractHeap(BinaryTree<E> component) {
-        super(component);
-    }
+public abstract class AbstractHeap<E extends Comparable<? super E>> extends LinkedBinaryTree<E> implements Heap<E, BinTreeNode<E>> {
 
     protected void downHeap(BinTreeNode<E> node, boolean maxHeap) {
         BinTreeNode<E> lChild = node.getLeftChild();

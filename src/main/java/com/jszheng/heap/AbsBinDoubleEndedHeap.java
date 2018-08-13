@@ -1,16 +1,11 @@
 package com.jszheng.heap;
 
-import com.jszheng.base.BinaryTree;
 import com.jszheng.base.complete.LinearSearch;
 import com.jszheng.node.BinTreeNode;
 import com.jszheng.search.SearchAlgo;
 
 public abstract class AbsBinDoubleEndedHeap<E extends Comparable<? super E>> extends AbstractHeap<E>
         implements DoubleEndedHeap<E, BinTreeNode<E>> {
-
-    public AbsBinDoubleEndedHeap(BinaryTree<E> component) {
-        super(component);
-    }
 
     @Override
     protected SearchAlgo<E> createSearchAlgo() {

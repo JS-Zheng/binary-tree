@@ -8,7 +8,7 @@ public class BinomialHeapManipulator extends AbstractMWayMinHeapManipulator<Bino
 
     @Override
     protected BinomialHeap createTree() {
-        return new BinomialHeap<>();
+        return new BinomialHeap<>(false);
     }
 
     @Override

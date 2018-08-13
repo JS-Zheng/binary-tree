@@ -1,19 +1,14 @@
 package com.jszheng.searchtree;
 
 import com.jszheng.Env;
-import com.jszheng.base.BinaryTree;
-import com.jszheng.base.BtDecorator;
+import com.jszheng.base.LinkedBinaryTree;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.search.SearchResult;
 
-abstract class AbstractBst<E extends Comparable<? super E>, Base extends BinaryTree<E>> extends BtDecorator<E, Base> implements BinarySearchTree<E> {
+abstract class AbstractBst<E extends Comparable<? super E>> extends LinkedBinaryTree<E> implements BinarySearchTree<E> {
 
     protected BstDeletion<E> deletionAlgo;
     protected BstSearch<E> searchAlgo;
-
-    AbstractBst(Base component) {
-        super(component);
-    }
 
     @Override
     public void delete(E data) {

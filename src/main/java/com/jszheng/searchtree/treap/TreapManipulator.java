@@ -10,7 +10,7 @@ public final class TreapManipulator extends AbstractBstManipulator<Treap> {
 
     @Override
     protected Treap createTree() {
-        return new Treap<>(baseBt());
+        return new Treap<>();
     }
 
     @Override

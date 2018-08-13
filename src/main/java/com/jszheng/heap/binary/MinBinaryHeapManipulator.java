@@ -26,6 +26,6 @@ public class MinBinaryHeapManipulator extends AbsMinBinaryHeapManipulator<MinBin
 
     @Override
     protected MinBinaryHeap<Comparable<? super Comparable>> createTree() {
-        return new MinBinaryHeap(baseBt());
+        return new MinBinaryHeap();
     }
 }

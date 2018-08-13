@@ -1,25 +1,10 @@
 package com.jszheng.heap.binary;
 
-import com.jszheng.base.BinaryTree;
 import com.jszheng.heap.MaxHeap;
 import com.jszheng.insertion.InsertionAlgo;
 import com.jszheng.node.BinTreeNode;
 
 public class MaxBinaryHeap<E extends Comparable<? super E>> extends BinaryHeap<E> implements MaxHeap<E, BinTreeNode<E>> {
-
-    public MaxBinaryHeap(BinaryTree<E> component) {
-        super(component);
-    }
-
-    @Override
-    public BinaryTree<E> copy(boolean deep) {
-        return new MaxBinaryHeap<>(component.copy(deep));
-    }
-
-    @Override
-    public BinaryTree<E> newTree() {
-        return new MaxBinaryHeap<>(component.newTree());
-    }
 
     @Override
     public E deleteMax() {
@@ -38,6 +23,11 @@ public class MaxBinaryHeap<E extends Comparable<? super E>> extends BinaryHeap<E
             constructHeapByBottomUp(data);
         else
             super.insert(data);
+    }
+
+    @Override
+    public MaxBinaryHeap<E> newTree() {
+        return new MaxBinaryHeap<>();
     }
 
     @Override

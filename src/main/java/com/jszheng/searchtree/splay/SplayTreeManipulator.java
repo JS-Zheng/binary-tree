@@ -10,7 +10,7 @@ public final class SplayTreeManipulator extends AbstractBstManipulator<SplayTree
 
     @Override
     protected SplayTree createTree() {
-        return new SplayTree(baseBt());
+        return new SplayTree();
     }
 
     @Override

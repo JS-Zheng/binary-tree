@@ -1,6 +1,5 @@
 package com.jszheng.heap.deap;
 
-import com.jszheng.base.BinaryTree;
 import com.jszheng.base.BinaryTreeLemma;
 import com.jszheng.base.complete.CompleteBinaryTree;
 import com.jszheng.heap.AbsBinDoubleEndedHeap;
@@ -9,20 +8,6 @@ import com.jszheng.node.BinTreeNode;
 
 // Source -- https://pdfs.semanticscholar.org/e1e5/eafb44abc04834caf752b147256335a73bb3.pdf
 public class Deap<E extends Comparable<? super E>> extends AbsBinDoubleEndedHeap<E> implements CompleteBinaryTree<E> {
-
-    public Deap(BinaryTree<E> component) {
-        super(component);
-    }
-
-    @Override
-    public Deap<E> copy(boolean deep) {
-        return new Deap<>(component.copy(deep));
-    }
-
-    @Override
-    public Deap<E> newTree() {
-        return new Deap<>(component.newTree());
-    }
 
     @Override
     public E deleteMax() {
@@ -138,6 +123,11 @@ public class Deap<E extends Comparable<? super E>> extends AbsBinDoubleEndedHeap
     public E searchMin() {
         BinTreeNode<E> minNode = searchExtremaNode(false);
         return minNode != null ? minNode.getData() : null;
+    }
+
+    @Override
+    public Deap<E> newTree() {
+        return new Deap<>();
     }
 
     @Override

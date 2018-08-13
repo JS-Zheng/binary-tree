@@ -11,7 +11,7 @@ public class MinMaxHeapManipulator extends DoubleEndedHeapManipulator {
 
     @Override
     protected BinaryTree createTree() {
-        return new MinMaxHeap(baseBt());
+        return new MinMaxHeap();
     }
 
     @Override
